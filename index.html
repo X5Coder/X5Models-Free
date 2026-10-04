@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
 <title>X5Models Free</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='black'/%3E%3Cg fill='%234A7DFF'%3E%3Cpath d='M48 15 L30 15 L20 35 L30 35 L30 30 L42 30 L42 42 L30 42 L25 50 L18 50 L10 62 L25 62 L30 55 L42 55 L42 68 L30 68 L25 78 L42 78 L48 82 L48 15 Z'/%3E%3Cpath d='M52 15 L70 15 L80 35 L70 35 L70 30 L58 30 L58 42 L70 42 L75 50 L82 50 L90 62 L75 62 L70 55 L58 55 L58 68 L70 68 L75 78 L58 78 L52 82 L52 15 Z'/%3E%3C/g%3E%3C/svg%3E">
 
@@ -25,6 +25,8 @@
     --err-border: #3a1212;
     --accent: #4A7DFF;
     --header-h: 56px;
+    --composer-min-h: 56px;
+    --kb-height: 0px;
   }
 
   html, body {
@@ -35,6 +37,8 @@
     overflow: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    overscroll-behavior: none;
   }
 
   .layout {
@@ -44,6 +48,18 @@
     height: 100dvh;
     width: 100%;
     overflow: hidden;
+    position: relative;
+    transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  /* When keyboard is open on mobile — lift the composer only */
+  body.kb-open .layout {
+    transform: translateY(calc(-1 * var(--kb-height)));
+  }
+
+  body.kb-open .chat {
+    /* Keep chat scrollable but prevent body scroll */
+    padding-bottom: 0;
   }
 
   /* ============================================
@@ -185,19 +201,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.3s ease;
   }
 
   .login-icon svg { width: 100%; height: 100%; }
-
-  .login-box.error .login-icon { transform: scale(0.96); }
 
   .login-title {
     font-size: clamp(1.3rem, 3.5vw, 1.55rem);
     font-weight: 600;
     color: #fff;
     letter-spacing: -0.025em;
-    transition: color 0.3s ease;
   }
 
   .login-box.error .login-title { color: var(--err); }
@@ -208,7 +220,6 @@
     line-height: 1.55;
     max-width: 440px;
     margin: 0 auto 6px;
-    transition: color 0.3s ease;
   }
 
   .login-box.error .login-sub { color: #a06060; }
@@ -436,11 +447,13 @@
     scroll-behavior: smooth;
   }
 
-  .chat::-webkit-scrollbar { width: 5px; }
+  .chat::-webkit-scrollbar { width: 6px; }
+  .chat::-webkit-scrollbar-track { background: transparent; }
   .chat::-webkit-scrollbar-thumb {
     background: #1e1e1e;
     border-radius: 3px;
   }
+  .chat::-webkit-scrollbar-thumb:hover { background: #2a2a2a; }
 
   .msg {
     max-width: 82%;
@@ -472,6 +485,44 @@
     color: var(--err);
     font-size: 0.82rem;
     max-width: 100%;
+  }
+
+  /* Empty state */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    text-align: center;
+    padding: 40px 20px;
+    margin: auto 0;
+    animation: fadeIn 0.6s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .empty-state-icon {
+    width: 48px;
+    height: 48px;
+    opacity: 0.7;
+  }
+
+  .empty-state-title {
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
+    font-weight: 600;
+    color: #d0d0d0;
+    letter-spacing: -0.02em;
+  }
+
+  .empty-state-sub {
+    font-size: clamp(0.82rem, 2vw, 0.88rem);
+    color: var(--mut);
+    max-width: 400px;
+    line-height: 1.5;
   }
 
   /* Working block */
@@ -585,12 +636,17 @@
   }
 
   /* ============================================
-     Composer — Fixed & Refined
+     Composer
   ============================================ */
   .composer-wrap {
     padding: 8px clamp(14px, 3vw, 24px) clamp(14px, 3vh, 22px);
     flex-shrink: 0;
     background: linear-gradient(to top, #000 70%, transparent);
+    transition: padding 0.25s ease;
+  }
+
+  body.kb-open .composer-wrap {
+    padding-bottom: max(clamp(8px, 2vh, 14px), env(safe-area-inset-bottom));
   }
 
   .composer {
@@ -604,7 +660,7 @@
     border-radius: 28px;
     padding: 6px 6px 6px clamp(16px, 3vw, 20px);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    min-height: 52px;
+    min-height: var(--composer-min-h);
   }
 
   .composer:focus-within {
@@ -629,6 +685,15 @@
     scrollbar-width: thin;
     scrollbar-color: #2a2a2a transparent;
     display: block;
+    height: 24px;
+    /* Prevent iOS zoom on focus */
+    font-size: 16px;
+  }
+
+  @media (min-width: 640px) {
+    .composer textarea {
+      font-size: clamp(0.88rem, 2vw, 0.94rem);
+    }
   }
 
   .composer textarea::-webkit-scrollbar { width: 4px; }
@@ -639,9 +704,6 @@
 
   .composer textarea::placeholder { color: var(--mut-2); }
 
-  /* ============================================
-     Send button — Fixed
-  ============================================ */
   .send-btn {
     width: 40px;
     height: 40px;
@@ -684,9 +746,7 @@
   .send-btn.sending:hover { transform: scale(1.05); }
   .send-btn.sending:active { transform: scale(0.95); }
 
-  .send-btn:disabled {
-    cursor: not-allowed;
-  }
+  .send-btn:disabled { cursor: not-allowed; }
 
   .send-btn svg {
     width: 16px;
@@ -1034,6 +1094,9 @@
     letter-spacing: 0.02em;
   }
 
+  /* ============================================
+     Mobile
+  ============================================ */
   @media (max-width: 640px) {
     :root { --header-h: 52px; }
     .header { padding: 0 12px; gap: 6px; }
@@ -1049,11 +1112,22 @@
     .steps-list li::before { width: 20px; height: 20px; font-size: 0.68rem; }
     .send-btn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; }
     .composer { min-height: 50px; padding: 5px 5px 5px 16px; }
+    .composer textarea { padding: 10px 0; }
   }
 
   @media (max-width: 380px) {
     .brand-name { max-width: 36vw; }
     .model-btn { max-width: 34vw; padding: 5px 8px; }
+  }
+
+  /* iOS Safari specific: use svh when available */
+  @supports (height: 100svh) {
+    .layout {
+      height: 100svh;
+    }
+    body.kb-open .layout {
+      height: 100dvh;
+    }
   }
 </style>
 </head>
@@ -1168,7 +1242,7 @@
     <div class="chat-screen" id="chatScreen">
       <div class="chat" id="chat"></div>
 
-      <div class="composer-wrap">
+      <div class="composer-wrap" id="composerWrap">
         <div class="composer" id="composer">
           <textarea id="input" placeholder="Ask anything..." rows="1" autocomplete="off" spellcheck="false"></textarea>
           <button type="button" class="send-btn" id="sendBtn" aria-label="Send" disabled>
@@ -1229,6 +1303,7 @@
     let tokenRevealed = false;
     let currentController = null;
     let abortRequested = false;
+    let autoLoggedIn = false;
 
     const chat = document.getElementById('chat');
     const composer = document.getElementById('composer');
@@ -1255,6 +1330,7 @@
     const connectingDots = document.getElementById('connectingDots');
     const loginError = document.getElementById('loginError');
     const loginErrorText = document.getElementById('loginErrorText');
+    const composerWrap = document.getElementById('composerWrap');
 
     const scrollBottom = () => { chat.scrollTop = chat.scrollHeight; };
     const sleep = (ms) => new Promise(r => setTimeout(r, ms));
@@ -1344,24 +1420,30 @@
       }
     };
 
-    async function connect() {
+    async function connect(savedToken) {
       if (connectingBusy) return;
-      const t = tokInput.value.trim();
+      const t = (savedToken || tokInput.value).trim();
+      const silent = !!savedToken;
+
       if (!t) {
-        showLoginError("Please enter a token to continue.");
-        tokInput.focus();
+        if (!silent) {
+          showLoginError("Please enter a token to continue.");
+          tokInput.focus();
+        }
         return;
       }
 
       connectingBusy = true;
-      clearLoginError();
+      if (!silent) clearLoginError();
       goBtn.disabled = true;
       tokInput.disabled = true;
 
       const startTs = Date.now();
-      buildDotSquare(connectingDots);
-      connectingEl.classList.add('show');
-      connectingAnim.start();
+      if (!silent) {
+        buildDotSquare(connectingDots);
+        connectingEl.classList.add('show');
+        connectingAnim.start();
+      }
 
       const finish = (ok, errMsg) => {
         connectingBusy = false;
@@ -1369,15 +1451,23 @@
         connectingEl.classList.remove('show');
         goBtn.disabled = false;
         tokInput.disabled = false;
-        if (!ok) showLoginError(errMsg || "Something went wrong.");
+        if (!ok && !silent) showLoginError(errMsg || "Something went wrong.");
+        else if (!ok && silent) {
+          // Silent failure — clean up saved token and let user retry
+          try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+          tokInput.value = "";
+          tokInput.focus();
+        }
       };
 
       try {
         const url = API_URL + "?action=models&token=" + encodeURIComponent(t);
         const data = await gasFetch(url, { method: "GET" });
 
-        const elapsed = Date.now() - startTs;
-        if (elapsed < MIN_LOADING) await sleep(MIN_LOADING - elapsed);
+        if (!silent) {
+          const elapsed = Date.now() - startTs;
+          if (elapsed < MIN_LOADING) await sleep(MIN_LOADING - elapsed);
+        }
 
         if (!data || data._parseError) { finish(false, "Invalid response from server."); return; }
 
@@ -1411,6 +1501,9 @@
         logoutBtn.classList.add('show');
         modelBtnName.textContent = currentModel.label || currentModel.id;
 
+        // Show empty state if no messages yet
+        renderEmptyStateIfNeeded();
+
         connectingBusy = false;
         connectingAnim.stop();
         connectingEl.classList.remove('show');
@@ -1420,19 +1513,48 @@
         const msg = (e && e.message) || "";
         const isTimeout = /abort|timeout/i.test(msg);
         const isNetwork = /network|failed to fetch|load failed/i.test(msg);
-        const elapsed = Date.now() - startTs;
-        if (elapsed < MIN_LOADING) await sleep(MIN_LOADING - elapsed);
+        if (!silent) {
+          const elapsed = Date.now() - startTs;
+          if (elapsed < MIN_LOADING) await sleep(MIN_LOADING - elapsed);
+        }
         if (isTimeout) finish(false, "Connection timed out. Please check your internet and try again.");
         else if (isNetwork) finish(false, "Unable to reach server. Please check your internet.");
         else finish(false, "Connection failed. Please try again.");
       }
     }
 
-    function initToken() {
+    async function autoLogin() {
+      if (autoLoggedIn) return;
+      autoLoggedIn = true;
       let saved = null;
       try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
-      if (saved) tokInput.value = saved;
-      tokInput.focus();
+      if (!saved) {
+        tokInput.focus();
+        return;
+      }
+      tokInput.value = saved;
+      await connect(saved);
+    }
+
+    function renderEmptyStateIfNeeded() {
+      if (chat.children.length > 0) return;
+      chat.innerHTML = `
+        <div class="empty-state">
+          <svg class="empty-state-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <g fill="#4A7DFF" opacity="0.6">
+              <path d="M48 15 L30 15 L20 35 L30 35 L30 30 L42 30 L42 42 L30 42 L25 50 L18 50 L10 62 L25 62 L30 55 L42 55 L42 68 L30 68 L25 78 L42 78 L48 82 L48 15 Z"/>
+              <path d="M52 15 L70 15 L80 35 L70 35 L70 30 L58 30 L58 42 L70 42 L75 50 L82 50 L90 62 L75 62 L70 55 L58 55 L58 68 L70 68 L75 78 L58 78 L52 82 L52 15 Z"/>
+            </g>
+          </svg>
+          <div class="empty-state-title">Ready when you are</div>
+          <div class="empty-state-sub">Ask anything — the model will answer in real time.</div>
+        </div>
+      `;
+    }
+
+    function removeEmptyState() {
+      const es = chat.querySelector('.empty-state');
+      if (es) es.remove();
     }
 
     function setupDragToDismiss(dialogEl, overlayEl, dragArea, onClose) {
@@ -1633,6 +1755,7 @@ ${exampleJSON}</div>
     }
 
     function addUserMessage(text) {
+      removeEmptyState();
       const el = document.createElement('div');
       el.className = 'msg user';
       el.textContent = text;
@@ -1642,6 +1765,7 @@ ${exampleJSON}</div>
     }
 
     function addErrorMessage(text) {
+      removeEmptyState();
       const el = document.createElement('div');
       el.className = 'msg error';
       el.textContent = text;
@@ -1669,6 +1793,7 @@ ${exampleJSON}</div>
     }
 
     function createThinkingBlock() {
+      removeEmptyState();
       const block = document.createElement('div');
       block.className = 'thinking-block';
 
@@ -1978,7 +2103,7 @@ ${exampleJSON}</div>
     setupDragToDismiss(dialog, dialogOverlay, dialogDragArea, closeDialog);
     setupDragToDismiss(infoDialog, infoOverlay, infoDragArea, closeInfo);
 
-    goBtn.addEventListener('click', connect);
+    goBtn.addEventListener('click', () => connect());
     tokInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') { e.preventDefault(); connect(); }
     });
@@ -2013,7 +2138,56 @@ ${exampleJSON}</div>
       if (e.key === 'Escape') { closeDialog(); closeInfo(); }
     });
 
-    initToken();
+    /* ============================================
+       Keyboard Handling — Lift layout only
+       ============================================ */
+    (function setupKeyboardLift() {
+      if (!window.visualViewport) return;
+
+      const vv = window.visualViewport;
+      let initialHeight = window.innerHeight;
+      let raf = null;
+
+      function update() {
+        if (raf) cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          // Compute how much the viewport shrank (keyboard height)
+          const kb = Math.max(0, initialHeight - vv.height - vv.offsetTop);
+
+          // Threshold: consider keyboard open if shrink > 100px
+          if (kb > 100 && document.activeElement === input) {
+            document.documentElement.style.setProperty('--kb-height', kb + 'px');
+            document.body.classList.add('kb-open');
+            // Keep chat pinned to bottom
+            scrollBottom();
+          } else {
+            document.documentElement.style.setProperty('--kb-height', '0px');
+            document.body.classList.remove('kb-open');
+          }
+        });
+      }
+
+      vv.addEventListener('resize', update);
+      vv.addEventListener('scroll', update);
+
+      // Also track focus/blur to reset
+      input.addEventListener('focus', () => { setTimeout(update, 100); });
+      input.addEventListener('blur', () => {
+        document.documentElement.style.setProperty('--kb-height', '0px');
+        document.body.classList.remove('kb-open');
+      });
+
+      // Reset baseline on orientation change
+      window.addEventListener('orientationchange', () => {
+        document.body.classList.remove('kb-open');
+        document.documentElement.style.setProperty('--kb-height', '0px');
+        setTimeout(() => { initialHeight = window.innerHeight; update(); }, 300);
+      });
+
+      update();
+    })();
+
+    autoLogin();
     autoResize();
     updateSendBtn();
   </script>
