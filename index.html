@@ -585,7 +585,7 @@
   }
 
   /* ============================================
-     Composer — Clean, refined, responsive
+     Composer — Fixed & Refined
   ============================================ */
   .composer-wrap {
     padding: 8px clamp(14px, 3vw, 24px) clamp(14px, 3vh, 22px);
@@ -596,14 +596,15 @@
   .composer {
     display: flex;
     align-items: flex-end;
-    gap: 8px;
+    gap: 6px;
     max-width: 820px;
     margin: 0 auto;
     background: #101010;
     border: 1px solid #1f1f1f;
-    border-radius: 26px;
-    padding: 6px 6px 6px clamp(16px, 3vw, 22px);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    border-radius: 28px;
+    padding: 6px 6px 6px clamp(16px, 3vw, 20px);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    min-height: 52px;
   }
 
   .composer:focus-within {
@@ -623,10 +624,11 @@
     outline: none;
     resize: none;
     max-height: 160px;
-    padding: clamp(9px, 1.5vh, 12px) 0;
+    padding: 12px 0;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #2a2a2a transparent;
+    display: block;
   }
 
   .composer textarea::-webkit-scrollbar { width: 4px; }
@@ -637,9 +639,14 @@
 
   .composer textarea::placeholder { color: var(--mut-2); }
 
+  /* ============================================
+     Send button — Fixed
+  ============================================ */
   .send-btn {
-    width: clamp(34px, 5vw, 38px);
-    height: clamp(34px, 5vw, 38px);
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
     border-radius: 50%;
     background: #2a2a2a;
     color: #6a6a6a;
@@ -649,58 +656,67 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: transform 0.15s ease,
+    align-self: flex-end;
+    transition: background 0.2s ease,
+                color 0.2s ease,
                 border-radius 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
-                background 0.2s ease,
-                color 0.2s ease;
+                transform 0.15s ease;
     position: relative;
+    padding: 0;
+    line-height: 1;
+    overflow: hidden;
   }
 
-  /* Ready state (has text) */
   .send-btn.ready {
     background: #ffffff;
     color: #000;
   }
 
-  .send-btn.ready:hover { transform: scale(1.06); }
-  .send-btn.ready:active { transform: scale(0.94); }
+  .send-btn.ready:hover { transform: scale(1.05); }
+  .send-btn.ready:active { transform: scale(0.95); }
 
-  /* Sending / stop state */
   .send-btn.sending {
     background: #ffffff;
     color: #000;
     border-radius: 12px;
   }
 
-  .send-btn.sending:hover { transform: scale(1.06); }
-  .send-btn.sending:active { transform: scale(0.94); }
+  .send-btn.sending:hover { transform: scale(1.05); }
+  .send-btn.sending:active { transform: scale(0.95); }
+
+  .send-btn:disabled {
+    cursor: not-allowed;
+  }
 
   .send-btn svg {
-    width: 15px;
-    height: 15px;
+    width: 16px;
+    height: 16px;
     display: block;
-    transition: opacity 0.2s ease, transform 0.2s ease;
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
   }
 
   .send-btn .icon-send {
+    transform: translate(-50%, -50%) scale(1);
     opacity: 1;
-    transform: scale(1);
   }
 
   .send-btn .icon-stop {
+    transform: translate(-50%, -50%) scale(0.5);
     opacity: 0;
-    transform: scale(0.5);
   }
 
   .send-btn.sending .icon-send {
+    transform: translate(-50%, -50%) scale(0.5);
     opacity: 0;
-    transform: scale(0.5);
   }
 
   .send-btn.sending .icon-stop {
+    transform: translate(-50%, -50%) scale(1);
     opacity: 1;
-    transform: scale(1);
   }
 
   /* ============================================
@@ -976,7 +992,6 @@
     border-radius: 2px;
   }
 
-  /* Connecting overlay */
   .connecting {
     position: fixed;
     inset: 0;
@@ -1019,9 +1034,6 @@
     letter-spacing: 0.02em;
   }
 
-  /* ============================================
-     Responsive
-  ============================================ */
   @media (max-width: 640px) {
     :root { --header-h: 52px; }
     .header { padding: 0 12px; gap: 6px; }
@@ -1035,15 +1047,13 @@
     .steps-list { gap: 12px; }
     .steps-list li { gap: 10px; }
     .steps-list li::before { width: 20px; height: 20px; font-size: 0.68rem; }
+    .send-btn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; }
+    .composer { min-height: 50px; padding: 5px 5px 5px 16px; }
   }
 
   @media (max-width: 380px) {
     .brand-name { max-width: 36vw; }
     .model-btn { max-width: 34vw; padding: 5px 8px; }
-  }
-
-  @media (min-height: 800px) {
-    .chat { gap: 18px; }
   }
 </style>
 </head>
@@ -1051,9 +1061,6 @@
 
   <div class="layout">
 
-    <!-- ============================================
-         Header
-    ============================================ -->
     <div class="header">
       <a class="brand" href="https://github.com/X5Coder/X5Models-Free" target="_blank" rel="noopener noreferrer">
         <svg class="brand-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -1094,9 +1101,6 @@
       </button>
     </div>
 
-    <!-- ============================================
-         Login Screen
-    ============================================ -->
     <div class="login-screen" id="loginScreen">
       <div class="login-box" id="loginBox">
         <div class="login-icon">
@@ -1161,9 +1165,6 @@
       </div>
     </div>
 
-    <!-- ============================================
-         Chat Screen
-    ============================================ -->
     <div class="chat-screen" id="chatScreen">
       <div class="chat" id="chat"></div>
 
@@ -1185,7 +1186,6 @@
 
   </div>
 
-  <!-- Dialogs -->
   <div class="dialog-overlay" id="dialogOverlay"></div>
   <div class="dialog" id="dialog">
     <div class="dialog-drag-area" id="dialogDragArea">
@@ -1837,7 +1837,8 @@ ${exampleJSON}</div>
 
     function autoResize() {
       input.style.height = 'auto';
-      input.style.height = Math.min(input.scrollHeight, 160) + 'px';
+      const newHeight = Math.min(input.scrollHeight, 160);
+      input.style.height = newHeight + 'px';
     }
 
     function updateSendBtn() {
