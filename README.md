@@ -12,13 +12,11 @@ A lightweight, elegant web client that gives you instant access to a curated col
 [![Made with](https://img.shields.io/badge/made%20with-HTML%20%2B%20CSS%20%2B%20JS-4A7DFF?style=flat-square)](#)
 [![No build](https://img.shields.io/badge/build-none%20required-4A7DFF?style=flat-square)](#)
 
-[Get Started](#-getting-your-token) · [Features](#-features) · [API](#-api-reference) · [Support](#-support)
-
 </div>
 
 ---
 
-## ✨ Overview
+## Overview
 
 **X5Models Free** is a single-file web application that turns any modern browser into a powerful, distraction-free AI chat interface. No accounts to create, no SDKs to install — just paste your token and start talking to the model of your choice.
 
@@ -30,56 +28,18 @@ The entire app lives in **one HTML file**, backed by a **Google Apps Script** en
 
 ---
 
-## 🚀 Features
+## Features
 
-<table>
-<tr>
-<td width="50%">
-
-### 🎨 Thoughtful Design
-A refined dark interface with a live **Working** indicator, smooth streaming responses, and a typing animation that feels natural — not rushed.
-
-</td>
-<td width="50%">
-
-### ⚡ Real-time Streaming
-Responses arrive **character by character** via Server-Sent Events. You can stop generation at any moment with a single click.
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-### 🧠 Any Model, One Token
-Switch between models mid-conversation. Your selection is remembered between sessions.
-
-</td>
-<td width="50%">
-
-### 🔐 Persistent Sessions
-Your token is stored locally — reopening the page fills the field automatically. Press **Connect** whenever you're ready.
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-### 📱 Fully Responsive
-The same interface, from a 320px phone to a 4K monitor. No horizontal scroll, no broken layouts.
-
-</td>
-<td width="50%">
-
-### 🔌 OpenAI-Compatible
-The backend accepts standard OpenAI request shapes. Use it from your own scripts, tools, or agents.
-
-</td>
-</tr>
-</table>
+- **Thoughtful Design** — A refined dark interface with a live *Working* indicator, smooth streaming responses, and a typing animation that feels natural — not rushed.
+- **Real-time Streaming** — Responses arrive character by character via Server-Sent Events. You can stop generation at any moment with a single click.
+- **Any Model, One Token** — Switch between models mid-conversation. Your selection is remembered between sessions.
+- **Persistent Sessions** — Your token is stored locally — reopening the page fills the field automatically. Press *Connect* whenever you're ready.
+- **Fully Responsive** — The same interface, from a 320px phone to a 4K monitor. No horizontal scroll, no broken layouts.
+- **OpenAI-Compatible** — The backend accepts standard OpenAI request shapes. Use it from your own scripts, tools, or agents.
 
 ---
 
-## 🎟 Getting Your Token
+## Getting Your Token
 
 Getting a token takes less than a minute. Here's the full walkthrough:
 
