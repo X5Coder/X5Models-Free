@@ -2,42 +2,47 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>X5Models Free</title>
 <style>
 :root{--bg:#0b0e14;--panel:#131824;--line:#232c40;--txt:#e8ecf4;--mut:#8b93a7;--acc:#4f7cff}
-*{box-sizing:border-box}body{font-family:Segoe UI,Arial,sans-serif;background:radial-gradient(1200px 600px at 80% -10%,#1b2540 0%,var(--bg) 55%);color:var(--txt);margin:0;display:flex;flex-direction:column;height:100vh}
-header{background:rgba(19,24,36,.92);padding:14px 16px;border-bottom:1px solid var(--line)}
-.brand{display:flex;align-items:center;gap:10px}.logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--acc),#9b5cff);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px}.brand h1{font-size:17px;margin:0}.brand small{color:var(--mut);font-size:12px}
-#login{display:flex;gap:8px;margin-top:10px}#login input{flex:1;background:#0b0e14;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:11px}
-button{background:linear-gradient(135deg,var(--acc),#6a5cff);color:#fff;border:0;border-radius:10px;padding:11px 18px;font-weight:700;cursor:pointer}button:disabled{opacity:.5;cursor:wait}
+*{box-sizing:border-box}html,body{height:100%}
+body{font-family:Segoe UI,Arial,sans-serif;background:radial-gradient(1200px 600px at 80% -10%,#1b2540 0%,var(--bg) 55%);color:var(--txt);margin:0;display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+header{background:rgba(19,24,36,.94);padding:12px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:34px;height:34px;min-width:34px;border-radius:10px;background:linear-gradient(135deg,var(--acc),#9b5cff);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17px}
+.brand h1{font-size:16px;margin:0}.brand small{color:var(--mut);font-size:11px}
+#login{display:flex;gap:8px;margin-top:10px}
+#login input{flex:1;min-width:0;background:#0b0e14;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:11px;font-size:16px}
+button{background:linear-gradient(135deg,var(--acc),#6a5cff);color:#fff;border:0;border-radius:10px;padding:11px 18px;font-weight:700;cursor:pointer;font-size:15px;white-space:nowrap}button:disabled{opacity:.5}
 #who{margin-top:8px;font-size:12px;color:var(--mut)}
-#chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;max-width:900px;width:100%;margin:0 auto}
-.msg{max-width:82%;padding:11px 14px;border-radius:14px;white-space:pre-wrap;font-size:14px;line-height:1.55}
+#chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;max-width:900px;width:100%;margin:0 auto}
+.msg{max-width:82%;padding:10px 13px;border-radius:14px;white-space:pre-wrap;word-break:break-word;font-size:14px;line-height:1.55}
 .u{align-self:flex-end;background:linear-gradient(135deg,#2f5bff,#6a5cff);border-bottom-right-radius:4px}
 .a{align-self:flex-start;background:var(--panel);border:1px solid var(--line);border-bottom-left-radius:4px}
 .meta{font-size:11px;color:var(--mut);margin-top:6px}
-#bar{display:flex;gap:8px;padding:12px;background:rgba(19,24,36,.95);border-top:1px solid var(--line)}
-#bar .wrap{flex:1;display:flex;gap:8px;max-width:900px;margin:0 auto;width:100%}
-#bar select{max-width:220px;background:#0b0e14;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:11px}
-#bar input{flex:1;background:#0b0e14;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:11px}
+#bar{padding:10px;background:rgba(19,24,36,.96);border-top:1px solid var(--line);position:sticky;bottom:0}
+#bar .wrap{display:flex;gap:8px;max-width:900px;margin:0 auto;width:100%}
+#bar select{width:30%;min-width:0;background:#0b0e14;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:11px;font-size:14px}
+#bar input{flex:1;min-width:0;background:#0b0e14;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:11px;font-size:16px}
 .hide{display:none!important}
-</style>
+@media(max-width:640px){.msg{max-width:92%;font-size:13px}#bar{padding:8px}#bar select{width:26%}button{padding:11px 12px}}</style>
 </head>
 <body>
+<script>
+var G="https://script.google.com/macros/s/AKfycbwE4MgcyATsiJUUUvArDC1BX5JLpeinJUvgFG7_3vwNBgny-BSoSS28dPoWu2fMeUA7/exec";
+var T="";var HIST=[];
+function add(t,me,meta){var d=document.createElement("div");d.className="msg "+(me?"u":"a");var p=document.createElement("div");p.textContent=t;d.appendChild(p);if(meta){var m=document.createElement("div");m.className="meta";m.textContent=meta;d.appendChild(m);}var c=document.getElementById("chat");c.appendChild(d);c.scrollTop=c.scrollHeight;return d;}
+function post(p,b){return fetch(G+p,{method:"POST",body:JSON.stringify(b)}).then(function(r){return r.json();});}
+function conn(){T=document.getElementById("tok").value.trim();if(!T)return;var go=document.getElementById("go");go.disabled=true;add("Connecting...",false);fetch(G+"?action=models").then(function(r){return r.json();}).then(function(m){if(m.error||!m.data){add("Error: "+((m.error||{}).message||"server offline"),false);go.disabled=false;return;}var s=document.getElementById("models");s.innerHTML="";m.data.forEach(function(x){var o=document.createElement("option");o.value=x.id;o.textContent=x.label||x.id;s.appendChild(o);});document.getElementById("login").classList.add("hide");document.getElementById("bar").classList.remove("hide");var w=document.getElementById("who");w.classList.remove("hide");fetch(G+"?action=usage&token="+encodeURIComponent(T)).then(function(r){return r.json();}).then(function(u){w.textContent=(u.email||"Connected")+" | used "+(u.total||0);});add("Welcome! Pick a model and start chatting.",false);}).catch(function(){add("Connection failed. Check internet.",false);go.disabled=false;});}
+function send(){var i=document.getElementById("inp");var t=i.value.trim();if(!t||!T)return;i.value="";HIST.push({role:"user",content:t});add(t,true);var b=add("Typing...",false);post("?action=chat",{model:document.getElementById("models").value,messages:HIST.slice(-20),max_tokens:800,_tok:T}).then(function(d){if(d.error){b.firstChild.textContent="Error: "+(d.error.message||"?");return;}var mg=((d.choices||[])[0]||{}).message||{};b.firstChild.textContent=mg.content||"(empty)";HIST.push({role:"assistant",content:mg.content||""});}).catch(function(){b.firstChild.textContent="Network error. Try again.";});}
+document.getElementById("go").onclick=conn;
+document.getElementById("send").onclick=send;
+document.getElementById("inp").onkeydown=function(e){if(e.key==="Enter")send();};
+document.getElementById("tok").onkeydown=function(e){if(e.key==="Enter")conn();};
+</script>
 <header><div class="brand"><div class="logo">X5</div><div><h1>X5Models Free</h1><small>free AI chat</small></div></div><div id="login"><input id="tok" type="password" placeholder="Paste your token (sk-...)" autocomplete="off"><button id="go">Connect</button></div><div id="who" class="hide"></div></header>
 <div id="chat"></div>
 <div id="bar" class="hide"><div class="wrap"><select id="models"></select><input id="inp" placeholder="Type a message..." autocomplete="off"><button id="send">Send</button></div></div>
 </body>
 </html>
-<script>
-var G="https://script.google.com/macros/s/AKfycbwE4MgcyATsiJUUUvArDC1BX5JLpeinJUvgFG7_3vwNBgny-BSoSS28dPoWu2fMeUA7/exec";
-var T="";var HIST=[];
-function add(txt,me,meta){var d=document.createElement("div");d.className="msg "+(me?"u":"a");var p=document.createElement("div");p.textContent=txt;d.appendChild(p);if(meta){var m=document.createElement("div");m.className="meta";m.textContent=meta;d.appendChild(m);}var c=document.getElementById("chat");c.appendChild(d);c.scrollTop=c.scrollHeight;return d;}
-function send(){var inp=document.getElementById("inp");var t=inp.value.trim();if(!t||!T)return;inp.value="";HIST.push({role:"user",content:t});add(t,true);var b=add("Typing...",false);var btn=document.getElementById("send");btn.disabled=true;post("?action=chat",{model:document.getElementById("models").value,messages:HIST.slice(-20),max_tokens:800,_tok:T}).then(function(d){btn.disabled=false;if(d.error){b.childNodes[0].textContent="Error: "+(d.error.message||"?");return;}var msg=((d.choices||[])[0]||{}).message||{};b.childNodes[0].textContent=msg.content||"(empty)";HIST.push({role:"assistant",content:msg.content||""});var u=d.usage||{};var met=document.createElement("div");met.className="meta";met.textContent=document.getElementById("models").value+" | "+(u.total_tokens||0)+" tokens";b.appendChild(met);b.parentNode.scrollTop=b.parentNode.scrollHeight;}).catch(function(){btn.disabled=false;b.childNodes[0].textContent="Network error. Try again.";});}
-document.getElementById("send").onclick=send;
-document.getElementById("inp").onkeydown=function(e){if(e.key==="Enter")send();};
-</script>
-function post(path,body){return fetch(G+path,{method:"POST",body:JSON.stringify(body)}).then(function(r){return r.json();});}
-document.getElementById("go").onclick=function(){T=document.getElementById("tok").value.trim();if(!T)return;var go=document.getElementById("go");go.disabled=true;fetch(G+"?action=models").then(function(r){return r.json();}).then(function(m){if(m.error){add("Error: "+m.error.message,false);go.disabled=false;return;}var s=document.getElementById("models");s.innerHTML="";(m.data||[]).forEach(function(x){var o=document.createElement("option");o.value=x.id;o.textContent=x.label||x.id;s.appendChild(o);});document.getElementById("login").classList.add("hide");document.getElementById("bar").classList.remove("hide");var w=document.getElementById("who");w.classList.remove("hide");fetch(G+"?action=usage&token="+encodeURIComponent(T)).then(function(r){return r.json();}).then(function(u){w.textContent=(u.email||"Connected")+" | used "+(u.total||0);});add("Welcome! Pick a model below and start chatting.",false);}).catch(function(){add("Connection failed. Check your token.",false);go.disabled=false;});};
-PART1OK
