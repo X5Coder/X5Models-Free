@@ -7,7 +7,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -66,9 +66,17 @@
   @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
 
   .header-title {
-    font-size: 0.85rem; font-weight: 500;
-    color: #888; letter-spacing: 0.02em; white-space: nowrap;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #888;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    cursor: pointer;
   }
+
+  .header-title:hover { color: #fff; }
 
   .header-spacer { flex: 1; }
 
@@ -78,7 +86,7 @@
     color: var(--txt); padding: 7px 12px; border-radius: 10px;
     font-family: inherit; font-size: 0.78rem; font-weight: 500;
     cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease;
-    white-space: nowrap; max-width: 240px;
+    white-space: nowrap; max-width: 220px;
   }
 
   .model-btn.show { display: inline-flex; }
@@ -86,23 +94,33 @@
   .model-btn .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .model-btn svg { width: 10px; height: 10px; flex-shrink: 0; opacity: 0.6; }
 
-  .logout-btn {
-    display: none; background: transparent;
-    border: 1px solid var(--line-2); color: #888;
-    width: 32px; height: 32px; border-radius: 10px;
-    cursor: pointer; align-items: center; justify-content: center;
+  .icon-btn {
+    display: none;
+    background: transparent;
+    border: 1px solid var(--line-2);
+    color: #888;
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
     transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
     flex-shrink: 0;
   }
 
-  .logout-btn.show { display: flex; }
-  .logout-btn:hover { background: #161616; border-color: #2a2a2a; color: #e0e0e0; }
-  .logout-btn svg { width: 14px; height: 14px; }
+  .icon-btn.show { display: flex; }
+  .icon-btn:hover { background: #161616; border-color: #2a2a2a; color: #e0e0e0; }
+  .icon-btn svg { width: 14px; height: 14px; }
 
   /* Login */
   .login-screen {
-    flex: 1; display: flex; align-items: center; justify-content: center;
-    padding: 20px; transition: opacity 0.4s ease, transform 0.4s ease;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 20px;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    overflow-y: auto;
   }
 
   .login-screen.hide {
@@ -111,8 +129,9 @@
   }
 
   .login-box {
-    width: 100%; max-width: 420px;
+    width: 100%; max-width: 440px;
     display: flex; flex-direction: column; gap: 14px; text-align: center;
+    margin: auto 0;
   }
 
   .login-icon {
@@ -199,11 +218,11 @@
     max-height: 0; padding-top: 0; padding-bottom: 0;
     opacity: 0; overflow: hidden;
     transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.3s ease, padding 0.3s ease, margin 0.3s ease;
+                opacity 0.3s ease, padding 0.3s ease;
   }
 
   .login-error.show {
-    max-height: 100px; padding-top: 12px; padding-bottom: 12px; opacity: 1;
+    max-height: 120px; padding-top: 12px; padding-bottom: 12px; opacity: 1;
   }
 
   .login-error svg { width: 18px; height: 18px; flex-shrink: 0; }
@@ -218,6 +237,92 @@
 
   .login-box.shake .login-input-wrap {
     animation: shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+  }
+
+  /* Steps section */
+  .login-steps {
+    text-align: left;
+    background: #060606;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px;
+    margin-top: 6px;
+  }
+
+  .login-steps-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #b0b0b0;
+    letter-spacing: 0.02em;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+
+  .login-steps-head svg {
+    width: 14px; height: 14px;
+    color: #6a6a6a;
+  }
+
+  .steps-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    counter-reset: step;
+  }
+
+  .steps-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.78rem;
+    color: #909090;
+    line-height: 1.55;
+    counter-increment: step;
+  }
+
+  .steps-list li::before {
+    content: counter(step);
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    background: #101010;
+    border: 1px solid #1e1e1e;
+    color: #888;
+    font-size: 0.7rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .steps-list a {
+    color: #d0d0d0;
+    text-decoration: none;
+    border-bottom: 1px dashed #2a2a2a;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    word-break: break-all;
+  }
+
+  .steps-list a:hover {
+    color: #fff;
+    border-color: #4a4a4a;
+  }
+
+  .steps-list code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    background: #101010;
+    border: 1px solid #1e1e1e;
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: #c0c0c0;
+    word-break: break-all;
   }
 
   /* Chat */
@@ -256,19 +361,13 @@
     font-size: 0.82rem; max-width: 100%;
   }
 
-  /* Thinking Block */
+  /* Thinking Block - Working only, no steps, no arrow */
   .thinking-block {
-    align-self: flex-start; width: 100%;
-    display: flex; flex-direction: column; gap: 6px;
-    transition: gap 0.4s ease;
-  }
-
-  .thinking-block.done { gap: 2px; }
-
-  .thinking-header {
-    display: flex; align-items: center; gap: 6px;
-    cursor: pointer; user-select: none;
-    padding: 4px 0; width: fit-content;
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
   }
 
   .dot-square {
@@ -323,101 +422,6 @@
     animation: none; background-image: none;
     -webkit-text-fill-color: #ffffff; color: #ffffff;
   }
-
-  .arrow {
-    width: 14px; height: 14px;
-    display: flex; align-items: center; justify-content: center;
-    color: #888; transition: color 0.25s ease;
-  }
-
-  .arrow svg {
-    width: 10px; height: 10px; display: block;
-    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  .thinking-header:hover .arrow { color: #fff; }
-  .thinking-block.open .arrow svg { transform: rotate(90deg); }
-
-  .steps {
-    display: grid; grid-template-rows: 1fr;
-    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-    margin-left: 9px; opacity: 1;
-  }
-
-  .thinking-block:not(.open) .steps { grid-template-rows: 0fr; opacity: 0; }
-
-  .steps-inner {
-    overflow: hidden; min-height: 0;
-    display: flex; flex-direction: column; gap: 4px;
-    border-left: 1px solid var(--line-2); padding-left: 12px;
-  }
-
-  .step-item { display: flex; flex-direction: column; }
-
-  .step-head {
-    display: flex; align-items: center; gap: 8px;
-    cursor: pointer; user-select: none;
-    width: fit-content; padding: 3px 0;
-  }
-
-  .step-bullet {
-    width: 4px; height: 4px; border-radius: 50%;
-    background: #444; flex-shrink: 0;
-    transition: background 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .step-item.done .step-bullet {
-    background: #4ade80; box-shadow: 0 0 6px rgba(74, 222, 128, 0.5);
-  }
-
-  .step-title {
-    font-size: 0.82rem; color: var(--mut); line-height: 1.5;
-    transition: color 0.3s ease; opacity: 0; transform: translateX(-6px);
-    animation: stepIn 0.4s ease forwards;
-  }
-
-  .step-item.done .step-title { color: #8a8a8a; }
-
-  @keyframes stepIn { to { opacity: 1; transform: translateX(0); } }
-
-  .step-arrow {
-    width: 12px; height: 12px;
-    display: flex; align-items: center; justify-content: center;
-    color: #555; margin-left: 2px; transition: color 0.25s ease;
-  }
-
-  .step-arrow svg {
-    width: 8px; height: 8px; display: block;
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  .step-head:hover .step-arrow { color: #aaa; }
-  .step-item.open .step-arrow svg { transform: rotate(90deg); }
-
-  .step-content {
-    display: grid; grid-template-rows: 0fr;
-    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease;
-    padding-left: 12px; padding-top: 0; padding-bottom: 0;
-  }
-
-  .step-item.open .step-content {
-    grid-template-rows: 1fr; padding-top: 6px; padding-bottom: 4px;
-  }
-
-  .step-content-inner { overflow: hidden; min-height: 0; }
-
-  .step-text {
-    font-size: 0.78rem; color: var(--mut); line-height: 1.6; padding: 4px 0;
-  }
-
-  .step-img {
-    width: 180px; height: 100px; border-radius: 8px; overflow: hidden;
-    background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
-    display: flex; align-items: center; justify-content: center;
-    margin: 4px 0; border: 1px solid var(--line);
-  }
-
-  .step-img svg { width: 28px; height: 28px; color: var(--mut-2); }
 
   .final {
     align-self: flex-start; max-width: 100%;
@@ -474,7 +478,7 @@
   .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .send-btn svg { width: 16px; height: 16px; pointer-events: none; }
 
-  /* Dialog */
+  /* Dialog base */
   .dialog-overlay {
     position: fixed; inset: 0;
     background: rgba(0, 0, 0, 0.6);
@@ -490,18 +494,29 @@
     transform: translate(-50%, 100%);
     width: 100%; max-width: 520px;
     background: #0a0a0a; border: 1px solid var(--line-2); border-bottom: 0;
-    border-radius: 20px 20px 0 0; padding: 20px;
+    border-radius: 20px 20px 0 0; padding: 0 20px 20px;
     transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 101; max-height: 70vh;
+    z-index: 101; max-height: 80vh;
     display: flex; flex-direction: column;
     box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.7);
+    will-change: transform;
   }
 
   .dialog.show { transform: translate(-50%, 0); }
 
+  .dialog-drag-area {
+    padding: 12px 0 4px;
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+    flex-shrink: 0;
+  }
+
+  .dialog-drag-area:active { cursor: grabbing; }
+
   .dialog-handle {
     width: 40px; height: 4px; background: #2a2a2a;
-    border-radius: 2px; margin: 0 auto 16px; flex-shrink: 0;
+    border-radius: 2px; margin: 0 auto 16px;
   }
 
   .dialog-title {
@@ -511,9 +526,11 @@
 
   .dialog-sub { font-size: 0.78rem; color: var(--mut); margin-bottom: 16px; }
 
+  /* Model list */
   .model-list {
     overflow-y: auto; display: flex; flex-direction: column;
-    gap: 6px; flex: 1; margin: 0 -6px; padding: 0 6px;
+    gap: 6px; flex: 1; min-height: 0;
+    margin: 0 -6px; padding: 0 6px;
   }
 
   .model-list::-webkit-scrollbar { width: 4px; }
@@ -566,6 +583,97 @@
   .model-item.active .model-item-check { display: block; }
   .model-item-check svg { width: 16px; height: 16px; }
 
+  /* Info dialog - specific */
+  .info-list {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 0 2px 4px;
+  }
+
+  .info-list::-webkit-scrollbar { width: 4px; }
+  .info-list::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
+
+  .info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .info-label {
+    font-size: 0.68rem;
+    color: #555;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .info-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.74rem;
+    color: #d0d0d0;
+    background: #060606;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+    word-break: break-all;
+    line-height: 1.55;
+  }
+
+  .info-value.masked {
+    color: #6a6a6a;
+  }
+
+  .info-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .info-row .info-value {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .info-reveal {
+    background: #101010;
+    border: 1px solid var(--line-2);
+    color: #888;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .info-reveal:hover { background: #161616; border-color: #2a2a2a; color: #e0e0e0; }
+  .info-reveal svg { width: 14px; height: 14px; }
+
+  .info-pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: #b0b0b0;
+    background: #060606;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    white-space: pre;
+    overflow-x: auto;
+    line-height: 1.7;
+  }
+
+  .info-pre::-webkit-scrollbar { height: 4px; }
+  .info-pre::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
+
+  .info-pre .k { color: #c0c0c0; }
+  .info-pre .s { color: #8ab4ff; }
+  .info-pre .p { color: #888; }
+
   /* Connecting */
   .connecting {
     position: fixed; inset: 0;
@@ -598,6 +706,7 @@
     .composer-wrap { padding: 12px 16px 16px; }
     .msg { max-width: 92%; font-size: 0.88rem; }
     .header-title { font-size: 0.8rem; }
+    .login-screen { padding: 24px 16px; }
   }
 </style>
 </head>
@@ -607,7 +716,7 @@
 
     <div class="header">
       <span class="logo-dot"></span>
-      <span class="header-title">X5Models Free</span>
+      <a class="header-title" href="https://github.com/X5Coder/X5Models-Free" target="_blank" rel="noopener noreferrer">X5Models Free</a>
       <div class="header-spacer"></div>
 
       <button class="model-btn" id="modelBtn">
@@ -620,7 +729,15 @@
         <span class="name" id="modelBtnName">Select model</span>
       </button>
 
-      <button class="logout-btn" id="logoutBtn" title="Disconnect">
+      <button class="icon-btn" id="infoBtn" title="Connection info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+      </button>
+
+      <button class="icon-btn" id="logoutBtn" title="Disconnect">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
           <polyline points="16 17 21 12 16 7"/>
@@ -629,6 +746,9 @@
       </button>
     </div>
 
+    <!-- ============================================
+         Login Screen
+    ============================================ -->
     <div class="login-screen" id="loginScreen">
       <div class="login-box" id="loginBox">
         <div class="login-icon">
@@ -654,9 +774,47 @@
           </svg>
           <span id="loginErrorText">Invalid token. Please check and try again.</span>
         </div>
+
+        <!-- Steps -->
+        <div class="login-steps">
+          <div class="login-steps-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"/>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+            How to get your token
+          </div>
+          <ol class="steps-list">
+            <li>
+              Copy the Python script from
+              <a href="https://raw.githubusercontent.com/X5Coder/X5Models-Free/refs/heads/main/start.py" target="_blank" rel="noopener noreferrer">start.py</a>
+            </li>
+            <li>
+              Run it in any Python editor on your PC or phone
+            </li>
+            <li>
+              It will print a URL like
+              <code>https://authkit.cline.bot/device?user_code=XXXX-XXXX</code>
+            </li>
+            <li>
+              Open that URL in Chrome and sign in with your Google account
+            </li>
+            <li>
+              Confirm the code shown on the page, then go back to the script
+            </li>
+            <li>
+              Copy the token shown in the terminal
+              <code>sk-xxxxxxxxxxxx</code>
+              and paste it above
+            </li>
+          </ol>
+        </div>
       </div>
     </div>
 
+    <!-- ============================================
+         Chat Screen
+    ============================================ -->
     <div class="chat-screen" id="chatScreen">
       <div class="chat" id="chat"></div>
 
@@ -675,12 +833,26 @@
 
   </div>
 
+  <!-- Model dialog -->
   <div class="dialog-overlay" id="dialogOverlay"></div>
   <div class="dialog" id="dialog">
-    <div class="dialog-handle"></div>
-    <div class="dialog-title">Select a model</div>
-    <div class="dialog-sub">Choose which AI model to chat with</div>
+    <div class="dialog-drag-area" id="dialogDragArea">
+      <div class="dialog-handle"></div>
+      <div class="dialog-title">Select a model</div>
+      <div class="dialog-sub">Choose which AI model to chat with</div>
+    </div>
     <div class="model-list" id="modelList"></div>
+  </div>
+
+  <!-- Info dialog -->
+  <div class="dialog-overlay" id="infoOverlay"></div>
+  <div class="dialog" id="infoDialog">
+    <div class="dialog-drag-area" id="infoDragArea">
+      <div class="dialog-handle"></div>
+      <div class="dialog-title">Connection Info</div>
+      <div class="dialog-sub">Details about your current session</div>
+    </div>
+    <div class="info-list" id="infoList"></div>
   </div>
 
   <div class="connecting" id="connecting">
@@ -707,7 +879,8 @@
     let isProcessing = false;
     let currentModel = null;
     let modelsList = [];
-    let connecting = false;
+    let connectingBusy = false;
+    let tokenRevealed = false;
 
     /* ============================================
        Elements
@@ -723,10 +896,16 @@
     const chatScreen = document.getElementById('chatScreen');
     const modelBtn = document.getElementById('modelBtn');
     const modelBtnName = document.getElementById('modelBtnName');
+    const infoBtn = document.getElementById('infoBtn');
     const logoutBtn = document.getElementById('logoutBtn');
     const dialog = document.getElementById('dialog');
     const dialogOverlay = document.getElementById('dialogOverlay');
+    const dialogDragArea = document.getElementById('dialogDragArea');
     const modelList = document.getElementById('modelList');
+    const infoDialog = document.getElementById('infoDialog');
+    const infoOverlay = document.getElementById('infoOverlay');
+    const infoDragArea = document.getElementById('infoDragArea');
+    const infoList = document.getElementById('infoList');
     const connectingEl = document.getElementById('connecting');
     const connectingDots = document.getElementById('connectingDots');
     const loginError = document.getElementById('loginError');
@@ -735,28 +914,17 @@
     /* ============================================
        Helpers
     ============================================ */
-    function scrollBottom() {
-      chat.scrollTop = chat.scrollHeight;
-    }
-
-    function sleep(ms) {
-      return new Promise(r => setTimeout(r, ms));
-    }
-
+    function scrollBottom() { chat.scrollTop = chat.scrollHeight; }
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
     function escapeHtml(str) {
       const div = document.createElement('div');
-      div.textContent = str;
+      div.textContent = str == null ? "" : str;
       return div.innerHTML;
     }
 
-    /* ============================================
-       Fast JSONP-style Fetch
-       Uses plain fetch (no abort controller conflicts with GAS)
-    ============================================ */
     async function gasFetch(url, options = {}) {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
-
       try {
         const res = await fetch(url, {
           ...options,
@@ -765,13 +933,9 @@
           cache: "no-store"
         });
         clearTimeout(timer);
-
         const text = await res.text();
-        try {
-          return JSON.parse(text);
-        } catch (e) {
-          return { _raw: text, _parseError: true };
-        }
+        try { return JSON.parse(text); }
+        catch (e) { return { _raw: text, _parseError: true }; }
       } catch (e) {
         clearTimeout(timer);
         throw e;
@@ -793,9 +957,7 @@
       loginBox.classList.add('shake');
 
       clearTimeout(errorTimer);
-      errorTimer = setTimeout(() => {
-        loginBox.classList.remove('shake');
-      }, 500);
+      errorTimer = setTimeout(() => loginBox.classList.remove('shake'), 500);
     }
 
     function clearLoginError() {
@@ -833,23 +995,10 @@
         const runCycle = () => {
           if (this.stopped) return;
           dots.forEach(d => d.classList.remove('on'));
-
-          this.timers.push(setTimeout(() => {
-            if (this.stopped) return;
-            rings[0].forEach(d => d.classList.add('on'));
-          }, 60));
-          this.timers.push(setTimeout(() => {
-            if (this.stopped) return;
-            rings[1].forEach(d => d.classList.add('on'));
-          }, 360));
-          this.timers.push(setTimeout(() => {
-            if (this.stopped) return;
-            rings[2].forEach(d => d.classList.add('on'));
-          }, 660));
-          this.timers.push(setTimeout(() => {
-            if (this.stopped) return;
-            dots.forEach(d => d.classList.remove('on'));
-          }, 1300));
+          this.timers.push(setTimeout(() => { if (!this.stopped) rings[0].forEach(d => d.classList.add('on')); }, 60));
+          this.timers.push(setTimeout(() => { if (!this.stopped) rings[1].forEach(d => d.classList.add('on')); }, 360));
+          this.timers.push(setTimeout(() => { if (!this.stopped) rings[2].forEach(d => d.classList.add('on')); }, 660));
+          this.timers.push(setTimeout(() => { if (!this.stopped) dots.forEach(d => d.classList.remove('on')); }, 1300));
           this.timers.push(setTimeout(runCycle, 1600));
         };
         runCycle();
@@ -862,16 +1011,15 @@
     };
 
     /* ============================================
-       Connect — simplified & fast
-       Only checks ?action=models — if data comes back, token is valid.
+       Connect
     ============================================ */
     async function connect(t, silent = false) {
-      if (connecting) return;
-      connecting = true;
+      if (connectingBusy) return;
+      connectingBusy = true;
 
       t = (t || tokInput.value).trim();
       if (!t) {
-        connecting = false;
+        connectingBusy = false;
         if (!silent) {
           showLoginError("Please enter a token to continue.");
           tokInput.focus();
@@ -890,31 +1038,21 @@
       }
 
       const finish = (ok, errMsg) => {
-        connecting = false;
+        connectingBusy = false;
         connectingAnim.stop();
         connectingEl.classList.remove('show');
         goBtn.disabled = false;
         tokInput.disabled = false;
-        if (!ok && !silent) {
-          showLoginError(errMsg || "Something went wrong. Please try again.");
-        } else if (!ok && silent) {
-          // Silently fail — user needs to re-login
-          tokInput.value = "";
-          tokInput.focus();
-        }
+        if (!ok && !silent) showLoginError(errMsg || "Something went wrong.");
+        else if (!ok && silent) { tokInput.value = ""; tokInput.focus(); }
       };
 
       try {
-        // Single request — fetch models WITH token to validate
         const url = API_URL + "?action=models&token=" + encodeURIComponent(t);
         const data = await gasFetch(url, { method: "GET" });
 
-        if (!data || data._parseError) {
-          finish(false, "Invalid response from server.");
-          return;
-        }
+        if (!data || data._parseError) { finish(false, "Invalid response from server."); return; }
 
-        // Any explicit error from server
         if (data.error) {
           const msg = (data.error && data.error.message) || "";
           if (/invalid|unauthor|forbidden|token|auth|denied|expired/i.test(msg)) {
@@ -925,14 +1063,9 @@
           return;
         }
 
-        // Success = we have models data
         const list = data.data;
-        if (!list || !list.length) {
-          finish(false, "No models available with this token.");
-          return;
-        }
+        if (!list || !list.length) { finish(false, "No models available with this token."); return; }
 
-        // All good
         token = t;
         modelsList = list;
 
@@ -946,20 +1079,17 @@
         loginScreen.classList.add('hide');
         chatScreen.classList.add('show');
         modelBtn.classList.add('show');
+        infoBtn.classList.add('show');
         logoutBtn.classList.add('show');
         modelBtnName.textContent = currentModel.label || currentModel.id;
 
-        connecting = false;
-        connectingAnim.stop();
-        connectingEl.classList.remove('show');
-
+        finish(true);
         input.focus();
 
       } catch (e) {
         const msg = (e && e.message) || "";
         const isTimeout = /abort|timeout/i.test(msg);
         const isNetwork = /network|failed to fetch|load failed/i.test(msg);
-
         if (isTimeout) finish(false, "Connection timed out. Please check your internet and try again.");
         else if (isNetwork) finish(false, "Unable to reach server. Please check your internet.");
         else finish(false, "Connection failed. Please try again.");
@@ -972,14 +1102,62 @@
     async function autoRestore() {
       let saved = null;
       try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
-
-      if (!saved) {
-        tokInput.focus();
-        return;
-      }
-
+      if (!saved) { tokInput.focus(); return; }
       tokInput.value = saved;
       await connect(saved, true);
+    }
+
+    /* ============================================
+       Drag-to-dismiss (Model dialog + Info dialog)
+    ============================================ */
+    function setupDragToDismiss(dialogEl, overlayEl, dragArea, onClose) {
+      let startY = 0;
+      let currentY = 0;
+      let dragging = false;
+
+      const start = (y) => {
+        startY = y;
+        currentY = y;
+        dragging = true;
+        dialogEl.style.transition = 'none';
+      };
+
+      const move = (y) => {
+        if (!dragging) return;
+        currentY = y;
+        const diff = Math.max(0, currentY - startY);
+        dialogEl.style.transform = `translate(-50%, ${diff}px)`;
+        const op = Math.max(0, 1 - diff / 400);
+        overlayEl.style.opacity = op;
+      };
+
+      const end = () => {
+        if (!dragging) return;
+        dragging = false;
+        const diff = currentY - startY;
+        dialogEl.style.transition = '';
+        overlayEl.style.opacity = '';
+        if (diff > 100) {
+          onClose();
+        } else {
+          dialogEl.style.transform = '';
+        }
+      };
+
+      dragArea.addEventListener('pointerdown', (e) => {
+        if (e.button !== undefined && e.button !== 0) return;
+        start(e.clientY);
+        try { dragArea.setPointerCapture(e.pointerId); } catch (err) {}
+      });
+      dragArea.addEventListener('pointermove', (e) => {
+        if (dragging) {
+          move(e.clientY);
+          if (e.cancelable) e.preventDefault();
+        }
+      });
+      dragArea.addEventListener('pointerup', end);
+      dragArea.addEventListener('pointercancel', end);
+      dragArea.addEventListener('pointerleave', () => { if (dragging) end(); });
     }
 
     /* ============================================
@@ -1023,18 +1201,101 @@
       });
 
       dialogOverlay.classList.add('show');
-      requestAnimationFrame(() => {
-        dialog.classList.add('show');
-      });
+      requestAnimationFrame(() => dialog.classList.add('show'));
     }
 
     function closeDialog() {
       dialog.classList.remove('show');
       dialogOverlay.classList.remove('show');
+      dialog.style.transform = '';
     }
 
     /* ============================================
-       Dot Square Animation (thinking block)
+       Info Dialog
+    ============================================ */
+    function maskToken(t) {
+      if (!t) return "";
+      if (t.length <= 12) return t;
+      return t.slice(0, 8) + "•".repeat(Math.min(20, t.length - 12)) + t.slice(-4);
+    }
+
+    function buildInfoDialog() {
+      const displayToken = tokenRevealed ? token : maskToken(token);
+      const exampleJSON = `{
+  "model": "${escapeHtml(currentModel?.id || "model-id")}",
+  "messages": [
+    { "role": "user", "content": "Hello" }
+  ],
+  "max_tokens": 800,
+  "_tok": "sk-..."
+}`;
+
+      infoList.innerHTML = `
+        <div class="info-section">
+          <div class="info-label">Server</div>
+          <div class="info-value">${escapeHtml(API_URL)}</div>
+        </div>
+
+        <div class="info-section">
+          <div class="info-label">Token</div>
+          <div class="info-row">
+            <div class="info-value ${tokenRevealed ? '' : 'masked'}" id="tokenDisplay">${escapeHtml(displayToken)}</div>
+            <button class="info-reveal" id="revealBtn" type="button" title="Toggle token visibility">
+              ${tokenRevealed ? `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                  <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+              ` : `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              `}
+            </button>
+          </div>
+        </div>
+
+        <div class="info-section">
+          <div class="info-label">Current Model</div>
+          <div class="info-value">${escapeHtml(currentModel?.id || "—")}</div>
+        </div>
+
+        <div class="info-section">
+          <div class="info-label">API Format (OpenAI compatible)</div>
+          <div class="info-pre"><span class="p">POST</span> <span class="s">{server}?action=chat</span>
+<span class="p">Content-Type:</span> <span class="s">application/json</span>
+
+${exampleJSON}</div>
+        </div>
+      `;
+
+      // Bind reveal button
+      const revealBtn = infoList.querySelector('#revealBtn');
+      if (revealBtn) {
+        revealBtn.addEventListener('click', () => {
+          tokenRevealed = !tokenRevealed;
+          buildInfoDialog();
+        });
+      }
+    }
+
+    function openInfo() {
+      if (!token) return;
+      buildInfoDialog();
+      infoOverlay.classList.add('show');
+      requestAnimationFrame(() => infoDialog.classList.add('show'));
+    }
+
+    function closeInfo() {
+      infoDialog.classList.remove('show');
+      infoOverlay.classList.remove('show');
+      infoDialog.style.transform = '';
+      tokenRevealed = false;
+    }
+
+    /* ============================================
+       Dot Square Animation
     ============================================ */
     const squareAnimations = new Map();
 
@@ -1043,7 +1304,7 @@
 
       const dots = [...square.querySelectorAll('span')];
       const rings = [[], [], []];
-      dots.forEach(dot => { rings[+dot.dataset.ring].push(dot); });
+      dots.forEach(dot => rings[+dot.dataset.ring].push(dot));
 
       let timers = [];
       let stopped = false;
@@ -1051,11 +1312,10 @@
       function runCycle() {
         if (stopped) return;
         dots.forEach(d => d.classList.remove('on'));
-
-        timers.push(setTimeout(() => { if (stopped) return; rings[0].forEach(d => d.classList.add('on')); }, 60));
-        timers.push(setTimeout(() => { if (stopped) return; rings[1].forEach(d => d.classList.add('on')); }, 360));
-        timers.push(setTimeout(() => { if (stopped) return; rings[2].forEach(d => d.classList.add('on')); }, 660));
-        timers.push(setTimeout(() => { if (stopped) return; dots.forEach(d => d.classList.remove('on')); }, 1300));
+        timers.push(setTimeout(() => { if (!stopped) rings[0].forEach(d => d.classList.add('on')); }, 60));
+        timers.push(setTimeout(() => { if (!stopped) rings[1].forEach(d => d.classList.add('on')); }, 360));
+        timers.push(setTimeout(() => { if (!stopped) rings[2].forEach(d => d.classList.add('on')); }, 660));
+        timers.push(setTimeout(() => { if (!stopped) dots.forEach(d => d.classList.remove('on')); }, 1300));
         timers.push(setTimeout(runCycle, 1600));
       }
 
@@ -1066,7 +1326,6 @@
           timers = [];
         }
       });
-
       runCycle();
     }
 
@@ -1097,7 +1356,7 @@
     }
 
     /* ============================================
-       Thinking Block
+       Thinking Block (Working only — no steps, no arrow)
     ============================================ */
     function createDotSquare() {
       const square = document.createElement('div');
@@ -1120,10 +1379,7 @@
 
     function createThinkingBlock() {
       const block = document.createElement('div');
-      block.className = 'thinking-block open';
-
-      const header = document.createElement('div');
-      header.className = 'thinking-header';
+      block.className = 'thinking-block';
 
       const dotSquare = createDotSquare();
 
@@ -1131,136 +1387,123 @@
       workingText.className = 'working-text';
       workingText.textContent = 'Working';
 
-      const arrow = document.createElement('span');
-      arrow.className = 'arrow';
-      arrow.innerHTML = `
-        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 2.5 L8 6 L4 9.5"/>
-        </svg>
-      `;
-
-      header.appendChild(dotSquare);
-      header.appendChild(workingText);
-      header.appendChild(arrow);
-
-      const steps = document.createElement('div');
-      steps.className = 'steps';
-      const stepsInner = document.createElement('div');
-      stepsInner.className = 'steps-inner';
-      steps.appendChild(stepsInner);
-
-      block.appendChild(header);
-      block.appendChild(steps);
+      block.appendChild(dotSquare);
+      block.appendChild(workingText);
 
       chat.appendChild(block);
       scrollBottom();
 
       startSquareAnimation(dotSquare);
-
-      header.addEventListener('click', () => {
-        block.classList.toggle('open');
-      });
-
       block._dotSquare = dotSquare;
       return block;
     }
 
-    /* ============================================
-       Steps
-    ============================================ */
-    const stepsLibrary = [
-      { title: "Sending request", type: "image", text: "Dispatching message to the model..." },
-      { title: "Processing input", type: "text", text: "Analyzing your message and context." },
-      { title: "Searching knowledge", type: "image", text: "Querying internal knowledge base..." },
-      { title: "Retrieving data", type: "text", text: "Gathering relevant information pieces." },
-      { title: "Verifying accuracy", type: "image", text: "Cross-checking facts and consistency..." },
-      { title: "Composing response", type: "text", text: "Building the final answer for you." }
-    ];
-
-    function createStepItem(stepData) {
-      const item = document.createElement('div');
-      item.className = 'step-item';
-
-      const contentHTML = stepData.type === 'image'
-        ? `<div class="step-img">
-             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-               <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-               <circle cx="8.5" cy="8.5" r="1.5"/>
-               <path d="M21 15 L16 10 L5 21"/>
-             </svg>
-           </div>
-           <div class="step-text">${stepData.text}</div>`
-        : `<div class="step-text">${stepData.text}</div>`;
-
-      item.innerHTML = `
-        <div class="step-head">
-          <span class="step-bullet"></span>
-          <span class="step-title">${stepData.title}</span>
-          <span class="step-arrow">
-            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 2.5 L8 6 L4 9.5"/>
-            </svg>
-          </span>
-        </div>
-        <div class="step-content">
-          <div class="step-content-inner">
-            ${contentHTML}
-          </div>
-        </div>
-      `;
-
-      const head = item.querySelector('.step-head');
-      head.addEventListener('click', (e) => {
-        e.stopPropagation();
-        item.classList.toggle('open');
-      });
-
-      return item;
-    }
-
-    async function runOneStep(block, index) {
-      const stepsInner = block.querySelector('.steps-inner');
-      const item = createStepItem(stepsLibrary[index]);
-      stepsInner.appendChild(item);
-      scrollBottom();
-      await sleep(280 + Math.random() * 180);
-      item.classList.add('done');
-    }
-
-    /* ============================================
-       Streaming Response
-    ============================================ */
-    async function streamResponse(text) {
-      const final = document.createElement('div');
-      final.className = 'final';
-
-      const textNode = document.createElement('span');
-      final.appendChild(textNode);
-
-      const cursor = document.createElement('span');
-      cursor.className = 'cursor';
-      final.appendChild(cursor);
-
-      chat.appendChild(final);
-      scrollBottom();
-
-      for (let i = 0; i < text.length; i++) {
-        textNode.textContent += text[i];
-        scrollBottom();
-
-        const char = text[i];
-        let delay = 8 + Math.random() * 12;
-        if (char === '.' || char === '!' || char === '?') delay = 100;
-        else if (char === ',') delay = 50;
-        else if (char === '\n') delay = 70;
-        else if (char === ' ') delay = 15;
-
-        await sleep(delay);
+    function finishThinkingBlock(block) {
+      if (block._dotSquare) {
+        stopSquareAnimation(block._dotSquare);
+        block._dotSquare.querySelectorAll('span').forEach(d => d.classList.remove('on'));
       }
+      block.classList.add('done');
+    }
 
-      await sleep(200);
-      cursor.remove();
-      return final;
+    /* ============================================
+       Chat Request — SSE + JSON fallback
+    ============================================ */
+    async function sendChat(payload, onDelta, onDone, onError) {
+      try {
+        const res = await fetch(API_URL + "?action=chat", {
+          method: "POST",
+          body: JSON.stringify(payload),
+          headers: { "Accept": "text/event-stream, application/json" },
+          redirect: "follow"
+        });
+
+        if (!res.ok) {
+          onError("Server error: HTTP " + res.status);
+          return;
+        }
+
+        const contentType = (res.headers.get("content-type") || "").toLowerCase();
+
+        // -------- SSE streaming path --------
+        if (contentType.includes("event-stream") && res.body && res.body.getReader) {
+          const reader = res.body.getReader();
+          const decoder = new TextDecoder();
+          let buffer = "";
+          let finished = false;
+
+          while (!finished) {
+            const { value, done: rdone } = await reader.read();
+            if (rdone) break;
+
+            buffer += decoder.decode(value, { stream: true });
+
+            let idx;
+            while ((idx = buffer.indexOf("\n\n")) !== -1) {
+              const event = buffer.slice(0, idx);
+              buffer = buffer.slice(idx + 2);
+
+              const lines = event.split("\n");
+              for (const line of lines) {
+                const trimmed = line.trim();
+                if (!trimmed.startsWith("data:")) continue;
+                const data = trimmed.slice(5).trim();
+                if (data === "[DONE]") { finished = true; break; }
+
+                try {
+                  const parsed = JSON.parse(data);
+                  if (parsed.error) { onError(parsed.error.message || "Server error"); return; }
+                  const delta = parsed.choices?.[0]?.delta?.content;
+                  const msg = parsed.choices?.[0]?.message?.content;
+                  const chunk = delta != null ? delta : msg;
+                  if (chunk) onDelta(chunk);
+                } catch (e) { /* ignore non-JSON line */ }
+              }
+              if (finished) break;
+            }
+          }
+          onDone();
+          return;
+        }
+
+        // -------- Text response path --------
+        const text = await res.text();
+        const trimmedAll = text.trim();
+
+        // SSE-formatted body delivered as one chunk
+        if (trimmedAll.startsWith("data:")) {
+          const lines = trimmedAll.split("\n");
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed.startsWith("data:")) continue;
+            const data = trimmed.slice(5).trim();
+            if (data === "[DONE]") continue;
+            try {
+              const parsed = JSON.parse(data);
+              if (parsed.error) { onError(parsed.error.message || "Server error"); return; }
+              const delta = parsed.choices?.[0]?.delta?.content;
+              const msg = parsed.choices?.[0]?.message?.content;
+              const chunk = delta != null ? delta : msg;
+              if (chunk) onDelta(chunk);
+            } catch (e) {}
+          }
+          onDone();
+          return;
+        }
+
+        // Plain JSON
+        try {
+          const parsed = JSON.parse(trimmedAll);
+          if (parsed.error) { onError(parsed.error.message || "Server error"); return; }
+          const content = parsed.choices?.[0]?.message?.content || "";
+          if (content) onDelta(content);
+          onDone();
+        } catch (e) {
+          onError("Invalid response from server");
+        }
+      } catch (e) {
+        onError((e && e.message) || "Network error");
+      }
     }
 
     /* ============================================
@@ -1279,78 +1522,61 @@
 
       const block = createThinkingBlock();
 
-      const payload = {
-        model: currentModel.id,
-        messages: history.slice(-20),
-        max_tokens: 800,
-        _tok: token
-      };
+      // Prepare the final element (only inserted on first delta)
+      const final = document.createElement('div');
+      final.className = 'final';
+      const textNode = document.createElement('span');
+      const cursor = document.createElement('span');
+      cursor.className = 'cursor';
+      final.appendChild(textNode);
+      final.appendChild(cursor);
 
-      let response = null;
-      let done = false;
+      let hasContent = false;
+      let fullContent = "";
+      let errorMsg = null;
 
-      fetch(API_URL + "?action=chat", {
-        method: "POST",
-        body: JSON.stringify(payload),
-        redirect: "follow"
-      })
-        .then(r => r.text())
-        .then(txt => {
-          try { response = JSON.parse(txt); }
-          catch (e) { response = { error: { message: "Invalid response from server" } }; }
-          done = true;
-        })
-        .catch(err => {
-          response = { error: { message: "Network error: " + err.message } };
-          done = true;
-        });
+      await new Promise((resolve) => {
+        sendChat(
+          {
+            model: currentModel.id,
+            messages: history.slice(-20),
+            max_tokens: 800,
+            _tok: token
+          },
+          (delta) => {
+            if (!hasContent) {
+              chat.appendChild(final);
+              hasContent = true;
+            }
+            fullContent += delta;
+            textNode.textContent += delta;
+            scrollBottom();
+          },
+          () => resolve(),
+          (err) => { errorMsg = err; resolve(); }
+        );
+      });
 
-      let stepIndex = 0;
-      while (!done && stepIndex < stepsLibrary.length) {
-        await runOneStep(block, stepIndex);
-        stepIndex++;
-      }
+      cursor.remove();
 
-      while (!done) { await sleep(100); }
-
-      while (stepIndex < stepsLibrary.length) {
-        await runOneStep(block, stepIndex);
-        stepIndex++;
-      }
-
-      await sleep(280);
-
-      if (response && response.error) {
-        const msg = response.error.message || "Unknown error";
-        addErrorMessage("Error: " + msg);
-        if (/invalid|unauthor|forbidden|token|auth|denied|expired/i.test(msg)) {
+      if (errorMsg) {
+        if (!hasContent) final.remove();
+        addErrorMessage("Error: " + errorMsg);
+        if (/invalid|unauthor|forbidden|token|auth|denied|expired/i.test(errorMsg)) {
           setTimeout(() => {
             disconnect();
             showLoginError("Your token has expired or is invalid. Please sign in again.");
           }, 1500);
         }
-      } else if (response) {
-        const content = ((response.choices || [])[0] || {}).message?.content || "";
-        if (!content) addErrorMessage("Empty response from model.");
-        else {
-          history.push({ role: "assistant", content });
-          await streamResponse(content);
-        }
+      } else if (fullContent) {
+        history.push({ role: "assistant", content: fullContent });
       } else {
-        addErrorMessage("No response from server.");
+        if (!hasContent) final.remove();
+        addErrorMessage("Empty response from model.");
       }
 
-      await sleep(400);
-
-      if (block._dotSquare) {
-        stopSquareAnimation(block._dotSquare);
-        block._dotSquare.querySelectorAll('span').forEach(d => {
-          d.classList.remove('on');
-        });
-      }
-
-      block.classList.add('done');
-      block.classList.remove('open');
+      await sleep(300);
+      finishThinkingBlock(block);
 
       isProcessing = false;
       sendBtn.disabled = false;
@@ -1373,6 +1599,7 @@
       } catch (e) {}
 
       modelBtn.classList.remove('show');
+      infoBtn.classList.remove('show');
       logoutBtn.classList.remove('show');
       chatScreen.classList.remove('show');
       loginScreen.classList.remove('hide');
@@ -1380,35 +1607,38 @@
       tokInput.disabled = false;
       goBtn.disabled = false;
       clearLoginError();
+      closeInfo();
+      closeDialog();
       tokInput.focus();
     }
+
+    /* ============================================
+       Drag setup
+    ============================================ */
+    setupDragToDismiss(dialog, dialogOverlay, dialogDragArea, closeDialog);
+    setupDragToDismiss(infoDialog, infoOverlay, infoDragArea, closeInfo);
 
     /* ============================================
        Events
     ============================================ */
     goBtn.addEventListener('click', () => connect());
     tokInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        connect();
-      }
+      if (e.key === 'Enter') { e.preventDefault(); connect(); }
     });
-
     tokInput.addEventListener('input', () => {
       if (loginBox.classList.contains('error')) clearLoginError();
     });
 
-    composer.addEventListener('submit', (e) => {
-      e.preventDefault();
-      handleSend();
-    });
+    composer.addEventListener('submit', (e) => { e.preventDefault(); handleSend(); });
 
     modelBtn.addEventListener('click', openDialog);
     dialogOverlay.addEventListener('click', closeDialog);
+    infoBtn.addEventListener('click', openInfo);
+    infoOverlay.addEventListener('click', closeInfo);
     logoutBtn.addEventListener('click', disconnect);
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeDialog();
+      if (e.key === 'Escape') { closeDialog(); closeInfo(); }
     });
 
     /* ============================================
