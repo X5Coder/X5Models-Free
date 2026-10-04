@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>X5Models Free</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='black'/%3E%3Cpath d='M50 32 L63 40 L63 56 L50 64 L37 56 L37 40 Z' fill='white'/%3E%3Cpath d='M50 37 V59' stroke='black' stroke-width='2'/%3E%3Cpath d='M45 41 C41 42 41 46 44 47 C41 48 41 52 45 53' stroke='black' stroke-width='1.5' fill='none'/%3E%3Cpath d='M55 41 C59 42 59 46 56 47 C59 48 59 52 55 53' stroke='black' stroke-width='1.5' fill='none'/%3E%3Crect x='41' y='6' width='18' height='18' rx='5' fill='white'/%3E%3Cpath d='M50 9 C50.3 13 51 13.7 55 14 C51 14.3 50.3 15 50 19 C49.7 15 49 14.3 45 14 C49 13.7 49.7 13 50 9 Z' fill='black'/%3E%3Crect x='76' y='41' width='18' height='18' rx='5' fill='white'/%3E%3Cpath d='M85 45 L90 50 L85 55 L80 50 Z' fill='black'/%3E%3Crect x='76' y='76' width='18' height='18' rx='5' fill='white'/%3E%3Cpath d='M83 89 h2.5 v2.5 h-2.5 z M85.5 86.5 h2.5 v2.5 h-2.5 z M88 84 h2.5 v2.5 h-2.5 z M85.5 82 h2.5 v2.5 h-2.5 z' fill='black'/%3E%3Crect x='6' y='76' width='18' height='18' rx='5' fill='white'/%3E%3Ccircle cx='15' cy='82' r='1.5' fill='black'/%3E%3Ccircle cx='12' cy='86' r='1.5' fill='black'/%3E%3Ccircle cx='15' cy='86' r='1.5' fill='black'/%3E%3Ccircle cx='18' cy='86' r='1.5' fill='black'/%3E%3Ccircle cx='15' cy='90' r='1.5' fill='black'/%3E%3Crect x='6' y='41' width='18' height='18' rx='5' fill='white'/%3E%3Cpath d='M13 47 v9 M13 51 h5 M18 47 v9' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M50 26 V32 M68 50 H76 M64 62 L76 76 M36 62 L24 76 M32 50 H24' stroke='white' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -16,7 +17,7 @@
     --bg: #000;
     --line: #1a1a1a;
     --line-2: #1e1e1e;
-    --txt: #e0e0e0;
+    --txt: #e8e8e8;
     --mut: #6a6a6a;
     --mut-2: #4a4a4a;
     --err: #ff4d4d;
@@ -28,8 +29,10 @@
     height: 100%;
     background: var(--bg);
     color: var(--txt);
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Inter', -apple-system, sans-serif;
     overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   .layout {
@@ -40,7 +43,9 @@
     width: 100%;
   }
 
-  /* Header */
+  /* ============================================
+     Header
+  ============================================ */
   .header {
     padding: 14px 24px;
     border-bottom: 1px solid var(--line);
@@ -48,45 +53,60 @@
     align-items: center;
     gap: 10px;
     flex-shrink: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     position: relative;
     z-index: 10;
   }
 
-  .logo-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
-    animation: pulse 1.8s ease-in-out infinite;
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease;
+  }
+
+  .brand:hover { opacity: 0.85; }
+
+  .brand-icon {
+    width: 26px;
+    height: 26px;
     flex-shrink: 0;
   }
 
-  @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
-
-  .header-title {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: #888;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-    text-decoration: none;
+  .brand-name {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #d0d0d0;
+    letter-spacing: -0.01em;
     transition: color 0.2s ease;
-    cursor: pointer;
+    white-space: nowrap;
   }
 
-  .header-title:hover { color: #fff; }
+  .brand:hover .brand-name { color: #fff; }
 
   .header-spacer { flex: 1; }
 
+  /* Model button */
   .model-btn {
-    display: none; align-items: center; gap: 8px;
-    background: #0f0f0f; border: 1px solid var(--line-2);
-    color: var(--txt); padding: 7px 12px; border-radius: 10px;
-    font-family: inherit; font-size: 0.78rem; font-weight: 500;
-    cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease;
-    white-space: nowrap; max-width: 220px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: #0f0f0f;
+    border: 1px solid var(--line-2);
+    color: var(--txt);
+    padding: 7px 12px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap;
+    max-width: 220px;
   }
 
   .model-btn.show { display: inline-flex; }
@@ -109,120 +129,165 @@
   }
 
   .icon-btn.show { display: flex; }
-  .icon-btn:hover { background: #161616; border-color: #2a2a2a; color: #e0e0e0; }
+  .icon-btn:hover { background: #161616; border-color: #2a2a2a; color: #e8e8e8; }
   .icon-btn svg { width: 14px; height: 14px; }
 
-  /* Login */
+  /* ============================================
+     Login Screen
+  ============================================ */
   .login-screen {
     flex: 1;
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding: 40px 20px;
+    padding: 48px 24px;
     transition: opacity 0.4s ease, transform 0.4s ease;
     overflow-y: auto;
   }
 
   .login-screen.hide {
-    opacity: 0; transform: scale(0.96);
+    opacity: 0; transform: scale(0.98);
     pointer-events: none; position: absolute; inset: 0;
   }
 
   .login-box {
-    width: 100%; max-width: 440px;
-    display: flex; flex-direction: column; gap: 14px; text-align: center;
+    width: 100%; max-width: 640px;
+    display: flex; flex-direction: column; gap: 18px; text-align: center;
     margin: auto 0;
   }
 
   .login-icon {
-    width: 56px; height: 56px; border-radius: 16px;
-    background: linear-gradient(145deg, #141414, #0a0a0a);
-    border: 1px solid #1f1f1f;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 8px; color: #fff;
-    transition: border-color 0.3s ease, background 0.3s ease, color 0.3s ease;
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
   }
 
-  .login-icon svg { width: 26px; height: 26px; }
-
-  .login-box.error .login-icon {
-    border-color: var(--err-border);
-    background: linear-gradient(145deg, #1a0808, #0a0404);
-    color: var(--err);
+  .login-icon svg {
+    width: 100%;
+    height: 100%;
   }
+
+  .login-box.error .login-icon { transform: scale(0.96); }
 
   .login-title {
-    font-size: 1.4rem; font-weight: 600; color: #fff;
-    letter-spacing: -0.02em; transition: color 0.3s ease;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: -0.025em;
+    transition: color 0.3s ease;
   }
 
   .login-box.error .login-title { color: var(--err); }
 
   .login-sub {
-    font-size: 0.82rem; color: var(--mut);
-    margin-bottom: 8px; line-height: 1.5;
+    font-size: 0.88rem;
+    color: var(--mut);
+    line-height: 1.55;
+    max-width: 420px;
+    margin: 0 auto 8px;
     transition: color 0.3s ease;
   }
 
   .login-box.error .login-sub { color: #a06060; }
 
+  /* Token field */
   .login-input-wrap {
-    display: flex; gap: 6px; align-items: center;
-    background: #0a0a0a; border: 1px solid var(--line-2);
-    border-radius: 12px; padding: 4px 4px 4px 14px;
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+    background: #0a0a0a;
+    border: 1px solid var(--line-2);
+    border-radius: 14px;
+    padding: 6px 6px 6px 18px;
     transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
   }
 
   .login-input-wrap:focus-within { border-color: #333; }
 
   .login-box.error .login-input-wrap {
-    border-color: var(--err); background: var(--err-bg);
+    border-color: var(--err);
+    background: var(--err-bg);
     box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.08);
   }
 
   .login-input-wrap input {
-    flex: 1; min-width: 0; background: transparent;
-    border: 0; color: var(--txt); font-family: inherit;
-    font-size: 0.88rem; outline: none; padding: 10px 0;
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: 0;
+    color: var(--txt);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.86rem;
+    outline: none;
+    padding: 12px 0;
+    letter-spacing: 0.01em;
   }
 
-  .login-input-wrap input::placeholder { color: var(--mut-2); }
+  .login-input-wrap input::placeholder {
+    color: var(--mut-2);
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0;
+  }
+
   .login-box.error .login-input-wrap input::placeholder { color: #6a3030; }
 
   .login-input-wrap button {
-    background: #1a1a1a; border: 1px solid #2a2a2a;
-    color: #e0e0e0; padding: 10px 16px; border-radius: 9px;
-    font-family: inherit; font-size: 0.82rem; font-weight: 600;
-    cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease;
-    white-space: nowrap; flex-shrink: 0;
+    background: #ffffff;
+    border: 0;
+    color: #000;
+    padding: 0 22px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
-  .login-input-wrap button:hover:not(:disabled) { background: #222; border-color: #3a3a3a; }
-
-  .login-box.error .login-input-wrap button {
-    background: #2a0a0a; border-color: #3a1212; color: var(--err);
-  }
-
-  .login-box.error .login-input-wrap button:hover:not(:disabled) {
-    background: #351010; border-color: #4a1818;
-  }
-
+  .login-input-wrap button:hover:not(:disabled) { background: #e8e8e8; }
+  .login-input-wrap button:active:not(:disabled) { transform: scale(0.98); }
   .login-input-wrap button:disabled { opacity: 0.5; cursor: not-allowed; }
 
+  .login-box.error .login-input-wrap button {
+    background: #2a0a0a;
+    border: 1px solid #3a1212;
+    color: var(--err);
+  }
+
+  /* Error message */
   .login-error {
-    display: flex; align-items: center; gap: 10px;
-    padding: 12px 14px; border-radius: 12px;
-    background: var(--err-bg); border: 1px solid var(--err-border);
-    color: var(--err); font-size: 0.82rem; font-weight: 500;
-    text-align: left; line-height: 1.4;
-    max-height: 0; padding-top: 0; padding-bottom: 0;
-    opacity: 0; overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: var(--err-bg);
+    border: 1px solid var(--err-border);
+    color: var(--err);
+    font-size: 0.82rem;
+    font-weight: 500;
+    text-align: left;
+    line-height: 1.4;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    overflow: hidden;
     transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
                 opacity 0.3s ease, padding 0.3s ease;
   }
 
   .login-error.show {
-    max-height: 120px; padding-top: 12px; padding-bottom: 12px; opacity: 1;
+    max-height: 120px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    opacity: 1;
   }
 
   .login-error svg { width: 18px; height: 18px; flex-shrink: 0; }
@@ -244,55 +309,56 @@
     text-align: left;
     background: #060606;
     border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 18px;
-    margin-top: 6px;
+    border-radius: 16px;
+    padding: 22px 26px;
+    margin-top: 4px;
   }
 
   .login-steps-head {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     font-size: 0.78rem;
     font-weight: 600;
-    color: #b0b0b0;
+    color: #c0c0c0;
     letter-spacing: 0.02em;
-    margin-bottom: 14px;
+    margin-bottom: 18px;
     text-transform: uppercase;
   }
 
   .login-steps-head svg {
-    width: 14px; height: 14px;
-    color: #6a6a6a;
+    width: 15px;
+    height: 15px;
+    color: #7a7a7a;
   }
 
   .steps-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
     counter-reset: step;
   }
 
   .steps-list li {
     display: flex;
     align-items: flex-start;
-    gap: 10px;
-    font-size: 0.78rem;
-    color: #909090;
-    line-height: 1.55;
+    gap: 12px;
+    font-size: 0.82rem;
+    color: #9a9a9a;
+    line-height: 1.6;
     counter-increment: step;
   }
 
   .steps-list li::before {
     content: counter(step);
-    width: 20px;
-    height: 20px;
-    border-radius: 6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
     background: #101010;
     border: 1px solid #1e1e1e;
-    color: #888;
-    font-size: 0.7rem;
+    color: #999;
+    font-size: 0.72rem;
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -316,74 +382,107 @@
 
   .steps-list code {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     background: #101010;
     border: 1px solid #1e1e1e;
-    padding: 1px 5px;
-    border-radius: 4px;
+    padding: 2px 6px;
+    border-radius: 5px;
     color: #c0c0c0;
     word-break: break-all;
   }
 
-  /* Chat */
-  .chat-screen { flex: 1; display: none; flex-direction: column; min-height: 0; }
+  /* ============================================
+     Chat
+  ============================================ */
+  .chat-screen {
+    flex: 1;
+    display: none;
+    flex-direction: column;
+    min-height: 0;
+  }
+
   .chat-screen.show { display: flex; }
 
   .chat {
-    flex: 1; overflow-y: auto; padding: 24px;
-    display: flex; flex-direction: column; gap: 18px;
-    max-width: 780px; width: 100%; margin: 0 auto;
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
   }
 
   .chat::-webkit-scrollbar { width: 6px; }
-  .chat::-webkit-scrollbar-thumb { background: #222; border-radius: 3px; }
+  .chat::-webkit-scrollbar-thumb {
+    background: #1e1e1e;
+    border-radius: 3px;
+  }
 
   .msg {
-    max-width: 85%; padding: 10px 14px; border-radius: 14px;
-    font-size: 0.92rem; line-height: 1.55;
-    white-space: pre-wrap; word-break: break-word;
-    animation: msgIn 0.3s ease;
+    max-width: 82%;
+    padding: 11px 16px;
+    border-radius: 18px;
+    font-size: 0.94rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    animation: msgIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   @keyframes msgIn {
-    from { opacity: 0; transform: translateY(6px); }
+    from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
   .msg.user {
-    align-self: flex-end; background: #1a1a1a; color: #e0e0e0;
-    border-bottom-right-radius: 4px;
+    align-self: flex-end;
+    background: #1f1f1f;
+    color: #ececec;
+    border-bottom-right-radius: 6px;
   }
 
   .msg.error {
-    align-self: flex-start; background: var(--err-bg);
-    border: 1px solid var(--err-border); color: var(--err);
-    font-size: 0.82rem; max-width: 100%;
+    align-self: flex-start;
+    background: var(--err-bg);
+    border: 1px solid var(--err-border);
+    color: var(--err);
+    font-size: 0.84rem;
+    max-width: 100%;
   }
 
-  /* Thinking Block - Working only, no steps, no arrow */
+  /* Working block */
   .thinking-block {
     align-self: flex-start;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     padding: 4px 0;
   }
 
   .dot-square {
-    display: grid; grid-template-columns: repeat(5, 1fr);
-    gap: 2px; align-self: center;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2.5px;
+    align-self: center;
   }
 
   .dot-square span {
-    width: 2px; height: 2px; border-radius: 50%;
-    background: #0f0f0f; box-shadow: none;
+    width: 2.5px;
+    height: 2.5px;
+    border-radius: 50%;
+    background: #0f0f0f;
+    box-shadow: none;
     transition: background 0.18s ease-out, box-shadow 0.18s ease-out;
   }
 
   .dot-square span.on {
     background: #ffffff;
-    box-shadow: 0 0 3px rgba(255, 255, 255, 0.85), 0 0 6px rgba(255, 255, 255, 0.35);
+    box-shadow:
+      0 0 3px rgba(255, 255, 255, 0.85),
+      0 0 6px rgba(255, 255, 255, 0.35);
   }
 
   .thinking-block.done .dot-square span {
@@ -393,23 +492,36 @@
 
   .thinking-block.done .dot-square span.lit-white {
     background: #ffffff;
-    box-shadow: 0 0 3px rgba(255, 255, 255, 0.85), 0 0 6px rgba(255, 255, 255, 0.35);
+    box-shadow:
+      0 0 3px rgba(255, 255, 255, 0.85),
+      0 0 6px rgba(255, 255, 255, 0.35);
   }
 
   .thinking-block.done .dot-square span.lit-black {
-    background: #2a2a2a; box-shadow: none;
+    background: #2a2a2a;
+    box-shadow: none;
   }
 
   .working-text {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 0.95rem; font-weight: 700;
-    letter-spacing: -0.02em; white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
     background-image: repeating-linear-gradient(
-      90deg, #ffffff 0px, #ffffff 55px, #4a4a4a 100px, #ffffff 145px, #ffffff 200px
+      90deg,
+      #ffffff 0px,
+      #ffffff 55px,
+      #4a4a4a 100px,
+      #ffffff 145px,
+      #ffffff 200px
     );
-    background-size: 200px 100%; background-repeat: repeat;
-    -webkit-background-clip: text; background-clip: text;
-    -webkit-text-fill-color: transparent; color: transparent;
+    background-size: 200px 100%;
+    background-repeat: repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
     animation: continuousWave 2.8s linear infinite;
   }
 
@@ -419,93 +531,199 @@
   }
 
   .thinking-block.done .working-text {
-    animation: none; background-image: none;
-    -webkit-text-fill-color: #ffffff; color: #ffffff;
+    animation: none;
+    background-image: none;
+    -webkit-text-fill-color: #ffffff;
+    color: #ffffff;
   }
 
+  /* Final response */
   .final {
-    align-self: flex-start; max-width: 100%;
-    font-size: 0.92rem; line-height: 1.7; color: #d0d0d0;
-    padding: 4px 0; white-space: pre-wrap; word-break: break-word;
+    align-self: flex-start;
+    max-width: 100%;
+    font-size: 0.94rem;
+    line-height: 1.72;
+    color: #e0e0e0;
+    padding: 2px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
   }
 
   .cursor {
-    display: inline-block; width: 7px; height: 15px;
-    background: #d0d0d0; vertical-align: text-bottom;
-    margin-left: 2px;
+    display: inline-block;
+    width: 7px;
+    height: 16px;
+    background: #e0e0e0;
+    vertical-align: text-bottom;
+    margin-left: 3px;
+    border-radius: 1px;
     animation: blink 0.9s steps(2, start) infinite;
   }
 
-  @keyframes blink { to { visibility: hidden; } }
+  @keyframes blink {
+    to { visibility: hidden; }
+  }
 
-  /* Composer */
+  /* ============================================
+     Composer (ChatGPT-style)
+  ============================================ */
   .composer-wrap {
-    border-top: 1px solid var(--line);
-    padding: 16px 24px 24px; flex-shrink: 0;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    padding: 12px 24px 20px;
+    flex-shrink: 0;
+    background: linear-gradient(to top, #000 60%, transparent);
   }
 
   .composer {
-    display: flex; gap: 10px; align-items: center;
-    max-width: 780px; margin: 0 auto;
-    background: #0a0a0a; border: 1px solid var(--line-2);
-    border-radius: 14px; padding: 4px 4px 4px 18px;
-    transition: border-color 0.2s ease;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    max-width: 800px;
+    margin: 0 auto;
+    background: #101010;
+    border: 1px solid #1f1f1f;
+    border-radius: 24px;
+    padding: 8px 8px 8px 20px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .composer:focus-within { border-color: #333; }
-
-  .composer input {
-    flex: 1; min-width: 0; background: transparent;
-    border: 0; color: var(--txt); font-family: inherit;
-    font-size: 0.9rem; outline: none; padding: 12px 0;
+  .composer:focus-within {
+    border-color: #333;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.03);
   }
 
-  .composer input::placeholder { color: var(--mut-2); }
+  .composer textarea {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: 0;
+    color: var(--txt);
+    font-family: inherit;
+    font-size: 0.94rem;
+    line-height: 1.5;
+    outline: none;
+    resize: none;
+    max-height: 200px;
+    padding: 10px 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .composer textarea::-webkit-scrollbar { width: 4px; }
+  .composer textarea::-webkit-scrollbar-thumb {
+    background: #2a2a2a;
+    border-radius: 2px;
+  }
+
+  .composer textarea::placeholder { color: var(--mut-2); }
 
   .send-btn {
-    background: #1a1a1a; border: 1px solid #2a2a2a;
-    color: #e0e0e0; width: 42px; height: 42px; border-radius: 11px;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-    transition: background 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #000;
+    border: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
+    transition: transform 0.15s ease,
+                border-radius 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                background 0.2s ease,
+                opacity 0.2s ease;
+    position: relative;
   }
 
-  .send-btn:hover:not(:disabled) { background: #222; border-color: #3a3a3a; }
+  .send-btn:hover:not(:disabled) { transform: scale(1.06); }
   .send-btn:active:not(:disabled) { transform: scale(0.94); }
-  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .send-btn svg { width: 16px; height: 16px; pointer-events: none; }
 
-  /* Dialog base */
-  .dialog-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.3s ease; z-index: 100;
+  .send-btn:disabled {
+    background: #1a1a1a;
+    color: #4a4a4a;
+    cursor: not-allowed;
   }
 
-  .dialog-overlay.show { opacity: 1; pointer-events: auto; }
+  /* Generating state: white square with black square inside */
+  .send-btn.sending {
+    border-radius: 8px;
+    background: #ffffff;
+    color: #000;
+  }
+
+  .send-btn svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .send-btn .icon-send {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .send-btn .icon-stop {
+    position: absolute;
+    opacity: 0;
+    transform: scale(0.6);
+  }
+
+  .send-btn.sending .icon-send {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+
+  .send-btn.sending .icon-stop {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* ============================================
+     Dialogs
+  ============================================ */
+  .dialog-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 100;
+  }
+
+  .dialog-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
 
   .dialog {
-    position: fixed; left: 50%; bottom: 0;
+    position: fixed;
+    left: 50%;
+    bottom: 0;
     transform: translate(-50%, 100%);
-    width: 100%; max-width: 520px;
-    background: #0a0a0a; border: 1px solid var(--line-2); border-bottom: 0;
-    border-radius: 20px 20px 0 0; padding: 0 20px 20px;
+    width: 100%;
+    max-width: 540px;
+    background: #0c0c0c;
+    border: 1px solid #1f1f1f;
+    border-bottom: 0;
+    border-radius: 22px 22px 0 0;
+    padding: 0 20px 22px;
     transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 101; max-height: 80vh;
-    display: flex; flex-direction: column;
-    box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.7);
+    z-index: 101;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.75);
     will-change: transform;
   }
 
   .dialog.show { transform: translate(-50%, 0); }
 
   .dialog-drag-area {
-    padding: 12px 0 4px;
+    padding: 14px 0 4px;
     cursor: grab;
     user-select: none;
     touch-action: none;
@@ -515,75 +733,132 @@
   .dialog-drag-area:active { cursor: grabbing; }
 
   .dialog-handle {
-    width: 40px; height: 4px; background: #2a2a2a;
-    border-radius: 2px; margin: 0 auto 16px;
+    width: 40px;
+    height: 4px;
+    background: #2a2a2a;
+    border-radius: 2px;
+    margin: 0 auto 16px;
   }
 
   .dialog-title {
-    font-size: 1rem; font-weight: 600; color: #fff;
-    letter-spacing: -0.01em; margin-bottom: 4px;
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: -0.015em;
+    margin-bottom: 4px;
   }
 
-  .dialog-sub { font-size: 0.78rem; color: var(--mut); margin-bottom: 16px; }
+  .dialog-sub {
+    font-size: 0.79rem;
+    color: var(--mut);
+    margin-bottom: 18px;
+  }
 
   /* Model list */
   .model-list {
-    overflow-y: auto; display: flex; flex-direction: column;
-    gap: 6px; flex: 1; min-height: 0;
-    margin: 0 -6px; padding: 0 6px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-height: 0;
+    margin: 0 -6px;
+    padding: 0 6px;
   }
 
   .model-list::-webkit-scrollbar { width: 4px; }
-  .model-list::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
+  .model-list::-webkit-scrollbar-thumb {
+    background: #222;
+    border-radius: 2px;
+  }
 
   .model-item {
-    display: flex; align-items: center; gap: 12px;
-    padding: 12px 14px; border-radius: 12px;
-    background: transparent; border: 1px solid transparent;
-    cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease;
-    text-align: left; width: 100%; font-family: inherit; color: var(--txt);
-    opacity: 0; transform: translateY(8px);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    text-align: left;
+    width: 100%;
+    font-family: inherit;
+    color: var(--txt);
+    opacity: 0;
+    transform: translateY(8px);
     animation: dialogItemIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
-  @keyframes dialogItemIn { to { opacity: 1; transform: translateY(0); } }
+  @keyframes dialogItemIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
 
-  .model-item:hover { background: #101010; border-color: var(--line-2); }
-  .model-item.active { background: #101010; border-color: #2a2a2a; }
+  .model-item:hover {
+    background: #101010;
+    border-color: var(--line-2);
+  }
+
+  .model-item.active {
+    background: #101010;
+    border-color: #2a2a2a;
+  }
 
   .model-item-icon {
-    width: 32px; height: 32px; border-radius: 9px;
-    background: linear-gradient(145deg, #141414, #0a0a0a);
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(145deg, #161616, #0a0a0a);
     border: 1px solid #1f1f1f;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; color: #888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #888;
   }
 
   .model-item.active .model-item-icon {
-    background: #1a1a1a; border-color: #2a2a2a; color: #fff;
+    background: #1a1a1a;
+    border-color: #2a2a2a;
+    color: #fff;
   }
 
-  .model-item-icon svg { width: 14px; height: 14px; }
+  .model-item-icon svg { width: 15px; height: 15px; }
 
   .model-item-info { flex: 1; min-width: 0; }
 
   .model-item-name {
-    font-size: 0.86rem; font-weight: 500; color: #d0d0d0;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: #d0d0d0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .model-item.active .model-item-name { color: #fff; }
 
   .model-item-id {
-    font-size: 0.72rem; color: var(--mut); margin-top: 2px;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font-size: 0.73rem;
+    color: var(--mut);
+    margin-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace;
   }
 
-  .model-item-check { color: #4ade80; flex-shrink: 0; display: none; }
+  .model-item-check {
+    color: #4ade80;
+    flex-shrink: 0;
+    display: none;
+  }
+
   .model-item.active .model-item-check { display: block; }
   .model-item-check svg { width: 16px; height: 16px; }
 
-  /* Info dialog - specific */
+  /* Info dialog */
   .info-list {
     overflow-y: auto;
     display: flex;
@@ -593,7 +868,10 @@
   }
 
   .info-list::-webkit-scrollbar { width: 4px; }
-  .info-list::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
+  .info-list::-webkit-scrollbar-thumb {
+    background: #222;
+    border-radius: 2px;
+  }
 
   .info-section {
     display: flex;
@@ -611,7 +889,7 @@
 
   .info-value {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.74rem;
+    font-size: 0.75rem;
     color: #d0d0d0;
     background: #060606;
     border: 1px solid var(--line);
@@ -621,9 +899,7 @@
     line-height: 1.55;
   }
 
-  .info-value.masked {
-    color: #6a6a6a;
-  }
+  .info-value.masked { color: #6a6a6a; }
 
   .info-row {
     display: flex;
@@ -651,62 +927,86 @@
     flex-shrink: 0;
   }
 
-  .info-reveal:hover { background: #161616; border-color: #2a2a2a; color: #e0e0e0; }
+  .info-reveal:hover {
+    background: #161616;
+    border-color: #2a2a2a;
+    color: #e0e0e0;
+  }
+
   .info-reveal svg { width: 14px; height: 14px; }
 
   .info-pre {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     color: #b0b0b0;
     background: #060606;
     border: 1px solid var(--line);
     border-radius: 10px;
-    padding: 12px 14px;
+    padding: 14px;
     white-space: pre;
     overflow-x: auto;
     line-height: 1.7;
   }
 
   .info-pre::-webkit-scrollbar { height: 4px; }
-  .info-pre::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
-
-  .info-pre .k { color: #c0c0c0; }
-  .info-pre .s { color: #8ab4ff; }
-  .info-pre .p { color: #888; }
-
-  /* Connecting */
-  .connecting {
-    position: fixed; inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-    display: none; align-items: center; justify-content: center;
-    z-index: 200;
+  .info-pre::-webkit-scrollbar-thumb {
+    background: #222;
+    border-radius: 2px;
   }
 
-  .connecting.show { display: flex; }
+  /* Connecting overlay */
+  .connecting {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .connecting.show {
+    display: flex;
+    opacity: 1;
+  }
 
   .connecting-box {
-    display: flex; flex-direction: column;
-    align-items: center; gap: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
   }
 
   .connecting .dot-square {
-    grid-template-columns: repeat(5, 1fr); gap: 3px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 3.5px;
   }
 
-  .connecting .dot-square span { width: 3px; height: 3px; }
+  .connecting .dot-square span {
+    width: 3.5px;
+    height: 3.5px;
+  }
 
   .connecting-text {
-    font-size: 0.82rem; color: var(--mut); letter-spacing: 0.02em;
+    font-size: 0.85rem;
+    color: #888;
+    letter-spacing: 0.02em;
   }
 
+  /* Responsive */
   @media (max-width: 640px) {
     .header { padding: 12px 16px; }
-    .chat { padding: 16px; }
-    .composer-wrap { padding: 12px 16px 16px; }
-    .msg { max-width: 92%; font-size: 0.88rem; }
-    .header-title { font-size: 0.8rem; }
-    .login-screen { padding: 24px 16px; }
+    .chat { padding: 16px 16px; }
+    .composer-wrap { padding: 10px 16px 16px; }
+    .msg { max-width: 90%; font-size: 0.9rem; }
+    .brand-name { font-size: 0.82rem; }
+    .login-screen { padding: 28px 18px; }
+    .login-steps { padding: 18px 20px; }
+    .model-btn { max-width: 140px; }
   }
 </style>
 </head>
@@ -714,9 +1014,49 @@
 
   <div class="layout">
 
+    <!-- ============================================
+         Header
+    ============================================ -->
     <div class="header">
-      <span class="logo-dot"></span>
-      <a class="header-title" href="https://github.com/X5Coder/X5Models-Free" target="_blank" rel="noopener noreferrer">X5Models Free</a>
+      <a class="brand" href="https://github.com/X5Coder/X5Models-Free" target="_blank" rel="noopener noreferrer">
+        <svg class="brand-icon" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g stroke="#fff" stroke-width="4" stroke-linecap="round">
+            <line x1="60" y1="44" x2="60" y2="24"/>
+            <line x1="76" y1="58" x2="90" y2="58"/>
+            <line x1="74" y1="72" x2="88" y2="86"/>
+            <line x1="46" y1="72" x2="32" y2="86"/>
+            <line x1="44" y1="58" x2="30" y2="58"/>
+          </g>
+
+          <path d="M60 40 L76 49 V67 L60 76 L44 67 V49 Z" fill="#fff"/>
+          <path d="M60 46 V70" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M55 50 C50.5 51.5 50.5 56 53 57.5 C50.5 59 50.5 63.5 55 65" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M65 50 C69.5 51.5 69.5 56 67 57.5 C69.5 59 69.5 63.5 65 65" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+          <rect x="42" y="4" width="36" height="34" rx="9" fill="#fff"/>
+          <path d="M60 10 C60.6 16 61.5 17 67 17.6 C61.5 18.3 60.6 19.2 60 25 C59.4 19.2 58.5 18.3 53 17.6 C58.5 17 59.4 16 60 10 Z" fill="#000"/>
+
+          <rect x="86" y="42" width="34" height="34" rx="9" fill="#fff"/>
+          <path d="M103 49 L110 59 L103 69 L96 59 Z" fill="#000"/>
+
+          <rect x="86" y="88" width="34" height="34" rx="9" fill="#fff"/>
+          <path d="M99 110 h4 v4 h-4 z M103 106 h4 v4 h-4 z M107 102 h4 v4 h-4 z M103 98 h4 v4 h-4 z" fill="#000"/>
+
+          <rect x="0" y="88" width="34" height="34" rx="9" fill="#fff"/>
+          <circle cx="17" cy="99" r="2.2" fill="#000"/>
+          <circle cx="11.5" cy="104" r="2.2" fill="#000"/>
+          <circle cx="17" cy="105" r="2.2" fill="#000"/>
+          <circle cx="22.5" cy="104" r="2.2" fill="#000"/>
+          <circle cx="11.5" cy="110" r="2.2" fill="#000"/>
+          <circle cx="17" cy="111" r="2.2" fill="#000"/>
+          <circle cx="22.5" cy="110" r="2.2" fill="#000"/>
+
+          <rect x="0" y="42" width="34" height="34" rx="9" fill="#fff"/>
+          <path d="M12 49 v12 M12 55 h6 M18 49 v12" stroke="#000" stroke-width="2.6" stroke-linecap="round"/>
+        </svg>
+        <span class="brand-name">X5Models Free</span>
+      </a>
+
       <div class="header-spacer"></div>
 
       <button class="model-btn" id="modelBtn">
@@ -752,14 +1092,45 @@
     <div class="login-screen" id="loginScreen">
       <div class="login-box" id="loginBox">
         <div class="login-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2 L2 7 L12 12 L22 7 Z"/>
-            <path d="M2 17 L12 22 L22 17"/>
-            <path d="M2 12 L12 17 L22 12"/>
+          <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <g stroke="#fff" stroke-width="4" stroke-linecap="round">
+              <line x1="60" y1="44" x2="60" y2="24"/>
+              <line x1="76" y1="58" x2="90" y2="58"/>
+              <line x1="74" y1="72" x2="88" y2="86"/>
+              <line x1="46" y1="72" x2="32" y2="86"/>
+              <line x1="44" y1="58" x2="30" y2="58"/>
+            </g>
+
+            <path d="M60 40 L76 49 V67 L60 76 L44 67 V49 Z" fill="#fff"/>
+            <path d="M60 46 V70" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M55 50 C50.5 51.5 50.5 56 53 57.5 C50.5 59 50.5 63.5 55 65" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M65 50 C69.5 51.5 69.5 56 67 57.5 C69.5 59 69.5 63.5 65 65" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+            <rect x="42" y="4" width="36" height="34" rx="9" fill="#fff"/>
+            <path d="M60 10 C60.6 16 61.5 17 67 17.6 C61.5 18.3 60.6 19.2 60 25 C59.4 19.2 58.5 18.3 53 17.6 C58.5 17 59.4 16 60 10 Z" fill="#000"/>
+
+            <rect x="86" y="42" width="34" height="34" rx="9" fill="#fff"/>
+            <path d="M103 49 L110 59 L103 69 L96 59 Z" fill="#000"/>
+
+            <rect x="86" y="88" width="34" height="34" rx="9" fill="#fff"/>
+            <path d="M99 110 h4 v4 h-4 z M103 106 h4 v4 h-4 z M107 102 h4 v4 h-4 z M103 98 h4 v4 h-4 z" fill="#000"/>
+
+            <rect x="0" y="88" width="34" height="34" rx="9" fill="#fff"/>
+            <circle cx="17" cy="99" r="2.2" fill="#000"/>
+            <circle cx="11.5" cy="104" r="2.2" fill="#000"/>
+            <circle cx="17" cy="105" r="2.2" fill="#000"/>
+            <circle cx="22.5" cy="104" r="2.2" fill="#000"/>
+            <circle cx="11.5" cy="110" r="2.2" fill="#000"/>
+            <circle cx="17" cy="111" r="2.2" fill="#000"/>
+            <circle cx="22.5" cy="110" r="2.2" fill="#000"/>
+
+            <rect x="0" y="42" width="34" height="34" rx="9" fill="#fff"/>
+            <path d="M12 49 v12 M12 55 h6 M18 49 v12" stroke="#000" stroke-width="2.6" stroke-linecap="round"/>
           </svg>
         </div>
+
         <div class="login-title">Connect to X5Models</div>
-        <div class="login-sub">Paste your access token to start</div>
+        <div class="login-sub">Paste your access token to start chatting with any model from a single API</div>
 
         <div class="login-input-wrap" id="loginWrap">
           <input type="password" id="tok" placeholder="sk-..." autocomplete="off" spellcheck="false">
@@ -775,7 +1146,6 @@
           <span id="loginErrorText">Invalid token. Please check and try again.</span>
         </div>
 
-        <!-- Steps -->
         <div class="login-steps">
           <div class="login-steps-head">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -819,21 +1189,24 @@
       <div class="chat" id="chat"></div>
 
       <div class="composer-wrap">
-        <form class="composer" id="composer" autocomplete="off">
-          <input type="text" id="input" placeholder="Type a message..." autocomplete="off">
-          <button type="submit" class="send-btn" id="sendBtn" aria-label="Send">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 2 L11 13"/>
-              <path d="M22 2 L15 22 L11 13 L2 9 Z"/>
+        <div class="composer" id="composer">
+          <textarea id="input" placeholder="Ask anything..." rows="1" autocomplete="off" spellcheck="false"></textarea>
+          <button type="button" class="send-btn" id="sendBtn" aria-label="Send" disabled>
+            <svg class="icon-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="19" x2="12" y2="5"/>
+              <polyline points="6 11 12 5 18 11"/>
+            </svg>
+            <svg class="icon-stop" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="7" y="7" width="10" height="10" rx="2"/>
             </svg>
           </button>
-        </form>
+        </div>
       </div>
     </div>
 
   </div>
 
-  <!-- Model dialog -->
+  <!-- Dialogs -->
   <div class="dialog-overlay" id="dialogOverlay"></div>
   <div class="dialog" id="dialog">
     <div class="dialog-drag-area" id="dialogDragArea">
@@ -844,7 +1217,6 @@
     <div class="model-list" id="modelList"></div>
   </div>
 
-  <!-- Info dialog -->
   <div class="dialog-overlay" id="infoOverlay"></div>
   <div class="dialog" id="infoDialog">
     <div class="dialog-drag-area" id="infoDragArea">
@@ -870,17 +1242,20 @@
     const STORAGE_KEY = "x5models_token";
     const MODEL_KEY = "x5models_model";
     const FETCH_TIMEOUT = 20000;
+    const MIN_LOADING = 350;
 
     /* ============================================
        State
     ============================================ */
     let token = "";
     let history = [];
-    let isProcessing = false;
+    let isStreaming = false;
     let currentModel = null;
     let modelsList = [];
     let connectingBusy = false;
     let tokenRevealed = false;
+    let currentController = null;
+    let abortRequested = false;
 
     /* ============================================
        Elements
@@ -914,8 +1289,9 @@
     /* ============================================
        Helpers
     ============================================ */
-    function scrollBottom() { chat.scrollTop = chat.scrollHeight; }
-    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+    const scrollBottom = () => { chat.scrollTop = chat.scrollHeight; };
+    const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
     function escapeHtml(str) {
       const div = document.createElement('div');
       div.textContent = str == null ? "" : str;
@@ -951,11 +1327,9 @@
       loginErrorText.textContent = message;
       loginError.classList.add('show');
       loginBox.classList.add('error');
-
       loginBox.classList.remove('shake');
       void loginBox.offsetWidth;
       loginBox.classList.add('shake');
-
       clearTimeout(errorTimer);
       errorTimer = setTimeout(() => loginBox.classList.remove('shake'), 500);
     }
@@ -1013,29 +1387,24 @@
     /* ============================================
        Connect
     ============================================ */
-    async function connect(t, silent = false) {
+    async function connect() {
       if (connectingBusy) return;
-      connectingBusy = true;
-
-      t = (t || tokInput.value).trim();
+      const t = tokInput.value.trim();
       if (!t) {
-        connectingBusy = false;
-        if (!silent) {
-          showLoginError("Please enter a token to continue.");
-          tokInput.focus();
-        }
+        showLoginError("Please enter a token to continue.");
+        tokInput.focus();
         return;
       }
 
-      if (!silent) clearLoginError();
+      connectingBusy = true;
+      clearLoginError();
       goBtn.disabled = true;
       tokInput.disabled = true;
 
-      if (!silent) {
-        buildDotSquare(connectingDots);
-        connectingEl.classList.add('show');
-        connectingAnim.start();
-      }
+      const startTs = Date.now();
+      buildDotSquare(connectingDots);
+      connectingEl.classList.add('show');
+      connectingAnim.start();
 
       const finish = (ok, errMsg) => {
         connectingBusy = false;
@@ -1043,13 +1412,16 @@
         connectingEl.classList.remove('show');
         goBtn.disabled = false;
         tokInput.disabled = false;
-        if (!ok && !silent) showLoginError(errMsg || "Something went wrong.");
-        else if (!ok && silent) { tokInput.value = ""; tokInput.focus(); }
+        if (!ok) showLoginError(errMsg || "Something went wrong.");
       };
 
       try {
         const url = API_URL + "?action=models&token=" + encodeURIComponent(t);
         const data = await gasFetch(url, { method: "GET" });
+
+        // Ensure minimum loading time
+        const elapsed = Date.now() - startTs;
+        if (elapsed < MIN_LOADING) await sleep(MIN_LOADING - elapsed);
 
         if (!data || data._parseError) { finish(false, "Invalid response from server."); return; }
 
@@ -1083,13 +1455,17 @@
         logoutBtn.classList.add('show');
         modelBtnName.textContent = currentModel.label || currentModel.id;
 
-        finish(true);
-        input.focus();
+        connectingBusy = false;
+        connectingAnim.stop();
+        connectingEl.classList.remove('show');
 
+        input.focus();
       } catch (e) {
         const msg = (e && e.message) || "";
         const isTimeout = /abort|timeout/i.test(msg);
         const isNetwork = /network|failed to fetch|load failed/i.test(msg);
+        const elapsed = Date.now() - startTs;
+        if (elapsed < MIN_LOADING) await sleep(MIN_LOADING - elapsed);
         if (isTimeout) finish(false, "Connection timed out. Please check your internet and try again.");
         else if (isNetwork) finish(false, "Unable to reach server. Please check your internet.");
         else finish(false, "Connection failed. Please try again.");
@@ -1097,51 +1473,37 @@
     }
 
     /* ============================================
-       Auto-restore
+       Auto-fill token (no auto-connect)
     ============================================ */
-    async function autoRestore() {
+    function initToken() {
       let saved = null;
       try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
-      if (!saved) { tokInput.focus(); return; }
-      tokInput.value = saved;
-      await connect(saved, true);
+      if (saved) tokInput.value = saved;
+      tokInput.focus();
     }
 
     /* ============================================
-       Drag-to-dismiss (Model dialog + Info dialog)
+       Drag-to-dismiss
     ============================================ */
     function setupDragToDismiss(dialogEl, overlayEl, dragArea, onClose) {
-      let startY = 0;
-      let currentY = 0;
-      let dragging = false;
+      let startY = 0, currentY = 0, dragging = false;
 
-      const start = (y) => {
-        startY = y;
-        currentY = y;
-        dragging = true;
-        dialogEl.style.transition = 'none';
-      };
-
+      const start = (y) => { startY = y; currentY = y; dragging = true; dialogEl.style.transition = 'none'; };
       const move = (y) => {
         if (!dragging) return;
         currentY = y;
         const diff = Math.max(0, currentY - startY);
         dialogEl.style.transform = `translate(-50%, ${diff}px)`;
-        const op = Math.max(0, 1 - diff / 400);
-        overlayEl.style.opacity = op;
+        overlayEl.style.opacity = Math.max(0, 1 - diff / 400);
       };
-
       const end = () => {
         if (!dragging) return;
         dragging = false;
         const diff = currentY - startY;
         dialogEl.style.transition = '';
         overlayEl.style.opacity = '';
-        if (diff > 100) {
-          onClose();
-        } else {
-          dialogEl.style.transform = '';
-        }
+        if (diff > 100) onClose();
+        else dialogEl.style.transform = '';
       };
 
       dragArea.addEventListener('pointerdown', (e) => {
@@ -1150,10 +1512,7 @@
         try { dragArea.setPointerCapture(e.pointerId); } catch (err) {}
       });
       dragArea.addEventListener('pointermove', (e) => {
-        if (dragging) {
-          move(e.clientY);
-          if (e.cancelable) e.preventDefault();
-        }
+        if (dragging) { move(e.clientY); if (e.cancelable) e.preventDefault(); }
       });
       dragArea.addEventListener('pointerup', end);
       dragArea.addEventListener('pointercancel', end);
@@ -1216,7 +1575,7 @@
     function maskToken(t) {
       if (!t) return "";
       if (t.length <= 12) return t;
-      return t.slice(0, 8) + "•".repeat(Math.min(20, t.length - 12)) + t.slice(-4);
+      return t.slice(0, 8) + "•".repeat(Math.min(24, t.length - 12)) + t.slice(-4);
     }
 
     function buildInfoDialog() {
@@ -1239,7 +1598,7 @@
         <div class="info-section">
           <div class="info-label">Token</div>
           <div class="info-row">
-            <div class="info-value ${tokenRevealed ? '' : 'masked'}" id="tokenDisplay">${escapeHtml(displayToken)}</div>
+            <div class="info-value ${tokenRevealed ? '' : 'masked'}">${escapeHtml(displayToken)}</div>
             <button class="info-reveal" id="revealBtn" type="button" title="Toggle token visibility">
               ${tokenRevealed ? `
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1263,14 +1622,13 @@
 
         <div class="info-section">
           <div class="info-label">API Format (OpenAI compatible)</div>
-          <div class="info-pre"><span class="p">POST</span> <span class="s">{server}?action=chat</span>
-<span class="p">Content-Type:</span> <span class="s">application/json</span>
+          <div class="info-pre">POST {server}?action=chat
+Content-Type: application/json
 
 ${exampleJSON}</div>
         </div>
       `;
 
-      // Bind reveal button
       const revealBtn = infoList.querySelector('#revealBtn');
       if (revealBtn) {
         revealBtn.addEventListener('click', () => {
@@ -1301,7 +1659,6 @@ ${exampleJSON}</div>
 
     function startSquareAnimation(square) {
       stopSquareAnimation(square);
-
       const dots = [...square.querySelectorAll('span')];
       const rings = [[], [], []];
       dots.forEach(dot => rings[+dot.dataset.ring].push(dot));
@@ -1356,13 +1713,12 @@ ${exampleJSON}</div>
     }
 
     /* ============================================
-       Thinking Block (Working only — no steps, no arrow)
+       Thinking Block
     ============================================ */
     function createDotSquare() {
       const square = document.createElement('div');
       square.className = 'dot-square';
-      const SIZE = 5;
-      const center = 2;
+      const SIZE = 5, center = 2;
       for (let row = 0; row < SIZE; row++) {
         for (let col = 0; col < SIZE; col++) {
           const dot = document.createElement('span');
@@ -1382,7 +1738,6 @@ ${exampleJSON}</div>
       block.className = 'thinking-block';
 
       const dotSquare = createDotSquare();
-
       const workingText = document.createElement('span');
       workingText.className = 'working-text';
       workingText.textContent = 'Working';
@@ -1407,15 +1762,56 @@ ${exampleJSON}</div>
     }
 
     /* ============================================
-       Chat Request — SSE + JSON fallback
+       Typing Queue (smooth, natural)
+    ============================================ */
+    const typeState = {
+      queue: [],
+      running: false,
+      node: null,
+      stopped: false
+    };
+
+    async function pumpQueue() {
+      if (typeState.running) return;
+      typeState.running = true;
+
+      while (typeState.queue.length && !typeState.stopped) {
+        const ch = typeState.queue.shift();
+        typeState.node.textContent += ch;
+        scrollBottom();
+
+        let d = 6 + Math.random() * 8;
+        if (ch === '.' || ch === '!' || ch === '?') d = 90;
+        else if (ch === ',') d = 45;
+        else if (ch === '\n') d = 55;
+        else if (ch === ' ') d = 12;
+
+        await sleep(d);
+      }
+
+      typeState.running = false;
+    }
+
+    function enqueueChars(str) {
+      if (typeState.stopped) return;
+      for (const ch of str) typeState.queue.push(ch);
+      pumpQueue();
+    }
+
+    /* ============================================
+       SSE Chat Request
     ============================================ */
     async function sendChat(payload, onDelta, onDone, onError) {
+      currentController = new AbortController();
+      abortRequested = false;
+
       try {
         const res = await fetch(API_URL + "?action=chat", {
           method: "POST",
           body: JSON.stringify(payload),
           headers: { "Accept": "text/event-stream, application/json" },
-          redirect: "follow"
+          redirect: "follow",
+          signal: currentController.signal
         });
 
         if (!res.ok) {
@@ -1425,7 +1821,7 @@ ${exampleJSON}</div>
 
         const contentType = (res.headers.get("content-type") || "").toLowerCase();
 
-        // -------- SSE streaming path --------
+        // ---- SSE streaming ----
         if (contentType.includes("event-stream") && res.body && res.body.getReader) {
           const reader = res.body.getReader();
           const decoder = new TextDecoder();
@@ -1443,8 +1839,7 @@ ${exampleJSON}</div>
               const event = buffer.slice(0, idx);
               buffer = buffer.slice(idx + 2);
 
-              const lines = event.split("\n");
-              for (const line of lines) {
+              for (const line of event.split("\n")) {
                 const trimmed = line.trim();
                 if (!trimmed.startsWith("data:")) continue;
                 const data = trimmed.slice(5).trim();
@@ -1457,7 +1852,7 @@ ${exampleJSON}</div>
                   const msg = parsed.choices?.[0]?.message?.content;
                   const chunk = delta != null ? delta : msg;
                   if (chunk) onDelta(chunk);
-                } catch (e) { /* ignore non-JSON line */ }
+                } catch (e) {}
               }
               if (finished) break;
             }
@@ -1466,14 +1861,12 @@ ${exampleJSON}</div>
           return;
         }
 
-        // -------- Text response path --------
+        // ---- Full text response ----
         const text = await res.text();
         const trimmedAll = text.trim();
 
-        // SSE-formatted body delivered as one chunk
         if (trimmedAll.startsWith("data:")) {
-          const lines = trimmedAll.split("\n");
-          for (const line of lines) {
+          for (const line of trimmedAll.split("\n")) {
             const trimmed = line.trim();
             if (!trimmed.startsWith("data:")) continue;
             const data = trimmed.slice(5).trim();
@@ -1491,7 +1884,7 @@ ${exampleJSON}</div>
           return;
         }
 
-        // Plain JSON
+        // ---- Plain JSON ----
         try {
           const parsed = JSON.parse(trimmedAll);
           if (parsed.error) { onError(parsed.error.message || "Server error"); return; }
@@ -1502,7 +1895,43 @@ ${exampleJSON}</div>
           onError("Invalid response from server");
         }
       } catch (e) {
-        onError((e && e.message) || "Network error");
+        if (e.name === "AbortError") {
+          onDone();
+        } else {
+          onError((e && e.message) || "Network error");
+        }
+      }
+    }
+
+    /* ============================================
+       Stop Generation
+    ============================================ */
+    function stopGeneration() {
+      abortRequested = true;
+      if (currentController) {
+        try { currentController.abort(); } catch (e) {}
+      }
+      typeState.stopped = true;
+      typeState.queue = [];
+    }
+
+    /* ============================================
+       Composer — auto resize + state
+    ============================================ */
+    function autoResize() {
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 200) + 'px';
+    }
+
+    function updateSendBtn() {
+      if (isStreaming) {
+        sendBtn.classList.add('sending');
+        sendBtn.disabled = false;
+        sendBtn.setAttribute('aria-label', 'Stop');
+      } else {
+        sendBtn.classList.remove('sending');
+        sendBtn.disabled = input.value.trim().length === 0;
+        sendBtn.setAttribute('aria-label', 'Send');
       }
     }
 
@@ -1511,18 +1940,19 @@ ${exampleJSON}</div>
     ============================================ */
     async function handleSend() {
       const text = input.value.trim();
-      if (!text || !token || !currentModel || isProcessing) return;
+      if (!text || !token || !currentModel || isStreaming) return;
 
-      isProcessing = true;
+      isStreaming = true;
       input.value = '';
-      sendBtn.disabled = true;
+      autoResize();
+      updateSendBtn();
 
       addUserMessage(text);
       history.push({ role: "user", content: text });
 
       const block = createThinkingBlock();
 
-      // Prepare the final element (only inserted on first delta)
+      // Prepare the final element
       const final = document.createElement('div');
       final.className = 'final';
       const textNode = document.createElement('span');
@@ -1535,6 +1965,19 @@ ${exampleJSON}</div>
       let fullContent = "";
       let errorMsg = null;
 
+      // Reset typing state
+      typeState.queue = [];
+      typeState.running = false;
+      typeState.stopped = false;
+      typeState.node = textNode;
+
+      const firstDeltaInsert = () => {
+        if (!hasContent) {
+          chat.appendChild(final);
+          hasContent = true;
+        }
+      };
+
       await new Promise((resolve) => {
         sendChat(
           {
@@ -1544,18 +1987,19 @@ ${exampleJSON}</div>
             _tok: token
           },
           (delta) => {
-            if (!hasContent) {
-              chat.appendChild(final);
-              hasContent = true;
-            }
+            firstDeltaInsert();
             fullContent += delta;
-            textNode.textContent += delta;
-            scrollBottom();
+            enqueueChars(delta);
           },
           () => resolve(),
           (err) => { errorMsg = err; resolve(); }
         );
       });
+
+      // Wait for typing queue to finish (unless aborted)
+      while (typeState.running || typeState.queue.length) {
+        await sleep(40);
+      }
 
       cursor.remove();
 
@@ -1570,16 +2014,18 @@ ${exampleJSON}</div>
         }
       } else if (fullContent) {
         history.push({ role: "assistant", content: fullContent });
-      } else {
+      } else if (!abortRequested) {
         if (!hasContent) final.remove();
         addErrorMessage("Empty response from model.");
       }
 
-      await sleep(300);
+      await sleep(250);
       finishThinkingBlock(block);
 
-      isProcessing = false;
-      sendBtn.disabled = false;
+      isStreaming = false;
+      abortRequested = false;
+      currentController = null;
+      updateSendBtn();
       input.focus();
     }
 
@@ -1587,6 +2033,7 @@ ${exampleJSON}</div>
        Disconnect
     ============================================ */
     function disconnect() {
+      stopGeneration();
       token = "";
       history = [];
       currentModel = null;
@@ -1621,7 +2068,7 @@ ${exampleJSON}</div>
     /* ============================================
        Events
     ============================================ */
-    goBtn.addEventListener('click', () => connect());
+    goBtn.addEventListener('click', connect);
     tokInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') { e.preventDefault(); connect(); }
     });
@@ -1629,7 +2076,22 @@ ${exampleJSON}</div>
       if (loginBox.classList.contains('error')) clearLoginError();
     });
 
-    composer.addEventListener('submit', (e) => { e.preventDefault(); handleSend(); });
+    input.addEventListener('input', () => {
+      autoResize();
+      if (!isStreaming) updateSendBtn();
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        if (!isStreaming) handleSend();
+      }
+    });
+
+    sendBtn.addEventListener('click', () => {
+      if (isStreaming) stopGeneration();
+      else handleSend();
+    });
 
     modelBtn.addEventListener('click', openDialog);
     dialogOverlay.addEventListener('click', closeDialog);
@@ -1644,7 +2106,9 @@ ${exampleJSON}</div>
     /* ============================================
        Init
     ============================================ */
-    autoRestore();
+    initToken();
+    autoResize();
+    updateSendBtn();
   </script>
 
 </body>
