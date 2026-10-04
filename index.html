@@ -1,48 +1,1421 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>X5Models Free</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-:root{--bg:#0b0e14;--panel:#131824;--line:#232c40;--txt:#e8ecf4;--mut:#8b93a7;--acc:#4f7cff}
-*{box-sizing:border-box}html,body{height:100%}
-body{font-family:Segoe UI,Arial,sans-serif;background:radial-gradient(1200px 600px at 80% -10%,#1b2540 0%,var(--bg) 55%);color:var(--txt);margin:0;display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
-header{background:rgba(19,24,36,.94);padding:12px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
-.brand{display:flex;align-items:center;gap:10px}
-.logo{width:34px;height:34px;min-width:34px;border-radius:10px;background:linear-gradient(135deg,var(--acc),#9b5cff);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17px}
-.brand h1{font-size:16px;margin:0}.brand small{color:var(--mut);font-size:11px}
-#login{display:flex;gap:8px;margin-top:10px}
-#login input{flex:1;min-width:0;background:#0b0e14;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:11px;font-size:16px}
-button{background:linear-gradient(135deg,var(--acc),#6a5cff);color:#fff;border:0;border-radius:10px;padding:11px 18px;font-weight:700;cursor:pointer;font-size:15px;white-space:nowrap}button:disabled{opacity:.5}
-#who{margin-top:8px;font-size:12px;color:var(--mut)}
-#chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;max-width:900px;width:100%;margin:0 auto}
-.msg{max-width:82%;padding:10px 13px;border-radius:14px;white-space:pre-wrap;word-break:break-word;font-size:14px;line-height:1.55}
-.u{align-self:flex-end;background:linear-gradient(135deg,#2f5bff,#6a5cff);border-bottom-right-radius:4px}
-.a{align-self:flex-start;background:var(--panel);border:1px solid var(--line);border-bottom-left-radius:4px}
-.meta{font-size:11px;color:var(--mut);margin-top:6px}
-#bar{padding:10px;background:rgba(19,24,36,.96);border-top:1px solid var(--line);position:sticky;bottom:0}
-#bar .wrap{display:flex;gap:8px;max-width:900px;margin:0 auto;width:100%}
-#bar select{width:30%;min-width:0;background:#0b0e14;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:11px;font-size:14px}
-#bar input{flex:1;min-width:0;background:#0b0e14;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:11px;font-size:16px}
-.hide{display:none!important}
-@media(max-width:640px){.msg{max-width:92%;font-size:13px}#bar{padding:8px}#bar select{width:26%}button{padding:11px 12px}}</style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #000;
+    --line: #1a1a1a;
+    --line-2: #1e1e1e;
+    --txt: #e0e0e0;
+    --mut: #6a6a6a;
+    --mut-2: #4a4a4a;
+    --err: #ff4d4d;
+    --err-bg: #1a0808;
+    --err-border: #3a1212;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--txt);
+    font-family: 'Space Grotesk', sans-serif;
+    overflow: hidden;
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    width: 100%;
+  }
+
+  /* Header */
+  .header {
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 10;
+  }
+
+  .logo-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+    animation: pulse 1.8s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+  .header-title {
+    font-size: 0.85rem; font-weight: 500;
+    color: #888; letter-spacing: 0.02em; white-space: nowrap;
+  }
+
+  .header-spacer { flex: 1; }
+
+  .model-btn {
+    display: none; align-items: center; gap: 8px;
+    background: #0f0f0f; border: 1px solid var(--line-2);
+    color: var(--txt); padding: 7px 12px; border-radius: 10px;
+    font-family: inherit; font-size: 0.78rem; font-weight: 500;
+    cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap; max-width: 240px;
+  }
+
+  .model-btn.show { display: inline-flex; }
+  .model-btn:hover { background: #161616; border-color: #2a2a2a; }
+  .model-btn .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .model-btn svg { width: 10px; height: 10px; flex-shrink: 0; opacity: 0.6; }
+
+  .logout-btn {
+    display: none; background: transparent;
+    border: 1px solid var(--line-2); color: #888;
+    width: 32px; height: 32px; border-radius: 10px;
+    cursor: pointer; align-items: center; justify-content: center;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .logout-btn.show { display: flex; }
+  .logout-btn:hover { background: #161616; border-color: #2a2a2a; color: #e0e0e0; }
+  .logout-btn svg { width: 14px; height: 14px; }
+
+  /* Login */
+  .login-screen {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    padding: 20px; transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .login-screen.hide {
+    opacity: 0; transform: scale(0.96);
+    pointer-events: none; position: absolute; inset: 0;
+  }
+
+  .login-box {
+    width: 100%; max-width: 420px;
+    display: flex; flex-direction: column; gap: 14px; text-align: center;
+  }
+
+  .login-icon {
+    width: 56px; height: 56px; border-radius: 16px;
+    background: linear-gradient(145deg, #141414, #0a0a0a);
+    border: 1px solid #1f1f1f;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 8px; color: #fff;
+    transition: border-color 0.3s ease, background 0.3s ease, color 0.3s ease;
+  }
+
+  .login-icon svg { width: 26px; height: 26px; }
+
+  .login-box.error .login-icon {
+    border-color: var(--err-border);
+    background: linear-gradient(145deg, #1a0808, #0a0404);
+    color: var(--err);
+  }
+
+  .login-title {
+    font-size: 1.4rem; font-weight: 600; color: #fff;
+    letter-spacing: -0.02em; transition: color 0.3s ease;
+  }
+
+  .login-box.error .login-title { color: var(--err); }
+
+  .login-sub {
+    font-size: 0.82rem; color: var(--mut);
+    margin-bottom: 8px; line-height: 1.5;
+    transition: color 0.3s ease;
+  }
+
+  .login-box.error .login-sub { color: #a06060; }
+
+  .login-input-wrap {
+    display: flex; gap: 6px; align-items: center;
+    background: #0a0a0a; border: 1px solid var(--line-2);
+    border-radius: 12px; padding: 4px 4px 4px 14px;
+    transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .login-input-wrap:focus-within { border-color: #333; }
+
+  .login-box.error .login-input-wrap {
+    border-color: var(--err); background: var(--err-bg);
+    box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.08);
+  }
+
+  .login-input-wrap input {
+    flex: 1; min-width: 0; background: transparent;
+    border: 0; color: var(--txt); font-family: inherit;
+    font-size: 0.88rem; outline: none; padding: 10px 0;
+  }
+
+  .login-input-wrap input::placeholder { color: var(--mut-2); }
+  .login-box.error .login-input-wrap input::placeholder { color: #6a3030; }
+
+  .login-input-wrap button {
+    background: #1a1a1a; border: 1px solid #2a2a2a;
+    color: #e0e0e0; padding: 10px 16px; border-radius: 9px;
+    font-family: inherit; font-size: 0.82rem; font-weight: 600;
+    cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap; flex-shrink: 0;
+  }
+
+  .login-input-wrap button:hover:not(:disabled) { background: #222; border-color: #3a3a3a; }
+
+  .login-box.error .login-input-wrap button {
+    background: #2a0a0a; border-color: #3a1212; color: var(--err);
+  }
+
+  .login-box.error .login-input-wrap button:hover:not(:disabled) {
+    background: #351010; border-color: #4a1818;
+  }
+
+  .login-input-wrap button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .login-error {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; border-radius: 12px;
+    background: var(--err-bg); border: 1px solid var(--err-border);
+    color: var(--err); font-size: 0.82rem; font-weight: 500;
+    text-align: left; line-height: 1.4;
+    max-height: 0; padding-top: 0; padding-bottom: 0;
+    opacity: 0; overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease, padding 0.3s ease, margin 0.3s ease;
+  }
+
+  .login-error.show {
+    max-height: 100px; padding-top: 12px; padding-bottom: 12px; opacity: 1;
+  }
+
+  .login-error svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+  }
+
+  .login-box.shake .login-input-wrap {
+    animation: shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+  }
+
+  /* Chat */
+  .chat-screen { flex: 1; display: none; flex-direction: column; min-height: 0; }
+  .chat-screen.show { display: flex; }
+
+  .chat {
+    flex: 1; overflow-y: auto; padding: 24px;
+    display: flex; flex-direction: column; gap: 18px;
+    max-width: 780px; width: 100%; margin: 0 auto;
+  }
+
+  .chat::-webkit-scrollbar { width: 6px; }
+  .chat::-webkit-scrollbar-thumb { background: #222; border-radius: 3px; }
+
+  .msg {
+    max-width: 85%; padding: 10px 14px; border-radius: 14px;
+    font-size: 0.92rem; line-height: 1.55;
+    white-space: pre-wrap; word-break: break-word;
+    animation: msgIn 0.3s ease;
+  }
+
+  @keyframes msgIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .msg.user {
+    align-self: flex-end; background: #1a1a1a; color: #e0e0e0;
+    border-bottom-right-radius: 4px;
+  }
+
+  .msg.error {
+    align-self: flex-start; background: var(--err-bg);
+    border: 1px solid var(--err-border); color: var(--err);
+    font-size: 0.82rem; max-width: 100%;
+  }
+
+  /* Thinking Block */
+  .thinking-block {
+    align-self: flex-start; width: 100%;
+    display: flex; flex-direction: column; gap: 6px;
+    transition: gap 0.4s ease;
+  }
+
+  .thinking-block.done { gap: 2px; }
+
+  .thinking-header {
+    display: flex; align-items: center; gap: 6px;
+    cursor: pointer; user-select: none;
+    padding: 4px 0; width: fit-content;
+  }
+
+  .dot-square {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 2px; align-self: center;
+  }
+
+  .dot-square span {
+    width: 2px; height: 2px; border-radius: 50%;
+    background: #0f0f0f; box-shadow: none;
+    transition: background 0.18s ease-out, box-shadow 0.18s ease-out;
+  }
+
+  .dot-square span.on {
+    background: #ffffff;
+    box-shadow: 0 0 3px rgba(255, 255, 255, 0.85), 0 0 6px rgba(255, 255, 255, 0.35);
+  }
+
+  .thinking-block.done .dot-square span {
+    transition: background 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .thinking-block.done .dot-square span.lit-white {
+    background: #ffffff;
+    box-shadow: 0 0 3px rgba(255, 255, 255, 0.85), 0 0 6px rgba(255, 255, 255, 0.35);
+  }
+
+  .thinking-block.done .dot-square span.lit-black {
+    background: #2a2a2a; box-shadow: none;
+  }
+
+  .working-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.95rem; font-weight: 700;
+    letter-spacing: -0.02em; white-space: nowrap;
+    background-image: repeating-linear-gradient(
+      90deg, #ffffff 0px, #ffffff 55px, #4a4a4a 100px, #ffffff 145px, #ffffff 200px
+    );
+    background-size: 200px 100%; background-repeat: repeat;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    animation: continuousWave 2.8s linear infinite;
+  }
+
+  @keyframes continuousWave {
+    0% { background-position: 0px 0; }
+    100% { background-position: 200px 0; }
+  }
+
+  .thinking-block.done .working-text {
+    animation: none; background-image: none;
+    -webkit-text-fill-color: #ffffff; color: #ffffff;
+  }
+
+  .arrow {
+    width: 14px; height: 14px;
+    display: flex; align-items: center; justify-content: center;
+    color: #888; transition: color 0.25s ease;
+  }
+
+  .arrow svg {
+    width: 10px; height: 10px; display: block;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .thinking-header:hover .arrow { color: #fff; }
+  .thinking-block.open .arrow svg { transform: rotate(90deg); }
+
+  .steps {
+    display: grid; grid-template-rows: 1fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    margin-left: 9px; opacity: 1;
+  }
+
+  .thinking-block:not(.open) .steps { grid-template-rows: 0fr; opacity: 0; }
+
+  .steps-inner {
+    overflow: hidden; min-height: 0;
+    display: flex; flex-direction: column; gap: 4px;
+    border-left: 1px solid var(--line-2); padding-left: 12px;
+  }
+
+  .step-item { display: flex; flex-direction: column; }
+
+  .step-head {
+    display: flex; align-items: center; gap: 8px;
+    cursor: pointer; user-select: none;
+    width: fit-content; padding: 3px 0;
+  }
+
+  .step-bullet {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: #444; flex-shrink: 0;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .step-item.done .step-bullet {
+    background: #4ade80; box-shadow: 0 0 6px rgba(74, 222, 128, 0.5);
+  }
+
+  .step-title {
+    font-size: 0.82rem; color: var(--mut); line-height: 1.5;
+    transition: color 0.3s ease; opacity: 0; transform: translateX(-6px);
+    animation: stepIn 0.4s ease forwards;
+  }
+
+  .step-item.done .step-title { color: #8a8a8a; }
+
+  @keyframes stepIn { to { opacity: 1; transform: translateX(0); } }
+
+  .step-arrow {
+    width: 12px; height: 12px;
+    display: flex; align-items: center; justify-content: center;
+    color: #555; margin-left: 2px; transition: color 0.25s ease;
+  }
+
+  .step-arrow svg {
+    width: 8px; height: 8px; display: block;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .step-head:hover .step-arrow { color: #aaa; }
+  .step-item.open .step-arrow svg { transform: rotate(90deg); }
+
+  .step-content {
+    display: grid; grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease;
+    padding-left: 12px; padding-top: 0; padding-bottom: 0;
+  }
+
+  .step-item.open .step-content {
+    grid-template-rows: 1fr; padding-top: 6px; padding-bottom: 4px;
+  }
+
+  .step-content-inner { overflow: hidden; min-height: 0; }
+
+  .step-text {
+    font-size: 0.78rem; color: var(--mut); line-height: 1.6; padding: 4px 0;
+  }
+
+  .step-img {
+    width: 180px; height: 100px; border-radius: 8px; overflow: hidden;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+    display: flex; align-items: center; justify-content: center;
+    margin: 4px 0; border: 1px solid var(--line);
+  }
+
+  .step-img svg { width: 28px; height: 28px; color: var(--mut-2); }
+
+  .final {
+    align-self: flex-start; max-width: 100%;
+    font-size: 0.92rem; line-height: 1.7; color: #d0d0d0;
+    padding: 4px 0; white-space: pre-wrap; word-break: break-word;
+  }
+
+  .cursor {
+    display: inline-block; width: 7px; height: 15px;
+    background: #d0d0d0; vertical-align: text-bottom;
+    margin-left: 2px;
+    animation: blink 0.9s steps(2, start) infinite;
+  }
+
+  @keyframes blink { to { visibility: hidden; } }
+
+  /* Composer */
+  .composer-wrap {
+    border-top: 1px solid var(--line);
+    padding: 16px 24px 24px; flex-shrink: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .composer {
+    display: flex; gap: 10px; align-items: center;
+    max-width: 780px; margin: 0 auto;
+    background: #0a0a0a; border: 1px solid var(--line-2);
+    border-radius: 14px; padding: 4px 4px 4px 18px;
+    transition: border-color 0.2s ease;
+  }
+
+  .composer:focus-within { border-color: #333; }
+
+  .composer input {
+    flex: 1; min-width: 0; background: transparent;
+    border: 0; color: var(--txt); font-family: inherit;
+    font-size: 0.9rem; outline: none; padding: 12px 0;
+  }
+
+  .composer input::placeholder { color: var(--mut-2); }
+
+  .send-btn {
+    background: #1a1a1a; border: 1px solid #2a2a2a;
+    color: #e0e0e0; width: 42px; height: 42px; border-radius: 11px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    flex-shrink: 0;
+  }
+
+  .send-btn:hover:not(:disabled) { background: #222; border-color: #3a3a3a; }
+  .send-btn:active:not(:disabled) { transform: scale(0.94); }
+  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .send-btn svg { width: 16px; height: 16px; pointer-events: none; }
+
+  /* Dialog */
+  .dialog-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease; z-index: 100;
+  }
+
+  .dialog-overlay.show { opacity: 1; pointer-events: auto; }
+
+  .dialog {
+    position: fixed; left: 50%; bottom: 0;
+    transform: translate(-50%, 100%);
+    width: 100%; max-width: 520px;
+    background: #0a0a0a; border: 1px solid var(--line-2); border-bottom: 0;
+    border-radius: 20px 20px 0 0; padding: 20px;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 101; max-height: 70vh;
+    display: flex; flex-direction: column;
+    box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.7);
+  }
+
+  .dialog.show { transform: translate(-50%, 0); }
+
+  .dialog-handle {
+    width: 40px; height: 4px; background: #2a2a2a;
+    border-radius: 2px; margin: 0 auto 16px; flex-shrink: 0;
+  }
+
+  .dialog-title {
+    font-size: 1rem; font-weight: 600; color: #fff;
+    letter-spacing: -0.01em; margin-bottom: 4px;
+  }
+
+  .dialog-sub { font-size: 0.78rem; color: var(--mut); margin-bottom: 16px; }
+
+  .model-list {
+    overflow-y: auto; display: flex; flex-direction: column;
+    gap: 6px; flex: 1; margin: 0 -6px; padding: 0 6px;
+  }
+
+  .model-list::-webkit-scrollbar { width: 4px; }
+  .model-list::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
+
+  .model-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px; border-radius: 12px;
+    background: transparent; border: 1px solid transparent;
+    cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease;
+    text-align: left; width: 100%; font-family: inherit; color: var(--txt);
+    opacity: 0; transform: translateY(8px);
+    animation: dialogItemIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes dialogItemIn { to { opacity: 1; transform: translateY(0); } }
+
+  .model-item:hover { background: #101010; border-color: var(--line-2); }
+  .model-item.active { background: #101010; border-color: #2a2a2a; }
+
+  .model-item-icon {
+    width: 32px; height: 32px; border-radius: 9px;
+    background: linear-gradient(145deg, #141414, #0a0a0a);
+    border: 1px solid #1f1f1f;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; color: #888;
+  }
+
+  .model-item.active .model-item-icon {
+    background: #1a1a1a; border-color: #2a2a2a; color: #fff;
+  }
+
+  .model-item-icon svg { width: 14px; height: 14px; }
+
+  .model-item-info { flex: 1; min-width: 0; }
+
+  .model-item-name {
+    font-size: 0.86rem; font-weight: 500; color: #d0d0d0;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+
+  .model-item.active .model-item-name { color: #fff; }
+
+  .model-item-id {
+    font-size: 0.72rem; color: var(--mut); margin-top: 2px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+
+  .model-item-check { color: #4ade80; flex-shrink: 0; display: none; }
+  .model-item.active .model-item-check { display: block; }
+  .model-item-check svg { width: 16px; height: 16px; }
+
+  /* Connecting */
+  .connecting {
+    position: fixed; inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    display: none; align-items: center; justify-content: center;
+    z-index: 200;
+  }
+
+  .connecting.show { display: flex; }
+
+  .connecting-box {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 16px;
+  }
+
+  .connecting .dot-square {
+    grid-template-columns: repeat(5, 1fr); gap: 3px;
+  }
+
+  .connecting .dot-square span { width: 3px; height: 3px; }
+
+  .connecting-text {
+    font-size: 0.82rem; color: var(--mut); letter-spacing: 0.02em;
+  }
+
+  @media (max-width: 640px) {
+    .header { padding: 12px 16px; }
+    .chat { padding: 16px; }
+    .composer-wrap { padding: 12px 16px 16px; }
+    .msg { max-width: 92%; font-size: 0.88rem; }
+    .header-title { font-size: 0.8rem; }
+  }
+</style>
 </head>
 <body>
-<script>
-var G="https://script.google.com/macros/s/AKfycbwE4MgcyATsiJUUUvArDC1BX5JLpeinJUvgFG7_3vwNBgny-BSoSS28dPoWu2fMeUA7/exec";
-var T="";var HIST=[];
-function add(t,me,meta){var d=document.createElement("div");d.className="msg "+(me?"u":"a");var p=document.createElement("div");p.textContent=t;d.appendChild(p);if(meta){var m=document.createElement("div");m.className="meta";m.textContent=meta;d.appendChild(m);}var c=document.getElementById("chat");c.appendChild(d);c.scrollTop=c.scrollHeight;return d;}
-function post(p,b){return fetch(G+p,{method:"POST",body:JSON.stringify(b)}).then(function(r){return r.json();});}
-function conn(){T=document.getElementById("tok").value.trim();if(!T)return;var go=document.getElementById("go");go.disabled=true;add("Connecting...",false);fetch(G+"?action=models").then(function(r){return r.json();}).then(function(m){if(m.error||!m.data){add("Error: "+((m.error||{}).message||"server offline"),false);go.disabled=false;return;}var s=document.getElementById("models");s.innerHTML="";m.data.forEach(function(x){var o=document.createElement("option");o.value=x.id;o.textContent=x.label||x.id;s.appendChild(o);});document.getElementById("login").classList.add("hide");document.getElementById("bar").classList.remove("hide");var w=document.getElementById("who");w.classList.remove("hide");fetch(G+"?action=usage&token="+encodeURIComponent(T)).then(function(r){return r.json();}).then(function(u){w.textContent=(u.email||"Connected")+" | used "+(u.total||0);});add("Welcome! Pick a model and start chatting.",false);}).catch(function(){add("Connection failed. Check internet.",false);go.disabled=false;});}
-function send(){var i=document.getElementById("inp");var t=i.value.trim();if(!t||!T)return;i.value="";HIST.push({role:"user",content:t});add(t,true);var b=add("Typing...",false);post("?action=chat",{model:document.getElementById("models").value,messages:HIST.slice(-20),max_tokens:800,_tok:T}).then(function(d){if(d.error){b.firstChild.textContent="Error: "+(d.error.message||"?");return;}var mg=((d.choices||[])[0]||{}).message||{};b.firstChild.textContent=mg.content||"(empty)";HIST.push({role:"assistant",content:mg.content||""});}).catch(function(){b.firstChild.textContent="Network error. Try again.";});}
-document.getElementById("go").onclick=conn;
-document.getElementById("send").onclick=send;
-document.getElementById("inp").onkeydown=function(e){if(e.key==="Enter")send();};
-document.getElementById("tok").onkeydown=function(e){if(e.key==="Enter")conn();};
-</script>
-<header><div class="brand"><div class="logo">X5</div><div><h1>X5Models Free</h1><small>free AI chat</small></div></div><div id="login"><input id="tok" type="password" placeholder="Paste your token (sk-...)" autocomplete="off"><button id="go">Connect</button></div><div id="who" class="hide"></div></header>
-<div id="chat"></div>
-<div id="bar" class="hide"><div class="wrap"><select id="models"></select><input id="inp" placeholder="Type a message..." autocomplete="off"><button id="send">Send</button></div></div>
+
+  <div class="layout">
+
+    <div class="header">
+      <span class="logo-dot"></span>
+      <span class="header-title">X5Models Free</span>
+      <div class="header-spacer"></div>
+
+      <button class="model-btn" id="modelBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+        </svg>
+        <span class="name" id="modelBtnName">Select model</span>
+      </button>
+
+      <button class="logout-btn" id="logoutBtn" title="Disconnect">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="login-screen" id="loginScreen">
+      <div class="login-box" id="loginBox">
+        <div class="login-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2 L2 7 L12 12 L22 7 Z"/>
+            <path d="M2 17 L12 22 L22 17"/>
+            <path d="M2 12 L12 17 L22 12"/>
+          </svg>
+        </div>
+        <div class="login-title">Connect to X5Models</div>
+        <div class="login-sub">Paste your access token to start</div>
+
+        <div class="login-input-wrap" id="loginWrap">
+          <input type="password" id="tok" placeholder="sk-..." autocomplete="off" spellcheck="false">
+          <button id="go" type="button">Connect</button>
+        </div>
+
+        <div class="login-error" id="loginError">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span id="loginErrorText">Invalid token. Please check and try again.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-screen" id="chatScreen">
+      <div class="chat" id="chat"></div>
+
+      <div class="composer-wrap">
+        <form class="composer" id="composer" autocomplete="off">
+          <input type="text" id="input" placeholder="Type a message..." autocomplete="off">
+          <button type="submit" class="send-btn" id="sendBtn" aria-label="Send">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 2 L11 13"/>
+              <path d="M22 2 L15 22 L11 13 L2 9 Z"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="dialog-overlay" id="dialogOverlay"></div>
+  <div class="dialog" id="dialog">
+    <div class="dialog-handle"></div>
+    <div class="dialog-title">Select a model</div>
+    <div class="dialog-sub">Choose which AI model to chat with</div>
+    <div class="model-list" id="modelList"></div>
+  </div>
+
+  <div class="connecting" id="connecting">
+    <div class="connecting-box">
+      <div class="dot-square" id="connectingDots"></div>
+      <div class="connecting-text">Connecting...</div>
+    </div>
+  </div>
+
+  <script>
+    /* ============================================
+       Config
+    ============================================ */
+    const API_URL = "https://script.google.com/macros/s/AKfycbwE4MgcyATsiJUUUvArDC1BX5JLpeinJUvgFG7_3vwNBgny-BSoSS28dPoWu2fMeUA7/exec";
+    const STORAGE_KEY = "x5models_token";
+    const MODEL_KEY = "x5models_model";
+    const FETCH_TIMEOUT = 20000;
+
+    /* ============================================
+       State
+    ============================================ */
+    let token = "";
+    let history = [];
+    let isProcessing = false;
+    let currentModel = null;
+    let modelsList = [];
+    let connecting = false;
+
+    /* ============================================
+       Elements
+    ============================================ */
+    const chat = document.getElementById('chat');
+    const composer = document.getElementById('composer');
+    const input = document.getElementById('input');
+    const sendBtn = document.getElementById('sendBtn');
+    const tokInput = document.getElementById('tok');
+    const goBtn = document.getElementById('go');
+    const loginScreen = document.getElementById('loginScreen');
+    const loginBox = document.getElementById('loginBox');
+    const chatScreen = document.getElementById('chatScreen');
+    const modelBtn = document.getElementById('modelBtn');
+    const modelBtnName = document.getElementById('modelBtnName');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const dialog = document.getElementById('dialog');
+    const dialogOverlay = document.getElementById('dialogOverlay');
+    const modelList = document.getElementById('modelList');
+    const connectingEl = document.getElementById('connecting');
+    const connectingDots = document.getElementById('connectingDots');
+    const loginError = document.getElementById('loginError');
+    const loginErrorText = document.getElementById('loginErrorText');
+
+    /* ============================================
+       Helpers
+    ============================================ */
+    function scrollBottom() {
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function sleep(ms) {
+      return new Promise(r => setTimeout(r, ms));
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    /* ============================================
+       Fast JSONP-style Fetch
+       Uses plain fetch (no abort controller conflicts with GAS)
+    ============================================ */
+    async function gasFetch(url, options = {}) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+
+      try {
+        const res = await fetch(url, {
+          ...options,
+          signal: controller.signal,
+          redirect: "follow",
+          cache: "no-store"
+        });
+        clearTimeout(timer);
+
+        const text = await res.text();
+        try {
+          return JSON.parse(text);
+        } catch (e) {
+          return { _raw: text, _parseError: true };
+        }
+      } catch (e) {
+        clearTimeout(timer);
+        throw e;
+      }
+    }
+
+    /* ============================================
+       Login Error UI
+    ============================================ */
+    let errorTimer = null;
+
+    function showLoginError(message) {
+      loginErrorText.textContent = message;
+      loginError.classList.add('show');
+      loginBox.classList.add('error');
+
+      loginBox.classList.remove('shake');
+      void loginBox.offsetWidth;
+      loginBox.classList.add('shake');
+
+      clearTimeout(errorTimer);
+      errorTimer = setTimeout(() => {
+        loginBox.classList.remove('shake');
+      }, 500);
+    }
+
+    function clearLoginError() {
+      loginError.classList.remove('show');
+      loginBox.classList.remove('error');
+      loginBox.classList.remove('shake');
+    }
+
+    /* ============================================
+       Connecting Dots Animation
+    ============================================ */
+    function buildDotSquare(container) {
+      container.innerHTML = '';
+      const SIZE = 5;
+      const center = 2;
+      for (let row = 0; row < SIZE; row++) {
+        for (let col = 0; col < SIZE; col++) {
+          const dot = document.createElement('span');
+          const ring = Math.max(Math.abs(row - center), Math.abs(col - center));
+          dot.dataset.ring = ring;
+          container.appendChild(dot);
+        }
+      }
+    }
+
+    const connectingAnim = {
+      timers: [],
+      stopped: false,
+      start() {
+        this.stopped = false;
+        const dots = [...connectingDots.querySelectorAll('span')];
+        const rings = [[], [], []];
+        dots.forEach(d => rings[+d.dataset.ring].push(d));
+
+        const runCycle = () => {
+          if (this.stopped) return;
+          dots.forEach(d => d.classList.remove('on'));
+
+          this.timers.push(setTimeout(() => {
+            if (this.stopped) return;
+            rings[0].forEach(d => d.classList.add('on'));
+          }, 60));
+          this.timers.push(setTimeout(() => {
+            if (this.stopped) return;
+            rings[1].forEach(d => d.classList.add('on'));
+          }, 360));
+          this.timers.push(setTimeout(() => {
+            if (this.stopped) return;
+            rings[2].forEach(d => d.classList.add('on'));
+          }, 660));
+          this.timers.push(setTimeout(() => {
+            if (this.stopped) return;
+            dots.forEach(d => d.classList.remove('on'));
+          }, 1300));
+          this.timers.push(setTimeout(runCycle, 1600));
+        };
+        runCycle();
+      },
+      stop() {
+        this.stopped = true;
+        this.timers.forEach(t => clearTimeout(t));
+        this.timers = [];
+      }
+    };
+
+    /* ============================================
+       Connect — simplified & fast
+       Only checks ?action=models — if data comes back, token is valid.
+    ============================================ */
+    async function connect(t, silent = false) {
+      if (connecting) return;
+      connecting = true;
+
+      t = (t || tokInput.value).trim();
+      if (!t) {
+        connecting = false;
+        if (!silent) {
+          showLoginError("Please enter a token to continue.");
+          tokInput.focus();
+        }
+        return;
+      }
+
+      if (!silent) clearLoginError();
+      goBtn.disabled = true;
+      tokInput.disabled = true;
+
+      if (!silent) {
+        buildDotSquare(connectingDots);
+        connectingEl.classList.add('show');
+        connectingAnim.start();
+      }
+
+      const finish = (ok, errMsg) => {
+        connecting = false;
+        connectingAnim.stop();
+        connectingEl.classList.remove('show');
+        goBtn.disabled = false;
+        tokInput.disabled = false;
+        if (!ok && !silent) {
+          showLoginError(errMsg || "Something went wrong. Please try again.");
+        } else if (!ok && silent) {
+          // Silently fail — user needs to re-login
+          tokInput.value = "";
+          tokInput.focus();
+        }
+      };
+
+      try {
+        // Single request — fetch models WITH token to validate
+        const url = API_URL + "?action=models&token=" + encodeURIComponent(t);
+        const data = await gasFetch(url, { method: "GET" });
+
+        if (!data || data._parseError) {
+          finish(false, "Invalid response from server.");
+          return;
+        }
+
+        // Any explicit error from server
+        if (data.error) {
+          const msg = (data.error && data.error.message) || "";
+          if (/invalid|unauthor|forbidden|token|auth|denied|expired/i.test(msg)) {
+            finish(false, "Invalid token. Please check and try again.");
+          } else {
+            finish(false, msg || "Server returned an error.");
+          }
+          return;
+        }
+
+        // Success = we have models data
+        const list = data.data;
+        if (!list || !list.length) {
+          finish(false, "No models available with this token.");
+          return;
+        }
+
+        // All good
+        token = t;
+        modelsList = list;
+
+        try { localStorage.setItem(STORAGE_KEY, token); } catch (e) {}
+
+        let savedModelId = null;
+        try { savedModelId = localStorage.getItem(MODEL_KEY); } catch (e) {}
+
+        currentModel = modelsList.find(m => m.id === savedModelId) || modelsList[0];
+
+        loginScreen.classList.add('hide');
+        chatScreen.classList.add('show');
+        modelBtn.classList.add('show');
+        logoutBtn.classList.add('show');
+        modelBtnName.textContent = currentModel.label || currentModel.id;
+
+        connecting = false;
+        connectingAnim.stop();
+        connectingEl.classList.remove('show');
+
+        input.focus();
+
+      } catch (e) {
+        const msg = (e && e.message) || "";
+        const isTimeout = /abort|timeout/i.test(msg);
+        const isNetwork = /network|failed to fetch|load failed/i.test(msg);
+
+        if (isTimeout) finish(false, "Connection timed out. Please check your internet and try again.");
+        else if (isNetwork) finish(false, "Unable to reach server. Please check your internet.");
+        else finish(false, "Connection failed. Please try again.");
+      }
+    }
+
+    /* ============================================
+       Auto-restore
+    ============================================ */
+    async function autoRestore() {
+      let saved = null;
+      try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+
+      if (!saved) {
+        tokInput.focus();
+        return;
+      }
+
+      tokInput.value = saved;
+      await connect(saved, true);
+    }
+
+    /* ============================================
+       Model Dialog
+    ============================================ */
+    function openDialog() {
+      modelList.innerHTML = '';
+      modelsList.forEach((m, idx) => {
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = 'model-item' + (m.id === currentModel?.id ? ' active' : '');
+        item.style.animationDelay = (idx * 0.03) + 's';
+
+        item.innerHTML = `
+          <div class="model-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2 L2 7 L12 12 L22 7 Z"/>
+              <path d="M2 17 L12 22 L22 17"/>
+              <path d="M2 12 L12 17 L22 12"/>
+            </svg>
+          </div>
+          <div class="model-item-info">
+            <div class="model-item-name">${escapeHtml(m.label || m.id)}</div>
+            <div class="model-item-id">${escapeHtml(m.id)}</div>
+          </div>
+          <div class="model-item-check">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+        `;
+
+        item.addEventListener('click', () => {
+          currentModel = m;
+          modelBtnName.textContent = m.label || m.id;
+          try { localStorage.setItem(MODEL_KEY, m.id); } catch (e) {}
+          closeDialog();
+        });
+
+        modelList.appendChild(item);
+      });
+
+      dialogOverlay.classList.add('show');
+      requestAnimationFrame(() => {
+        dialog.classList.add('show');
+      });
+    }
+
+    function closeDialog() {
+      dialog.classList.remove('show');
+      dialogOverlay.classList.remove('show');
+    }
+
+    /* ============================================
+       Dot Square Animation (thinking block)
+    ============================================ */
+    const squareAnimations = new Map();
+
+    function startSquareAnimation(square) {
+      stopSquareAnimation(square);
+
+      const dots = [...square.querySelectorAll('span')];
+      const rings = [[], [], []];
+      dots.forEach(dot => { rings[+dot.dataset.ring].push(dot); });
+
+      let timers = [];
+      let stopped = false;
+
+      function runCycle() {
+        if (stopped) return;
+        dots.forEach(d => d.classList.remove('on'));
+
+        timers.push(setTimeout(() => { if (stopped) return; rings[0].forEach(d => d.classList.add('on')); }, 60));
+        timers.push(setTimeout(() => { if (stopped) return; rings[1].forEach(d => d.classList.add('on')); }, 360));
+        timers.push(setTimeout(() => { if (stopped) return; rings[2].forEach(d => d.classList.add('on')); }, 660));
+        timers.push(setTimeout(() => { if (stopped) return; dots.forEach(d => d.classList.remove('on')); }, 1300));
+        timers.push(setTimeout(runCycle, 1600));
+      }
+
+      squareAnimations.set(square, {
+        stop: () => {
+          stopped = true;
+          timers.forEach(t => clearTimeout(t));
+          timers = [];
+        }
+      });
+
+      runCycle();
+    }
+
+    function stopSquareAnimation(square) {
+      const anim = squareAnimations.get(square);
+      if (anim) { anim.stop(); squareAnimations.delete(square); }
+    }
+
+    /* ============================================
+       Message Helpers
+    ============================================ */
+    function addUserMessage(text) {
+      const el = document.createElement('div');
+      el.className = 'msg user';
+      el.textContent = text;
+      chat.appendChild(el);
+      scrollBottom();
+      return el;
+    }
+
+    function addErrorMessage(text) {
+      const el = document.createElement('div');
+      el.className = 'msg error';
+      el.textContent = text;
+      chat.appendChild(el);
+      scrollBottom();
+      return el;
+    }
+
+    /* ============================================
+       Thinking Block
+    ============================================ */
+    function createDotSquare() {
+      const square = document.createElement('div');
+      square.className = 'dot-square';
+      const SIZE = 5;
+      const center = 2;
+      for (let row = 0; row < SIZE; row++) {
+        for (let col = 0; col < SIZE; col++) {
+          const dot = document.createElement('span');
+          const ring = Math.max(Math.abs(row - center), Math.abs(col - center));
+          dot.dataset.ring = ring;
+          const isWhite = row >= 1 && row <= 3 && col >= 1 && col <= 3;
+          if (isWhite) dot.classList.add('lit-white');
+          else dot.classList.add('lit-black');
+          square.appendChild(dot);
+        }
+      }
+      return square;
+    }
+
+    function createThinkingBlock() {
+      const block = document.createElement('div');
+      block.className = 'thinking-block open';
+
+      const header = document.createElement('div');
+      header.className = 'thinking-header';
+
+      const dotSquare = createDotSquare();
+
+      const workingText = document.createElement('span');
+      workingText.className = 'working-text';
+      workingText.textContent = 'Working';
+
+      const arrow = document.createElement('span');
+      arrow.className = 'arrow';
+      arrow.innerHTML = `
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 2.5 L8 6 L4 9.5"/>
+        </svg>
+      `;
+
+      header.appendChild(dotSquare);
+      header.appendChild(workingText);
+      header.appendChild(arrow);
+
+      const steps = document.createElement('div');
+      steps.className = 'steps';
+      const stepsInner = document.createElement('div');
+      stepsInner.className = 'steps-inner';
+      steps.appendChild(stepsInner);
+
+      block.appendChild(header);
+      block.appendChild(steps);
+
+      chat.appendChild(block);
+      scrollBottom();
+
+      startSquareAnimation(dotSquare);
+
+      header.addEventListener('click', () => {
+        block.classList.toggle('open');
+      });
+
+      block._dotSquare = dotSquare;
+      return block;
+    }
+
+    /* ============================================
+       Steps
+    ============================================ */
+    const stepsLibrary = [
+      { title: "Sending request", type: "image", text: "Dispatching message to the model..." },
+      { title: "Processing input", type: "text", text: "Analyzing your message and context." },
+      { title: "Searching knowledge", type: "image", text: "Querying internal knowledge base..." },
+      { title: "Retrieving data", type: "text", text: "Gathering relevant information pieces." },
+      { title: "Verifying accuracy", type: "image", text: "Cross-checking facts and consistency..." },
+      { title: "Composing response", type: "text", text: "Building the final answer for you." }
+    ];
+
+    function createStepItem(stepData) {
+      const item = document.createElement('div');
+      item.className = 'step-item';
+
+      const contentHTML = stepData.type === 'image'
+        ? `<div class="step-img">
+             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+               <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+               <circle cx="8.5" cy="8.5" r="1.5"/>
+               <path d="M21 15 L16 10 L5 21"/>
+             </svg>
+           </div>
+           <div class="step-text">${stepData.text}</div>`
+        : `<div class="step-text">${stepData.text}</div>`;
+
+      item.innerHTML = `
+        <div class="step-head">
+          <span class="step-bullet"></span>
+          <span class="step-title">${stepData.title}</span>
+          <span class="step-arrow">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 2.5 L8 6 L4 9.5"/>
+            </svg>
+          </span>
+        </div>
+        <div class="step-content">
+          <div class="step-content-inner">
+            ${contentHTML}
+          </div>
+        </div>
+      `;
+
+      const head = item.querySelector('.step-head');
+      head.addEventListener('click', (e) => {
+        e.stopPropagation();
+        item.classList.toggle('open');
+      });
+
+      return item;
+    }
+
+    async function runOneStep(block, index) {
+      const stepsInner = block.querySelector('.steps-inner');
+      const item = createStepItem(stepsLibrary[index]);
+      stepsInner.appendChild(item);
+      scrollBottom();
+      await sleep(280 + Math.random() * 180);
+      item.classList.add('done');
+    }
+
+    /* ============================================
+       Streaming Response
+    ============================================ */
+    async function streamResponse(text) {
+      const final = document.createElement('div');
+      final.className = 'final';
+
+      const textNode = document.createElement('span');
+      final.appendChild(textNode);
+
+      const cursor = document.createElement('span');
+      cursor.className = 'cursor';
+      final.appendChild(cursor);
+
+      chat.appendChild(final);
+      scrollBottom();
+
+      for (let i = 0; i < text.length; i++) {
+        textNode.textContent += text[i];
+        scrollBottom();
+
+        const char = text[i];
+        let delay = 8 + Math.random() * 12;
+        if (char === '.' || char === '!' || char === '?') delay = 100;
+        else if (char === ',') delay = 50;
+        else if (char === '\n') delay = 70;
+        else if (char === ' ') delay = 15;
+
+        await sleep(delay);
+      }
+
+      await sleep(200);
+      cursor.remove();
+      return final;
+    }
+
+    /* ============================================
+       Send
+    ============================================ */
+    async function handleSend() {
+      const text = input.value.trim();
+      if (!text || !token || !currentModel || isProcessing) return;
+
+      isProcessing = true;
+      input.value = '';
+      sendBtn.disabled = true;
+
+      addUserMessage(text);
+      history.push({ role: "user", content: text });
+
+      const block = createThinkingBlock();
+
+      const payload = {
+        model: currentModel.id,
+        messages: history.slice(-20),
+        max_tokens: 800,
+        _tok: token
+      };
+
+      let response = null;
+      let done = false;
+
+      fetch(API_URL + "?action=chat", {
+        method: "POST",
+        body: JSON.stringify(payload),
+        redirect: "follow"
+      })
+        .then(r => r.text())
+        .then(txt => {
+          try { response = JSON.parse(txt); }
+          catch (e) { response = { error: { message: "Invalid response from server" } }; }
+          done = true;
+        })
+        .catch(err => {
+          response = { error: { message: "Network error: " + err.message } };
+          done = true;
+        });
+
+      let stepIndex = 0;
+      while (!done && stepIndex < stepsLibrary.length) {
+        await runOneStep(block, stepIndex);
+        stepIndex++;
+      }
+
+      while (!done) { await sleep(100); }
+
+      while (stepIndex < stepsLibrary.length) {
+        await runOneStep(block, stepIndex);
+        stepIndex++;
+      }
+
+      await sleep(280);
+
+      if (response && response.error) {
+        const msg = response.error.message || "Unknown error";
+        addErrorMessage("Error: " + msg);
+        if (/invalid|unauthor|forbidden|token|auth|denied|expired/i.test(msg)) {
+          setTimeout(() => {
+            disconnect();
+            showLoginError("Your token has expired or is invalid. Please sign in again.");
+          }, 1500);
+        }
+      } else if (response) {
+        const content = ((response.choices || [])[0] || {}).message?.content || "";
+        if (!content) addErrorMessage("Empty response from model.");
+        else {
+          history.push({ role: "assistant", content });
+          await streamResponse(content);
+        }
+      } else {
+        addErrorMessage("No response from server.");
+      }
+
+      await sleep(400);
+
+      if (block._dotSquare) {
+        stopSquareAnimation(block._dotSquare);
+        block._dotSquare.querySelectorAll('span').forEach(d => {
+          d.classList.remove('on');
+        });
+      }
+
+      block.classList.add('done');
+      block.classList.remove('open');
+
+      isProcessing = false;
+      sendBtn.disabled = false;
+      input.focus();
+    }
+
+    /* ============================================
+       Disconnect
+    ============================================ */
+    function disconnect() {
+      token = "";
+      history = [];
+      currentModel = null;
+      modelsList = [];
+      chat.innerHTML = "";
+
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(MODEL_KEY);
+      } catch (e) {}
+
+      modelBtn.classList.remove('show');
+      logoutBtn.classList.remove('show');
+      chatScreen.classList.remove('show');
+      loginScreen.classList.remove('hide');
+      tokInput.value = "";
+      tokInput.disabled = false;
+      goBtn.disabled = false;
+      clearLoginError();
+      tokInput.focus();
+    }
+
+    /* ============================================
+       Events
+    ============================================ */
+    goBtn.addEventListener('click', () => connect());
+    tokInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        connect();
+      }
+    });
+
+    tokInput.addEventListener('input', () => {
+      if (loginBox.classList.contains('error')) clearLoginError();
+    });
+
+    composer.addEventListener('submit', (e) => {
+      e.preventDefault();
+      handleSend();
+    });
+
+    modelBtn.addEventListener('click', openDialog);
+    dialogOverlay.addEventListener('click', closeDialog);
+    logoutBtn.addEventListener('click', disconnect);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDialog();
+    });
+
+    /* ============================================
+       Init
+    ============================================ */
+    autoRestore();
+  </script>
+
 </body>
 </html>
