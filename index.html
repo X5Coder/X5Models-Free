@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>X5Models Free</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='black'/%3E%3Cpath d='M50 32 L63 40 L63 56 L50 64 L37 56 L37 40 Z' fill='white'/%3E%3Cpath d='M50 37 V59' stroke='black' stroke-width='2'/%3E%3Cpath d='M45 41 C41 42 41 46 44 47 C41 48 41 52 45 53' stroke='black' stroke-width='1.5' fill='none'/%3E%3Cpath d='M55 41 C59 42 59 46 56 47 C59 48 59 52 55 53' stroke='black' stroke-width='1.5' fill='none'/%3E%3Crect x='41' y='6' width='18' height='18' rx='5' fill='white'/%3E%3Cpath d='M50 9 C50.3 13 51 13.7 55 14 C51 14.3 50.3 15 50 19 C49.7 15 49 14.3 45 14 C49 13.7 49.7 13 50 9 Z' fill='black'/%3E%3Crect x='76' y='41' width='18' height='18' rx='5' fill='white'/%3E%3Cpath d='M85 45 L90 50 L85 55 L80 50 Z' fill='black'/%3E%3Crect x='76' y='76' width='18' height='18' rx='5' fill='white'/%3E%3Cpath d='M83 89 h2.5 v2.5 h-2.5 z M85.5 86.5 h2.5 v2.5 h-2.5 z M88 84 h2.5 v2.5 h-2.5 z M85.5 82 h2.5 v2.5 h-2.5 z' fill='black'/%3E%3Crect x='6' y='76' width='18' height='18' rx='5' fill='white'/%3E%3Ccircle cx='15' cy='82' r='1.5' fill='black'/%3E%3Ccircle cx='12' cy='86' r='1.5' fill='black'/%3E%3Ccircle cx='15' cy='86' r='1.5' fill='black'/%3E%3Ccircle cx='18' cy='86' r='1.5' fill='black'/%3E%3Ccircle cx='15' cy='90' r='1.5' fill='black'/%3E%3Crect x='6' y='41' width='18' height='18' rx='5' fill='white'/%3E%3Cpath d='M13 47 v9 M13 51 h5 M18 47 v9' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M50 26 V32 M68 50 H76 M64 62 L76 76 M36 62 L24 76 M32 50 H24' stroke='white' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='black'/%3E%3Cg fill='%234A7DFF'%3E%3Cpath d='M48 15 L30 15 L20 35 L30 35 L30 30 L42 30 L42 42 L30 42 L25 50 L18 50 L10 62 L25 62 L30 55 L42 55 L42 68 L30 68 L25 78 L42 78 L48 82 L48 15 Z'/%3E%3Cpath d='M52 15 L70 15 L80 35 L70 35 L70 30 L58 30 L58 42 L70 42 L75 50 L82 50 L90 62 L75 62 L70 55 L58 55 L58 68 L70 68 L75 78 L58 78 L52 82 L52 15 Z'/%3E%3C/g%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,13 +23,15 @@
     --err: #ff4d4d;
     --err-bg: #1a0808;
     --err-border: #3a1212;
+    --accent: #4A7DFF;
+    --header-h: 56px;
   }
 
   html, body {
     height: 100%;
     background: var(--bg);
     color: var(--txt);
-    font-family: 'Inter', -apple-system, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     overflow: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -41,19 +43,21 @@
     height: 100vh;
     height: 100dvh;
     width: 100%;
+    overflow: hidden;
   }
 
   /* ============================================
      Header
   ============================================ */
   .header {
-    padding: 14px 24px;
+    height: var(--header-h);
+    padding: 0 clamp(14px, 3vw, 24px);
     border-bottom: 1px solid var(--line);
     display: flex;
     align-items: center;
     gap: 10px;
     flex-shrink: 0;
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     position: relative;
@@ -63,64 +67,74 @@
   .brand {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     text-decoration: none;
     color: inherit;
     transition: opacity 0.2s ease;
+    min-width: 0;
   }
 
   .brand:hover { opacity: 0.85; }
 
   .brand-icon {
-    width: 26px;
-    height: 26px;
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
+    display: block;
   }
 
   .brand-name {
-    font-size: 0.88rem;
+    font-size: 0.82rem;
     font-weight: 600;
     color: #d0d0d0;
     letter-spacing: -0.01em;
     transition: color 0.2s ease;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .brand:hover .brand-name { color: #fff; }
 
-  .header-spacer { flex: 1; }
+  .header-spacer { flex: 1; min-width: 0; }
 
-  /* Model button */
   .model-btn {
     display: none;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     background: #0f0f0f;
     border: 1px solid var(--line-2);
     color: var(--txt);
-    padding: 7px 12px;
-    border-radius: 10px;
+    padding: 6px 11px;
+    border-radius: 9px;
     font-family: inherit;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 500;
     cursor: pointer;
     transition: background 0.2s ease, border-color 0.2s ease;
     white-space: nowrap;
-    max-width: 220px;
+    max-width: min(220px, 32vw);
+    min-width: 0;
   }
 
   .model-btn.show { display: inline-flex; }
   .model-btn:hover { background: #161616; border-color: #2a2a2a; }
-  .model-btn .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .model-btn svg { width: 10px; height: 10px; flex-shrink: 0; opacity: 0.6; }
+  .model-btn .name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+  .model-btn > svg:first-child { width: 10px; height: 10px; flex-shrink: 0; opacity: 0.6; }
 
   .icon-btn {
     display: none;
     background: transparent;
     border: 1px solid var(--line-2);
     color: #888;
-    width: 32px; height: 32px;
-    border-radius: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
     cursor: pointer;
     align-items: center;
     justify-content: center;
@@ -130,7 +144,7 @@
 
   .icon-btn.show { display: flex; }
   .icon-btn:hover { background: #161616; border-color: #2a2a2a; color: #e8e8e8; }
-  .icon-btn svg { width: 14px; height: 14px; }
+  .icon-btn svg { width: 13px; height: 13px; }
 
   /* ============================================
      Login Screen
@@ -140,25 +154,33 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding: 48px 24px;
+    padding: clamp(24px, 5vh, 56px) clamp(16px, 3vw, 24px);
     transition: opacity 0.4s ease, transform 0.4s ease;
     overflow-y: auto;
+    min-height: 0;
   }
 
   .login-screen.hide {
-    opacity: 0; transform: scale(0.98);
-    pointer-events: none; position: absolute; inset: 0;
+    opacity: 0;
+    transform: scale(0.98);
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
   }
 
   .login-box {
-    width: 100%; max-width: 640px;
-    display: flex; flex-direction: column; gap: 18px; text-align: center;
+    width: 100%;
+    max-width: 620px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
     margin: auto 0;
   }
 
   .login-icon {
-    width: 72px;
-    height: 72px;
+    width: 56px;
+    height: 56px;
     margin: 0 auto 4px;
     display: flex;
     align-items: center;
@@ -166,15 +188,12 @@
     transition: transform 0.3s ease;
   }
 
-  .login-icon svg {
-    width: 100%;
-    height: 100%;
-  }
+  .login-icon svg { width: 100%; height: 100%; }
 
   .login-box.error .login-icon { transform: scale(0.96); }
 
   .login-title {
-    font-size: 1.6rem;
+    font-size: clamp(1.3rem, 3.5vw, 1.55rem);
     font-weight: 600;
     color: #fff;
     letter-spacing: -0.025em;
@@ -184,17 +203,16 @@
   .login-box.error .login-title { color: var(--err); }
 
   .login-sub {
-    font-size: 0.88rem;
+    font-size: clamp(0.82rem, 2vw, 0.88rem);
     color: var(--mut);
     line-height: 1.55;
-    max-width: 420px;
-    margin: 0 auto 8px;
+    max-width: 440px;
+    margin: 0 auto 6px;
     transition: color 0.3s ease;
   }
 
   .login-box.error .login-sub { color: #a06060; }
 
-  /* Token field */
   .login-input-wrap {
     display: flex;
     gap: 8px;
@@ -221,7 +239,7 @@
     border: 0;
     color: var(--txt);
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.86rem;
+    font-size: clamp(0.8rem, 2vw, 0.86rem);
     outline: none;
     padding: 12px 0;
     letter-spacing: 0.01em;
@@ -239,10 +257,10 @@
     background: #ffffff;
     border: 0;
     color: #000;
-    padding: 0 22px;
+    padding: 0 clamp(16px, 3vw, 22px);
     border-radius: 10px;
     font-family: inherit;
-    font-size: 0.85rem;
+    font-size: clamp(0.78rem, 2vw, 0.85rem);
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s ease, transform 0.1s ease;
@@ -260,7 +278,6 @@
     color: var(--err);
   }
 
-  /* Error message */
   .login-error {
     display: flex;
     align-items: center;
@@ -304,13 +321,12 @@
     animation: shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97);
   }
 
-  /* Steps section */
   .login-steps {
     text-align: left;
     background: #060606;
     border: 1px solid var(--line);
     border-radius: 16px;
-    padding: 22px 26px;
+    padding: clamp(16px, 3vw, 22px) clamp(18px, 3vw, 26px);
     margin-top: 4px;
   }
 
@@ -318,25 +334,26 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 0.78rem;
+    font-size: clamp(0.7rem, 1.8vw, 0.78rem);
     font-weight: 600;
     color: #c0c0c0;
     letter-spacing: 0.02em;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
     text-transform: uppercase;
   }
 
   .login-steps-head svg {
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
     color: #7a7a7a;
+    flex-shrink: 0;
   }
 
   .steps-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
     counter-reset: step;
   }
 
@@ -344,7 +361,7 @@
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    font-size: 0.82rem;
+    font-size: clamp(0.75rem, 1.9vw, 0.82rem);
     color: #9a9a9a;
     line-height: 1.6;
     counter-increment: step;
@@ -382,7 +399,7 @@
 
   .steps-list code {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     background: #101010;
     border: 1px solid #1e1e1e;
     padding: 2px 6px;
@@ -392,13 +409,14 @@
   }
 
   /* ============================================
-     Chat
+     Chat Screen
   ============================================ */
   .chat-screen {
     flex: 1;
     display: none;
     flex-direction: column;
     min-height: 0;
+    overflow: hidden;
   }
 
   .chat-screen.show { display: flex; }
@@ -406,16 +424,19 @@
   .chat {
     flex: 1;
     overflow-y: auto;
-    padding: 28px 24px;
+    overflow-x: hidden;
+    padding: clamp(16px, 3vw, 28px) clamp(14px, 3vw, 24px);
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    max-width: 800px;
+    gap: 16px;
+    max-width: 820px;
     width: 100%;
     margin: 0 auto;
+    min-height: 0;
+    scroll-behavior: smooth;
   }
 
-  .chat::-webkit-scrollbar { width: 6px; }
+  .chat::-webkit-scrollbar { width: 5px; }
   .chat::-webkit-scrollbar-thumb {
     background: #1e1e1e;
     border-radius: 3px;
@@ -423,9 +444,9 @@
 
   .msg {
     max-width: 82%;
-    padding: 11px 16px;
+    padding: 10px 15px;
     border-radius: 18px;
-    font-size: 0.94rem;
+    font-size: clamp(0.86rem, 2vw, 0.94rem);
     line-height: 1.6;
     white-space: pre-wrap;
     word-break: break-word;
@@ -449,7 +470,7 @@
     background: var(--err-bg);
     border: 1px solid var(--err-border);
     color: var(--err);
-    font-size: 0.84rem;
+    font-size: 0.82rem;
     max-width: 100%;
   }
 
@@ -504,7 +525,7 @@
 
   .working-text {
     font-family: 'Inter', sans-serif;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     font-weight: 600;
     letter-spacing: -0.01em;
     white-space: nowrap;
@@ -537,11 +558,10 @@
     color: #ffffff;
   }
 
-  /* Final response */
   .final {
     align-self: flex-start;
     max-width: 100%;
-    font-size: 0.94rem;
+    font-size: clamp(0.86rem, 2vw, 0.94rem);
     line-height: 1.72;
     color: #e0e0e0;
     padding: 2px 0;
@@ -552,7 +572,7 @@
   .cursor {
     display: inline-block;
     width: 7px;
-    height: 16px;
+    height: 1em;
     background: #e0e0e0;
     vertical-align: text-bottom;
     margin-left: 3px;
@@ -565,30 +585,30 @@
   }
 
   /* ============================================
-     Composer (ChatGPT-style)
+     Composer — Clean, refined, responsive
   ============================================ */
   .composer-wrap {
-    padding: 12px 24px 20px;
+    padding: 8px clamp(14px, 3vw, 24px) clamp(14px, 3vh, 22px);
     flex-shrink: 0;
-    background: linear-gradient(to top, #000 60%, transparent);
+    background: linear-gradient(to top, #000 70%, transparent);
   }
 
   .composer {
     display: flex;
     align-items: flex-end;
     gap: 8px;
-    max-width: 800px;
+    max-width: 820px;
     margin: 0 auto;
     background: #101010;
     border: 1px solid #1f1f1f;
-    border-radius: 24px;
-    padding: 8px 8px 8px 20px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 26px;
+    padding: 6px 6px 6px clamp(16px, 3vw, 22px);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
   }
 
   .composer:focus-within {
-    border-color: #333;
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.03);
+    border-color: #2e2e2e;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.025);
   }
 
   .composer textarea {
@@ -598,14 +618,15 @@
     border: 0;
     color: var(--txt);
     font-family: inherit;
-    font-size: 0.94rem;
+    font-size: clamp(0.88rem, 2vw, 0.94rem);
     line-height: 1.5;
     outline: none;
     resize: none;
-    max-height: 200px;
-    padding: 10px 0;
+    max-height: 160px;
+    padding: clamp(9px, 1.5vh, 12px) 0;
     overflow-y: auto;
     scrollbar-width: thin;
+    scrollbar-color: #2a2a2a transparent;
   }
 
   .composer textarea::-webkit-scrollbar { width: 4px; }
@@ -617,11 +638,11 @@
   .composer textarea::placeholder { color: var(--mut-2); }
 
   .send-btn {
-    width: 36px;
-    height: 36px;
+    width: clamp(34px, 5vw, 38px);
+    height: clamp(34px, 5vw, 38px);
     border-radius: 50%;
-    background: #ffffff;
-    color: #000;
+    background: #2a2a2a;
+    color: #6a6a6a;
     border: 0;
     cursor: pointer;
     display: flex;
@@ -629,33 +650,37 @@
     justify-content: center;
     flex-shrink: 0;
     transition: transform 0.15s ease,
-                border-radius 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                border-radius 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
                 background 0.2s ease,
-                opacity 0.2s ease;
+                color 0.2s ease;
     position: relative;
   }
 
-  .send-btn:hover:not(:disabled) { transform: scale(1.06); }
-  .send-btn:active:not(:disabled) { transform: scale(0.94); }
-
-  .send-btn:disabled {
-    background: #1a1a1a;
-    color: #4a4a4a;
-    cursor: not-allowed;
-  }
-
-  /* Generating state: white square with black square inside */
-  .send-btn.sending {
-    border-radius: 8px;
+  /* Ready state (has text) */
+  .send-btn.ready {
     background: #ffffff;
     color: #000;
   }
 
+  .send-btn.ready:hover { transform: scale(1.06); }
+  .send-btn.ready:active { transform: scale(0.94); }
+
+  /* Sending / stop state */
+  .send-btn.sending {
+    background: #ffffff;
+    color: #000;
+    border-radius: 12px;
+  }
+
+  .send-btn.sending:hover { transform: scale(1.06); }
+  .send-btn.sending:active { transform: scale(0.94); }
+
   .send-btn svg {
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
     display: block;
     transition: opacity 0.2s ease, transform 0.2s ease;
+    position: absolute;
   }
 
   .send-btn .icon-send {
@@ -664,14 +689,13 @@
   }
 
   .send-btn .icon-stop {
-    position: absolute;
     opacity: 0;
-    transform: scale(0.6);
+    transform: scale(0.5);
   }
 
   .send-btn.sending .icon-send {
     opacity: 0;
-    transform: scale(0.6);
+    transform: scale(0.5);
   }
 
   .send-btn.sending .icon-stop {
@@ -713,7 +737,7 @@
     padding: 0 20px 22px;
     transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 101;
-    max-height: 80vh;
+    max-height: min(80vh, 640px);
     display: flex;
     flex-direction: column;
     box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.75);
@@ -754,7 +778,6 @@
     margin-bottom: 18px;
   }
 
-  /* Model list */
   .model-list {
     overflow-y: auto;
     display: flex;
@@ -840,7 +863,7 @@
   .model-item.active .model-item-name { color: #fff; }
 
   .model-item-id {
-    font-size: 0.73rem;
+    font-size: 0.72rem;
     color: var(--mut);
     margin-top: 2px;
     overflow: hidden;
@@ -858,7 +881,6 @@
   .model-item.active .model-item-check { display: block; }
   .model-item-check svg { width: 16px; height: 16px; }
 
-  /* Info dialog */
   .info-list {
     overflow-y: auto;
     display: flex;
@@ -889,7 +911,7 @@
 
   .info-value {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     color: #d0d0d0;
     background: #060606;
     border: 1px solid var(--line);
@@ -997,16 +1019,31 @@
     letter-spacing: 0.02em;
   }
 
-  /* Responsive */
+  /* ============================================
+     Responsive
+  ============================================ */
   @media (max-width: 640px) {
-    .header { padding: 12px 16px; }
-    .chat { padding: 16px 16px; }
-    .composer-wrap { padding: 10px 16px 16px; }
-    .msg { max-width: 90%; font-size: 0.9rem; }
-    .brand-name { font-size: 0.82rem; }
-    .login-screen { padding: 28px 18px; }
-    .login-steps { padding: 18px 20px; }
-    .model-btn { max-width: 140px; }
+    :root { --header-h: 52px; }
+    .header { padding: 0 12px; gap: 6px; }
+    .brand-icon { width: 18px; height: 18px; }
+    .brand-name { font-size: 0.78rem; max-width: 44vw; }
+    .model-btn { padding: 5px 9px; font-size: 0.72rem; max-width: 38vw; }
+    .icon-btn { width: 28px; height: 28px; }
+    .icon-btn svg { width: 12px; height: 12px; }
+    .msg { max-width: 90%; }
+    .login-steps { padding: 16px 18px; }
+    .steps-list { gap: 12px; }
+    .steps-list li { gap: 10px; }
+    .steps-list li::before { width: 20px; height: 20px; font-size: 0.68rem; }
+  }
+
+  @media (max-width: 380px) {
+    .brand-name { max-width: 36vw; }
+    .model-btn { max-width: 34vw; padding: 5px 8px; }
+  }
+
+  @media (min-height: 800px) {
+    .chat { gap: 18px; }
   }
 </style>
 </head>
@@ -1019,40 +1056,11 @@
     ============================================ -->
     <div class="header">
       <a class="brand" href="https://github.com/X5Coder/X5Models-Free" target="_blank" rel="noopener noreferrer">
-        <svg class="brand-icon" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <g stroke="#fff" stroke-width="4" stroke-linecap="round">
-            <line x1="60" y1="44" x2="60" y2="24"/>
-            <line x1="76" y1="58" x2="90" y2="58"/>
-            <line x1="74" y1="72" x2="88" y2="86"/>
-            <line x1="46" y1="72" x2="32" y2="86"/>
-            <line x1="44" y1="58" x2="30" y2="58"/>
+        <svg class="brand-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g fill="#4A7DFF">
+            <path d="M48 15 L30 15 L20 35 L30 35 L30 30 L42 30 L42 42 L30 42 L25 50 L18 50 L10 62 L25 62 L30 55 L42 55 L42 68 L30 68 L25 78 L42 78 L48 82 L48 15 Z"/>
+            <path d="M52 15 L70 15 L80 35 L70 35 L70 30 L58 30 L58 42 L70 42 L75 50 L82 50 L90 62 L75 62 L70 55 L58 55 L58 68 L70 68 L75 78 L58 78 L52 82 L52 15 Z"/>
           </g>
-
-          <path d="M60 40 L76 49 V67 L60 76 L44 67 V49 Z" fill="#fff"/>
-          <path d="M60 46 V70" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M55 50 C50.5 51.5 50.5 56 53 57.5 C50.5 59 50.5 63.5 55 65" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round"/>
-          <path d="M65 50 C69.5 51.5 69.5 56 67 57.5 C69.5 59 69.5 63.5 65 65" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round"/>
-
-          <rect x="42" y="4" width="36" height="34" rx="9" fill="#fff"/>
-          <path d="M60 10 C60.6 16 61.5 17 67 17.6 C61.5 18.3 60.6 19.2 60 25 C59.4 19.2 58.5 18.3 53 17.6 C58.5 17 59.4 16 60 10 Z" fill="#000"/>
-
-          <rect x="86" y="42" width="34" height="34" rx="9" fill="#fff"/>
-          <path d="M103 49 L110 59 L103 69 L96 59 Z" fill="#000"/>
-
-          <rect x="86" y="88" width="34" height="34" rx="9" fill="#fff"/>
-          <path d="M99 110 h4 v4 h-4 z M103 106 h4 v4 h-4 z M107 102 h4 v4 h-4 z M103 98 h4 v4 h-4 z" fill="#000"/>
-
-          <rect x="0" y="88" width="34" height="34" rx="9" fill="#fff"/>
-          <circle cx="17" cy="99" r="2.2" fill="#000"/>
-          <circle cx="11.5" cy="104" r="2.2" fill="#000"/>
-          <circle cx="17" cy="105" r="2.2" fill="#000"/>
-          <circle cx="22.5" cy="104" r="2.2" fill="#000"/>
-          <circle cx="11.5" cy="110" r="2.2" fill="#000"/>
-          <circle cx="17" cy="111" r="2.2" fill="#000"/>
-          <circle cx="22.5" cy="110" r="2.2" fill="#000"/>
-
-          <rect x="0" y="42" width="34" height="34" rx="9" fill="#fff"/>
-          <path d="M12 49 v12 M12 55 h6 M18 49 v12" stroke="#000" stroke-width="2.6" stroke-linecap="round"/>
         </svg>
         <span class="brand-name">X5Models Free</span>
       </a>
@@ -1092,40 +1100,11 @@
     <div class="login-screen" id="loginScreen">
       <div class="login-box" id="loginBox">
         <div class="login-icon">
-          <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <g stroke="#fff" stroke-width="4" stroke-linecap="round">
-              <line x1="60" y1="44" x2="60" y2="24"/>
-              <line x1="76" y1="58" x2="90" y2="58"/>
-              <line x1="74" y1="72" x2="88" y2="86"/>
-              <line x1="46" y1="72" x2="32" y2="86"/>
-              <line x1="44" y1="58" x2="30" y2="58"/>
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <g fill="#4A7DFF">
+              <path d="M48 15 L30 15 L20 35 L30 35 L30 30 L42 30 L42 42 L30 42 L25 50 L18 50 L10 62 L25 62 L30 55 L42 55 L42 68 L30 68 L25 78 L42 78 L48 82 L48 15 Z"/>
+              <path d="M52 15 L70 15 L80 35 L70 35 L70 30 L58 30 L58 42 L70 42 L75 50 L82 50 L90 62 L75 62 L70 55 L58 55 L58 68 L70 68 L75 78 L58 78 L52 82 L52 15 Z"/>
             </g>
-
-            <path d="M60 40 L76 49 V67 L60 76 L44 67 V49 Z" fill="#fff"/>
-            <path d="M60 46 V70" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
-            <path d="M55 50 C50.5 51.5 50.5 56 53 57.5 C50.5 59 50.5 63.5 55 65" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round"/>
-            <path d="M65 50 C69.5 51.5 69.5 56 67 57.5 C69.5 59 69.5 63.5 65 65" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round"/>
-
-            <rect x="42" y="4" width="36" height="34" rx="9" fill="#fff"/>
-            <path d="M60 10 C60.6 16 61.5 17 67 17.6 C61.5 18.3 60.6 19.2 60 25 C59.4 19.2 58.5 18.3 53 17.6 C58.5 17 59.4 16 60 10 Z" fill="#000"/>
-
-            <rect x="86" y="42" width="34" height="34" rx="9" fill="#fff"/>
-            <path d="M103 49 L110 59 L103 69 L96 59 Z" fill="#000"/>
-
-            <rect x="86" y="88" width="34" height="34" rx="9" fill="#fff"/>
-            <path d="M99 110 h4 v4 h-4 z M103 106 h4 v4 h-4 z M107 102 h4 v4 h-4 z M103 98 h4 v4 h-4 z" fill="#000"/>
-
-            <rect x="0" y="88" width="34" height="34" rx="9" fill="#fff"/>
-            <circle cx="17" cy="99" r="2.2" fill="#000"/>
-            <circle cx="11.5" cy="104" r="2.2" fill="#000"/>
-            <circle cx="17" cy="105" r="2.2" fill="#000"/>
-            <circle cx="22.5" cy="104" r="2.2" fill="#000"/>
-            <circle cx="11.5" cy="110" r="2.2" fill="#000"/>
-            <circle cx="17" cy="111" r="2.2" fill="#000"/>
-            <circle cx="22.5" cy="110" r="2.2" fill="#000"/>
-
-            <rect x="0" y="42" width="34" height="34" rx="9" fill="#fff"/>
-            <path d="M12 49 v12 M12 55 h6 M18 49 v12" stroke="#000" stroke-width="2.6" stroke-linecap="round"/>
           </svg>
         </div>
 
@@ -1197,7 +1176,7 @@
               <polyline points="6 11 12 5 18 11"/>
             </svg>
             <svg class="icon-stop" viewBox="0 0 24 24" fill="currentColor">
-              <rect x="7" y="7" width="10" height="10" rx="2"/>
+              <rect x="6" y="6" width="12" height="12" rx="2"/>
             </svg>
           </button>
         </div>
@@ -1235,18 +1214,12 @@
   </div>
 
   <script>
-    /* ============================================
-       Config
-    ============================================ */
     const API_URL = "https://script.google.com/macros/s/AKfycbwE4MgcyATsiJUUUvArDC1BX5JLpeinJUvgFG7_3vwNBgny-BSoSS28dPoWu2fMeUA7/exec";
     const STORAGE_KEY = "x5models_token";
     const MODEL_KEY = "x5models_model";
     const FETCH_TIMEOUT = 20000;
     const MIN_LOADING = 350;
 
-    /* ============================================
-       State
-    ============================================ */
     let token = "";
     let history = [];
     let isStreaming = false;
@@ -1257,9 +1230,6 @@
     let currentController = null;
     let abortRequested = false;
 
-    /* ============================================
-       Elements
-    ============================================ */
     const chat = document.getElementById('chat');
     const composer = document.getElementById('composer');
     const input = document.getElementById('input');
@@ -1286,9 +1256,6 @@
     const loginError = document.getElementById('loginError');
     const loginErrorText = document.getElementById('loginErrorText');
 
-    /* ============================================
-       Helpers
-    ============================================ */
     const scrollBottom = () => { chat.scrollTop = chat.scrollHeight; };
     const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
@@ -1318,9 +1285,6 @@
       }
     }
 
-    /* ============================================
-       Login Error UI
-    ============================================ */
     let errorTimer = null;
 
     function showLoginError(message) {
@@ -1340,13 +1304,9 @@
       loginBox.classList.remove('shake');
     }
 
-    /* ============================================
-       Connecting Dots Animation
-    ============================================ */
     function buildDotSquare(container) {
       container.innerHTML = '';
-      const SIZE = 5;
-      const center = 2;
+      const SIZE = 5, center = 2;
       for (let row = 0; row < SIZE; row++) {
         for (let col = 0; col < SIZE; col++) {
           const dot = document.createElement('span');
@@ -1384,9 +1344,6 @@
       }
     };
 
-    /* ============================================
-       Connect
-    ============================================ */
     async function connect() {
       if (connectingBusy) return;
       const t = tokInput.value.trim();
@@ -1419,7 +1376,6 @@
         const url = API_URL + "?action=models&token=" + encodeURIComponent(t);
         const data = await gasFetch(url, { method: "GET" });
 
-        // Ensure minimum loading time
         const elapsed = Date.now() - startTs;
         if (elapsed < MIN_LOADING) await sleep(MIN_LOADING - elapsed);
 
@@ -1472,9 +1428,6 @@
       }
     }
 
-    /* ============================================
-       Auto-fill token (no auto-connect)
-    ============================================ */
     function initToken() {
       let saved = null;
       try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
@@ -1482,9 +1435,6 @@
       tokInput.focus();
     }
 
-    /* ============================================
-       Drag-to-dismiss
-    ============================================ */
     function setupDragToDismiss(dialogEl, overlayEl, dragArea, onClose) {
       let startY = 0, currentY = 0, dragging = false;
 
@@ -1519,9 +1469,6 @@
       dragArea.addEventListener('pointerleave', () => { if (dragging) end(); });
     }
 
-    /* ============================================
-       Model Dialog
-    ============================================ */
     function openDialog() {
       modelList.innerHTML = '';
       modelsList.forEach((m, idx) => {
@@ -1569,9 +1516,6 @@
       dialog.style.transform = '';
     }
 
-    /* ============================================
-       Info Dialog
-    ============================================ */
     function maskToken(t) {
       if (!t) return "";
       if (t.length <= 12) return t;
@@ -1652,9 +1596,6 @@ ${exampleJSON}</div>
       tokenRevealed = false;
     }
 
-    /* ============================================
-       Dot Square Animation
-    ============================================ */
     const squareAnimations = new Map();
 
     function startSquareAnimation(square) {
@@ -1691,9 +1632,6 @@ ${exampleJSON}</div>
       if (anim) { anim.stop(); squareAnimations.delete(square); }
     }
 
-    /* ============================================
-       Message Helpers
-    ============================================ */
     function addUserMessage(text) {
       const el = document.createElement('div');
       el.className = 'msg user';
@@ -1712,9 +1650,6 @@ ${exampleJSON}</div>
       return el;
     }
 
-    /* ============================================
-       Thinking Block
-    ============================================ */
     function createDotSquare() {
       const square = document.createElement('div');
       square.className = 'dot-square';
@@ -1761,9 +1696,6 @@ ${exampleJSON}</div>
       block.classList.add('done');
     }
 
-    /* ============================================
-       Typing Queue (smooth, natural)
-    ============================================ */
     const typeState = {
       queue: [],
       running: false,
@@ -1798,9 +1730,6 @@ ${exampleJSON}</div>
       pumpQueue();
     }
 
-    /* ============================================
-       SSE Chat Request
-    ============================================ */
     async function sendChat(payload, onDelta, onDone, onError) {
       currentController = new AbortController();
       abortRequested = false;
@@ -1821,7 +1750,6 @@ ${exampleJSON}</div>
 
         const contentType = (res.headers.get("content-type") || "").toLowerCase();
 
-        // ---- SSE streaming ----
         if (contentType.includes("event-stream") && res.body && res.body.getReader) {
           const reader = res.body.getReader();
           const decoder = new TextDecoder();
@@ -1861,7 +1789,6 @@ ${exampleJSON}</div>
           return;
         }
 
-        // ---- Full text response ----
         const text = await res.text();
         const trimmedAll = text.trim();
 
@@ -1884,7 +1811,6 @@ ${exampleJSON}</div>
           return;
         }
 
-        // ---- Plain JSON ----
         try {
           const parsed = JSON.parse(trimmedAll);
           if (parsed.error) { onError(parsed.error.message || "Server error"); return; }
@@ -1895,17 +1821,11 @@ ${exampleJSON}</div>
           onError("Invalid response from server");
         }
       } catch (e) {
-        if (e.name === "AbortError") {
-          onDone();
-        } else {
-          onError((e && e.message) || "Network error");
-        }
+        if (e.name === "AbortError") onDone();
+        else onError((e && e.message) || "Network error");
       }
     }
 
-    /* ============================================
-       Stop Generation
-    ============================================ */
     function stopGeneration() {
       abortRequested = true;
       if (currentController) {
@@ -1915,29 +1835,30 @@ ${exampleJSON}</div>
       typeState.queue = [];
     }
 
-    /* ============================================
-       Composer — auto resize + state
-    ============================================ */
     function autoResize() {
       input.style.height = 'auto';
-      input.style.height = Math.min(input.scrollHeight, 200) + 'px';
+      input.style.height = Math.min(input.scrollHeight, 160) + 'px';
     }
 
     function updateSendBtn() {
       if (isStreaming) {
         sendBtn.classList.add('sending');
+        sendBtn.classList.remove('ready');
         sendBtn.disabled = false;
         sendBtn.setAttribute('aria-label', 'Stop');
       } else {
         sendBtn.classList.remove('sending');
-        sendBtn.disabled = input.value.trim().length === 0;
+        if (input.value.trim().length > 0) {
+          sendBtn.classList.add('ready');
+          sendBtn.disabled = false;
+        } else {
+          sendBtn.classList.remove('ready');
+          sendBtn.disabled = true;
+        }
         sendBtn.setAttribute('aria-label', 'Send');
       }
     }
 
-    /* ============================================
-       Send
-    ============================================ */
     async function handleSend() {
       const text = input.value.trim();
       if (!text || !token || !currentModel || isStreaming) return;
@@ -1952,7 +1873,6 @@ ${exampleJSON}</div>
 
       const block = createThinkingBlock();
 
-      // Prepare the final element
       const final = document.createElement('div');
       final.className = 'final';
       const textNode = document.createElement('span');
@@ -1965,7 +1885,6 @@ ${exampleJSON}</div>
       let fullContent = "";
       let errorMsg = null;
 
-      // Reset typing state
       typeState.queue = [];
       typeState.running = false;
       typeState.stopped = false;
@@ -1996,7 +1915,6 @@ ${exampleJSON}</div>
         );
       });
 
-      // Wait for typing queue to finish (unless aborted)
       while (typeState.running || typeState.queue.length) {
         await sleep(40);
       }
@@ -2029,9 +1947,6 @@ ${exampleJSON}</div>
       input.focus();
     }
 
-    /* ============================================
-       Disconnect
-    ============================================ */
     function disconnect() {
       stopGeneration();
       token = "";
@@ -2059,15 +1974,9 @@ ${exampleJSON}</div>
       tokInput.focus();
     }
 
-    /* ============================================
-       Drag setup
-    ============================================ */
     setupDragToDismiss(dialog, dialogOverlay, dialogDragArea, closeDialog);
     setupDragToDismiss(infoDialog, infoOverlay, infoDragArea, closeInfo);
 
-    /* ============================================
-       Events
-    ============================================ */
     goBtn.addEventListener('click', connect);
     tokInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') { e.preventDefault(); connect(); }
@@ -2103,9 +2012,6 @@ ${exampleJSON}</div>
       if (e.key === 'Escape') { closeDialog(); closeInfo(); }
     });
 
-    /* ============================================
-       Init
-    ============================================ */
     initToken();
     autoResize();
     updateSendBtn();
