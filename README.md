@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/X5Coder/X5Models-Free/main/icon.svg" width="120" height="120" alt="X5Models Free"/>
+<img src="https://raw.githubusercontent.com/X5Coder/X5Models-Free/main/ai-platform-svgrepo-com.svg" width="120" height="120" alt="X5Models Free"/>
 
 # X5Models Free
 
