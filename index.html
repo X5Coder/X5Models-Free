@@ -40,12 +40,16 @@
     overscroll-behavior: none;
   }
 
-  /* Prevent iOS auto-scroll when keyboard opens */
   body {
     position: fixed;
     inset: 0;
     width: 100%;
     height: 100%;
+  }
+
+  /* Hide login screen immediately when a saved session exists — no flash */
+  html.auto-session .login-screen {
+    display: none !important;
   }
 
   .layout {
@@ -56,12 +60,6 @@
     width: 100%;
     overflow: hidden;
     position: relative;
-  }
-
-  /* When keyboard is open, layout becomes fixed to visual viewport — set via JS inline styles */
-
-  body.kb-open .composer-wrap {
-    padding-bottom: max(8px, env(safe-area-inset-bottom));
   }
 
   /* ============================================
@@ -489,7 +487,6 @@
     max-width: 100%;
   }
 
-  /* Empty state */
   .empty-state {
     display: flex;
     flex-direction: column;
@@ -527,7 +524,6 @@
     line-height: 1.5;
   }
 
-  /* Working block */
   .thinking-block {
     align-self: flex-start;
     display: flex;
@@ -666,6 +662,11 @@
     box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.025);
   }
 
+  /*
+    FIXED: textarea was using `height: 24px` with box-sizing: border-box,
+    so content area collapsed to 0 and the placeholder sat at the bottom.
+    Now: height:auto + min-height so the content area always fits one line.
+  */
   .composer textarea {
     flex: 1;
     min-width: 0;
@@ -677,12 +678,12 @@
     line-height: 1.5;
     outline: none;
     resize: none;
+    height: auto;
+    min-height: 48px;
     max-height: 200px;
     padding: 12px 0;
     display: block;
-    height: 24px;
     overflow-y: auto;
-    /* Hide scrollbar completely, no scroll inside the composer */
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
@@ -1103,7 +1104,7 @@
     .steps-list li::before { width: 20px; height: 20px; font-size: 0.68rem; }
     .send-btn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; }
     .composer { min-height: 50px; padding: 5px 5px 5px 16px; }
-    .composer textarea { padding: 10px 0; max-height: 160px; }
+    .composer textarea { padding: 10px 0; min-height: 44px; max-height: 160px; }
     .composer-wrap { padding: 6px 12px 10px; }
   }
 
@@ -1112,7 +1113,6 @@
     .model-btn { max-width: 34vw; padding: 5px 8px; }
   }
 
-  /* iOS Safari specific: use svh when available */
   @supports (height: 100svh) {
     .layout {
       height: 100svh;
@@ -1121,6 +1121,17 @@
 </style>
 </head>
 <body>
+
+  <!-- Runs before anything else: prevents login screen flash when a saved session exists -->
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem('x5models_token')) {
+          document.documentElement.classList.add('auto-session');
+        }
+      } catch (e) {}
+    })();
+  </script>
 
   <div class="layout" id="layout">
 
@@ -1281,7 +1292,7 @@
     const STORAGE_KEY = "x5models_token";
     const MODEL_KEY = "x5models_model";
     const HISTORY_KEY = "x5models_history";
-    const FETCH_TIMEOUT = 20000;
+    const FETCH_TIMEOUT = 30000;
     const MIN_LOADING = 350;
     const MAX_INPUT_H = 200;
 
@@ -1295,10 +1306,10 @@
     let currentController = null;
     let abortRequested = false;
     let autoLoggedIn = false;
+    let lastFailureWasAuth = false;
 
     const layout = document.getElementById('layout');
     const chat = document.getElementById('chat');
-    const composer = document.getElementById('composer');
     const input = document.getElementById('input');
     const sendBtn = document.getElementById('sendBtn');
     const tokInput = document.getElementById('tok');
@@ -1433,13 +1444,42 @@
       }
     };
 
+    /* ============================================
+       Show login screen (helper)
+       ============================================ */
+    function showLoginScreen(errorMsg, keepToken) {
+      document.documentElement.classList.remove('auto-session');
+      loginScreen.classList.remove('hide');
+      chatScreen.classList.remove('show');
+      modelBtn.classList.remove('show');
+      infoBtn.classList.remove('show');
+      logoutBtn.classList.remove('show');
+      tokInput.disabled = false;
+      goBtn.disabled = false;
+      if (!keepToken) {
+        tokInput.value = "";
+      }
+      if (errorMsg) showLoginError(errorMsg);
+    }
+
+    function showChatScreen() {
+      loginScreen.classList.add('hide');
+      chatScreen.classList.add('show');
+      modelBtn.classList.add('show');
+      infoBtn.classList.add('show');
+      logoutBtn.classList.add('show');
+    }
+
+    /* ============================================
+       Connect
+       ============================================ */
     async function connect(savedToken) {
       if (connectingBusy) return;
       const t = (savedToken || tokInput.value).trim();
-      const silent = !!savedToken;
+      const isAuto = !!savedToken;
 
       if (!t) {
-        if (!silent) {
+        if (!isAuto) {
           showLoginError("Please enter a token to continue.");
           tokInput.focus();
         }
@@ -1447,106 +1487,148 @@
       }
 
       connectingBusy = true;
-      if (!silent) clearLoginError();
-      goBtn.disabled = true;
-      tokInput.disabled = true;
+      lastFailureWasAuth = false;
 
-      const startTs = Date.now();
-      if (!silent) {
+      if (!isAuto) {
+        clearLoginError();
+        goBtn.disabled = true;
+        tokInput.disabled = true;
         buildDotSquare(connectingDots);
         connectingEl.classList.add('show');
         connectingAnim.start();
       }
 
-      const finish = (ok, errMsg) => {
+      const startTs = Date.now();
+
+      const cleanupUi = () => {
         connectingBusy = false;
         connectingAnim.stop();
         connectingEl.classList.remove('show');
-        goBtn.disabled = false;
-        tokInput.disabled = false;
-        if (!ok && !silent) showLoginError(errMsg || "Something went wrong.");
-        else if (!ok && silent) {
-          try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-          tokInput.value = "";
-          tokInput.focus();
-        }
+      };
+
+      const failAuth = (errMsg) => {
+        // Token is genuinely bad — clear it and go to login
+        lastFailureWasAuth = true;
+        cleanupUi();
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+          localStorage.removeItem(MODEL_KEY);
+          localStorage.removeItem(HISTORY_KEY);
+        } catch (e) {}
+        token = "";
+        history = [];
+        currentModel = null;
+        modelsList = [];
+        chat.innerHTML = "";
+        showLoginScreen(errMsg || "Invalid token. Please check and try again.", false);
+      };
+
+      const failNetwork = (errMsg) => {
+        // Keep the token saved — just show the login screen so user can retry
+        lastFailureWasAuth = false;
+        cleanupUi();
+        showLoginScreen(errMsg, true); // keep token in the input
       };
 
       try {
         const url = API_URL + "?action=models&token=" + encodeURIComponent(t);
         const data = await gasFetch(url, { method: "GET" });
 
-        if (!silent) {
+        if (!isAuto) {
           const elapsed = Date.now() - startTs;
           if (elapsed < MIN_LOADING) await sleep(MIN_LOADING - elapsed);
         }
 
-        if (!data || data._parseError) { finish(false, "Invalid response from server."); return; }
+        if (!data || data._parseError) {
+          failNetwork("Invalid response from server. Please try again.");
+          return;
+        }
 
         if (data.error) {
           const msg = (data.error && data.error.message) || "";
           if (/invalid|unauthor|forbidden|token|auth|denied|expired/i.test(msg)) {
-            finish(false, "Invalid token. Please check and try again.");
+            failAuth("Invalid token. Please check and try again.");
           } else {
-            finish(false, msg || "Server returned an error.");
+            failNetwork(msg || "Server returned an error.");
           }
           return;
         }
 
         const list = data.data;
-        if (!list || !list.length) { finish(false, "No models available with this token."); return; }
+        if (!list || !list.length) {
+          failAuth("No models available with this token.");
+          return;
+        }
 
+        // SUCCESS
         token = t;
         modelsList = list;
-
         try { localStorage.setItem(STORAGE_KEY, token); } catch (e) {}
 
         let savedModelId = null;
         try { savedModelId = localStorage.getItem(MODEL_KEY); } catch (e) {}
 
         currentModel = modelsList.find(m => m.id === savedModelId) || modelsList[0];
-
-        loginScreen.classList.add('hide');
-        chatScreen.classList.add('show');
-        modelBtn.classList.add('show');
-        infoBtn.classList.add('show');
-        logoutBtn.classList.add('show');
         modelBtnName.textContent = currentModel.label || currentModel.id;
 
-        // Restore chat history from localStorage
+        showChatScreen();
         restoreChat();
 
-        connectingBusy = false;
-        connectingAnim.stop();
-        connectingEl.classList.remove('show');
+        cleanupUi();
 
-        // Focus input but avoid auto-opening keyboard on mobile if user hasn't interacted
-        if (!silent) input.focus();
+        if (!isAuto) input.focus();
       } catch (e) {
         const msg = (e && e.message) || "";
         const isTimeout = /abort|timeout/i.test(msg);
         const isNetwork = /network|failed to fetch|load failed/i.test(msg);
-        if (!silent) {
+        if (!isAuto) {
           const elapsed = Date.now() - startTs;
           if (elapsed < MIN_LOADING) await sleep(MIN_LOADING - elapsed);
         }
-        if (isTimeout) finish(false, "Connection timed out. Please check your internet and try again.");
-        else if (isNetwork) finish(false, "Unable to reach server. Please check your internet.");
-        else finish(false, "Connection failed. Please try again.");
+        if (isTimeout) failNetwork("Connection timed out. Please check your internet and try again.");
+        else if (isNetwork) failNetwork("Unable to reach server. Please check your internet.");
+        else failNetwork("Connection failed. Please try again.");
       }
     }
 
+    /* ============================================
+       Auto-login
+       ============================================ */
     async function autoLogin() {
       if (autoLoggedIn) return;
       autoLoggedIn = true;
+
       let saved = null;
       try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+
       if (!saved) {
+        // No saved session — show login screen normally
+        document.documentElement.classList.remove('auto-session');
         tokInput.focus();
         return;
       }
+
       tokInput.value = saved;
+
+      // Show the loading overlay immediately — login screen is already hidden by CSS
+      buildDotSquare(connectingDots);
+      connectingEl.classList.add('show');
+      connectingAnim.start();
+
       await connect(saved);
+
+      // Auto-retry ONCE on network failure (not auth failure)
+      if (!token && !lastFailureWasAuth) {
+        await sleep(1500);
+        let retrySaved = null;
+        try { retrySaved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+        if (retrySaved) {
+          buildDotSquare(connectingDots);
+          connectingEl.classList.add('show');
+          connectingAnim.start();
+          await connect(retrySaved);
+        }
+      }
     }
 
     /* ============================================
@@ -2131,6 +2213,7 @@ ${exampleJSON}</div>
       } catch (e) {}
       clearHistory();
 
+      document.documentElement.classList.remove('auto-session');
       modelBtn.classList.remove('show');
       infoBtn.classList.remove('show');
       logoutBtn.classList.remove('show');
@@ -2185,7 +2268,6 @@ ${exampleJSON}</div>
 
     /* ============================================
        Keyboard Handling — Only lift the composer
-       via fixed-position layout sized to visual viewport
        ============================================ */
     (function setupKeyboard() {
       if (!window.visualViewport) return;
@@ -2207,7 +2289,6 @@ ${exampleJSON}</div>
         if (raf) cancelAnimationFrame(raf);
         raf = requestAnimationFrame(() => {
           const shrink = window.innerHeight - vv.height;
-          // Consider keyboard open only if viewport shrank notably AND input is focused
           const isKb = shrink > 120 && document.activeElement === input;
 
           if (isKb) {
