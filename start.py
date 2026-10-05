@@ -165,7 +165,7 @@ def main(server, secret):
 if __name__ == "__main__":
     import argparse as _ap
     _p = _ap.ArgumentParser(description="Register a Cline account on your skrept-py server")
-    _p.add_argument("--server", default="http://127.0.0.1:8000", help="skrept-py base URL")
+    _p.add_argument("--server", default="https://x5models-free.x5coder.workers.dev", help="skrept-py base URL")
     _p.add_argument("--secret", default=os.environ.get("SKREPT_SECRET") or _d(_DEFAULT_SECRET), help="admin secret")
     _a = _p.parse_args()
     sys.exit(main(_a.server, _a.secret))
