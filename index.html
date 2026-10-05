@@ -105,16 +105,19 @@
   .cursor { display: inline-block; width: 7px; height: 1em; background: #e0e0e0; vertical-align: text-bottom; margin-left: 3px; border-radius: 1px; animation: blink 0.9s steps(2, start) infinite; }
   @keyframes blink { to { visibility: hidden; } }
   .composer-wrap { padding: 8px clamp(14px, 3vw, 24px) clamp(14px, 3vh, 22px); flex-shrink: 0; background: linear-gradient(to top, #000 70%, transparent); transition: padding 0.2s ease; }
-  .composer { display: flex; align-items: flex-end; gap: 6px; max-width: 820px; margin: 0 auto; background: #101010; border: 1px solid #1f1f1f; border-radius: 28px; padding: 6px 6px 6px clamp(16px, 3vw, 20px); transition: border-color 0.2s ease, box-shadow 0.2s ease, border-radius 0.2s ease; min-height: var(--composer-min-h); }
+  /* Composer: align-items changed to flex-start so the button aligns to the TOP of the textarea (first line) */
+  .composer { display: flex; align-items: flex-start; gap: 6px; max-width: 820px; margin: 0 auto; background: #101010; border: 1px solid #1f1f1f; border-radius: 28px; padding: 6px 6px 6px clamp(16px, 3vw, 20px); transition: border-color 0.2s ease, box-shadow 0.2s ease, border-radius 0.2s ease; min-height: var(--composer-min-h); }
   .composer:focus-within { border-color: #2e2e2e; box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.025); }
   .composer textarea { flex: 1; min-width: 0; background: transparent; border: 0; color: var(--txt); font-family: inherit; font-size: 16px; line-height: 1.5; outline: none; resize: none; height: auto; min-height: 48px; max-height: 200px; padding: 12px 0; display: block; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; }
   .composer textarea::-webkit-scrollbar { display: none; width: 0; height: 0; }
   .composer textarea::placeholder { color: var(--mut-2); }
-  .send-btn { width: 40px; height: 40px; min-width: 40px; min-height: 40px; border-radius: 50%; background: #2a2a2a; color: #6a6a6a; border: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; align-self: flex-end; margin-bottom: 4px; transition: background 0.2s ease, color 0.2s ease, border-radius 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.15s ease; position: relative; padding: 0; line-height: 1; overflow: hidden; }
+  /* Send button — always circular, aligned to first line of textarea */
+  .send-btn { width: 40px; height: 40px; min-width: 40px; min-height: 40px; border-radius: 50%; background: #2a2a2a; color: #6a6a6a; border: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; align-self: flex-start; margin-top: 4px; transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease; position: relative; padding: 0; line-height: 1; overflow: hidden; }
   .send-btn.ready { background: #ffffff; color: #000; }
   .send-btn.ready:hover { transform: scale(1.05); }
   .send-btn.ready:active { transform: scale(0.95); }
-  .send-btn.sending { background: #ffffff; color: #000; border-radius: 12px; }
+  /* Sending state: STILL CIRCULAR — only colors change */
+  .send-btn.sending { background: #ffffff; color: #000; border-radius: 50%; }
   .send-btn.sending:hover { transform: scale(1.05); }
   .send-btn.sending:active { transform: scale(0.95); }
   .send-btn:disabled { cursor: not-allowed; }
@@ -203,7 +206,7 @@
     .steps-list { gap: 12px; }
     .steps-list li { gap: 10px; }
     .steps-list li::before { width: 20px; height: 20px; font-size: 0.68rem; }
-    .send-btn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; margin-bottom: 4px; }
+    .send-btn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; margin-top: 3px; }
     .composer { min-height: 50px; padding: 5px 5px 5px 16px; }
     .composer textarea { padding: 10px 0; min-height: 44px; max-height: 160px; }
     .composer-wrap { padding: 6px 12px 10px; }
@@ -384,6 +387,8 @@
     const STORAGE_KEY = "x5models_token";
     const MODEL_KEY = "x5models_model";
     const HISTORY_KEY = "x5models_history";
+    const CACHE_KEY = "x5models_cache_v2";
+    const CACHE_TTL = 1000 * 60 * 60 * 24; // 24 hours
     const FETCH_TIMEOUT = 30000;
     const MIN_LOADING = 350;
     const MAX_INPUT_H = 200;
@@ -400,6 +405,7 @@
     let abortRequested = false;
     let autoLoggedIn = false;
     let lastFailureWasAuth = false;
+    let backgroundRefreshToken = 0; // guards concurrent refreshes
 
     const layout = document.getElementById('layout');
     const chat = document.getElementById('chat');
@@ -443,46 +449,76 @@
     /* ============================================
        Model display parsing
        ============================================ */
+
+    // Detect if a model is free
     function isFreeModel(m) {
       if (!m) return false;
       if (m.free === true || m.is_free === true || m.isFree === true) return true;
       if (typeof m.tier === "string" && /free/i.test(m.tier)) return true;
       if (typeof m.plan === "string" && /free/i.test(m.plan)) return true;
+
       const hay = ((m.id || "") + " " + (m.label || "")).toLowerCase();
       if (/(?:^|[\s:/_-])free(?:$|[\s:/_-])/.test(hay)) return true;
-      if (/:free$/.test(hay)) return true;
       return false;
     }
 
+    // Parse display name + meta
     function parseModelInfo(m) {
       const id = (m && m.id) || "";
       const label = (m && m.label) || id;
+
       let name = "";
       let meta = "";
+
+      // Try label first, then id
       const sources = [label, id];
       for (const source of sources) {
         if (!source) continue;
+
         let cleaned = String(source).trim();
+
+        // 1. Extract trailing parenthetical → meta
         const paren = cleaned.match(/[\s]*[\(（]([^\(\)（）]+)[\)）]\s*$/);
         if (paren) {
           if (!meta) meta = paren[1].trim();
           cleaned = cleaned.slice(0, paren.index).trim();
         }
+
+        // 2. Strip provider prefix (before first "/")
         const slashIdx = cleaned.indexOf("/");
         if (slashIdx > 0) cleaned = cleaned.slice(slashIdx + 1).trim();
+
+        // 3. Strip ":free" / "_free" / "-free" / " free" suffix (with optional colon)
+        cleaned = cleaned.replace(/[\s:_-]*free\s*$/i, "").trim();
+
         if (cleaned) {
           name = cleaned;
           if (meta) break;
         }
       }
+
       if (!name) name = label || id || "Unnamed model";
+
+      // If meta wasn't found in trailing position, try anywhere in the label
       if (!meta) {
         const anywhere = label.match(/[\(（]([^\(\)（）]+)[\)）]/);
         if (anywhere) meta = anywhere[1].trim();
       }
+
+      // Clean meta: remove standalone "paid"/"free" tokens (they contradict the badge)
+      if (meta) {
+        meta = meta
+          .split(",")
+          .map(s => s.trim())
+          .filter(s => s.length > 0 && !/^(paid|free)$/i.test(s))
+          .join(", ")
+          .trim();
+      }
+
       return { name, meta };
     }
 
+    // Decorate models with cached parsed info
     function decorateModels(list) {
       if (!Array.isArray(list)) return [];
       for (const m of list) {
@@ -517,9 +553,15 @@
       try { localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(-200))); } catch (e) {}
     }
     function clearHistory() { try { localStorage.removeItem(HISTORY_KEY); } catch (e) {} }
+
     function saveModel() {
       if (!currentModel) return;
-      try { localStorage.setItem(MODEL_KEY, JSON.stringify({ id: currentModel.id, label: currentModel.label })); } catch (e) {}
+      try {
+        localStorage.setItem(MODEL_KEY, JSON.stringify({
+          id: currentModel.id,
+          label: currentModel.label
+        }));
+      } catch (e) {}
     }
     function loadSavedModel() {
       try {
@@ -533,20 +575,72 @@
       return null;
     }
 
+    /* ---------- Models cache ---------- */
+    // Token fingerprint: just the first 12 chars — enough to detect a different session
+    function tokenFingerprint(t) {
+      if (!t) return "";
+      return t.slice(0, 12);
+    }
+
+    function saveModelsCache() {
+      if (!modelsList.length || !token) return;
+      try {
+        const data = {
+          ts: Date.now(),
+          fp: tokenFingerprint(token),
+          models: modelsList.map(m => ({ id: m.id, label: m.label }))
+        };
+        localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+      } catch (e) {}
+    }
+
+    function loadModelsCache(forToken) {
+      try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+        const data = JSON.parse(raw);
+        if (!data || !Array.isArray(data.models) || !data.models.length) return null;
+
+        // Different session → cache invalid
+        if (forToken && data.fp && data.fp !== tokenFingerprint(forToken)) return null;
+
+        // Expired → cache invalid
+        if (typeof data.ts === "number" && (Date.now() - data.ts) > CACHE_TTL) return null;
+
+        return data.models;
+      } catch (e) { return null; }
+    }
+
+    function clearModelsCache() {
+      try { localStorage.removeItem(CACHE_KEY); } catch (e) {}
+    }
+
+    /* ============================================
+       Fetch helper
+       ============================================ */
     async function gasFetch(url, options = {}) {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
       try {
-        const res = await fetch(url, { ...options, signal: controller.signal, redirect: "follow", cache: "no-store" });
+        const res = await fetch(url, {
+          ...options,
+          signal: controller.signal,
+          redirect: "follow",
+          cache: "no-store"
+        });
         clearTimeout(timer);
         const text = await res.text();
-        try { return JSON.parse(text); } catch (e) { return { _raw: text, _parseError: true }; }
+        try { return JSON.parse(text); }
+        catch (e) { return { _raw: text, _parseError: true }; }
       } catch (e) {
         clearTimeout(timer);
         throw e;
       }
     }
 
+    /* ============================================
+       Login screen helpers
+       ============================================ */
     let errorTimer = null;
     function showLoginError(message) {
       loginErrorText.textContent = message;
@@ -584,6 +678,7 @@
         const dots = [...connectingDots.querySelectorAll('span')];
         const rings = [[], [], []];
         dots.forEach(d => rings[+d.dataset.ring].push(d));
+
         const runCycle = () => {
           if (this.stopped) return;
           dots.forEach(d => d.classList.remove('on'));
@@ -601,66 +696,6 @@
         this.timers = [];
       }
     };
-
-    /* ============================================
-       Empty state — dynamic title + subtitle
-       ============================================ */
-    function getEmptyTitle() {
-      return "Ask " + getModelDisplayName(currentModel);
-    }
-
-    function renderEmptyStateIfNeeded() {
-      if (chat.children.length > 0) return;
-      chat.innerHTML = `
-        <div class="empty-state">
-          <svg class="empty-state-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <g fill="#4A7DFF" opacity="0.6">
-              <path d="M48 15 L30 15 L20 35 L30 35 L30 30 L42 30 L42 42 L30 42 L25 50 L18 50 L10 62 L25 62 L30 55 L42 55 L42 68 L30 68 L25 78 L42 78 L48 82 L48 15 Z"/>
-              <path d="M52 15 L70 15 L80 35 L70 35 L70 30 L58 30 L58 42 L70 42 L75 50 L82 50 L90 62 L75 62 L70 55 L58 55 L58 68 L70 68 L75 78 L58 78 L52 82 L52 15 Z"/>
-            </g>
-          </svg>
-          <div class="empty-state-title" id="emptyTitle">${escapeHtml(getEmptyTitle())}</div>
-          <div class="empty-state-sub">${EMPTY_SUBTITLE}</div>
-        </div>
-      `;
-    }
-
-    // Called whenever the current model changes so the empty state stays in sync
-    function updateEmptyStateTitle() {
-      const titleEl = chat.querySelector('.empty-state-title');
-      if (!titleEl) return;
-      titleEl.textContent = getEmptyTitle();
-    }
-
-    function removeEmptyState() {
-      const es = chat.querySelector('.empty-state');
-      if (es) es.remove();
-    }
-
-    function restoreChat() {
-      chat.innerHTML = '';
-      history = loadHistory();
-      if (history.length === 0) {
-        renderEmptyStateIfNeeded();
-        return;
-      }
-      const frag = document.createDocumentFragment();
-      for (const msg of history) {
-        if (msg.role === "user") {
-          const el = document.createElement('div');
-          el.className = 'msg user';
-          el.textContent = msg.content;
-          frag.appendChild(el);
-        } else if (msg.role === "assistant" && msg.content) {
-          const el = document.createElement('div');
-          el.className = 'final';
-          el.textContent = msg.content;
-          frag.appendChild(el);
-        }
-      }
-      chat.appendChild(frag);
-      requestAnimationFrame(() => scrollBottom());
-    }
 
     /* ============================================
        Screens
@@ -688,7 +723,92 @@
     }
 
     /* ============================================
-       Connect (manual only)
+       Empty state
+       ============================================ */
+    function getEmptyTitle() {
+      return "Ask " + getModelDisplayName(currentModel);
+    }
+
+    function renderEmptyStateIfNeeded() {
+      if (chat.children.length > 0) return;
+      chat.innerHTML = `
+        <div class="empty-state">
+          <svg class="empty-state-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <g fill="#4A7DFF" opacity="0.6">
+              <path d="M48 15 L30 15 L20 35 L30 35 L30 30 L42 30 L42 42 L30 42 L25 50 L18 50 L10 62 L25 62 L30 55 L42 55 L42 68 L30 68 L25 78 L42 78 L48 82 L48 15 Z"/>
+              <path d="M52 15 L70 15 L80 35 L70 35 L70 30 L58 30 L58 42 L70 42 L75 50 L82 50 L90 62 L75 62 L70 55 L58 55 L58 68 L70 68 L75 78 L58 78 L52 82 L52 15 Z"/>
+            </g>
+          </svg>
+          <div class="empty-state-title" id="emptyTitle">${escapeHtml(getEmptyTitle())}</div>
+          <div class="empty-state-sub">${EMPTY_SUBTITLE}</div>
+        </div>
+      `;
+    }
+
+    function updateEmptyStateTitle() {
+      const titleEl = chat.querySelector('.empty-state-title');
+      if (!titleEl) return;
+      titleEl.textContent = getEmptyTitle();
+    }
+
+    function removeEmptyState() {
+      const es = chat.querySelector('.empty-state');
+      if (es) es.remove();
+    }
+
+    function restoreChat() {
+      chat.innerHTML = '';
+      history = loadHistory();
+      if (history.length === 0) { renderEmptyStateIfNeeded(); return; }
+
+      const frag = document.createDocumentFragment();
+      for (const msg of history) {
+        if (msg.role === "user") {
+          const el = document.createElement('div');
+          el.className = 'msg user';
+          el.textContent = msg.content;
+          frag.appendChild(el);
+        } else if (msg.role === "assistant" && msg.content) {
+          const el = document.createElement('div');
+          el.className = 'final';
+          el.textContent = msg.content;
+          frag.appendChild(el);
+        }
+      }
+      chat.appendChild(frag);
+      requestAnimationFrame(() => scrollBottom());
+    }
+
+    /* ============================================
+       Apply fetched models to state (shared by connect + refresh)
+       ============================================ */
+    function applyModelsList(list, opts = {}) {
+      modelsList = decorateModels(list);
+
+      const savedModel = loadSavedModel();
+      let next = null;
+
+      // 1) Prefer currentModel if it still exists
+      if (currentModel) next = modelsList.find(m => m.id === currentModel.id);
+      // 2) Fall back to saved model
+      if (!next && savedModel) next = modelsList.find(m => m.id === savedModel.id);
+      // 3) Fall back to first
+      if (!next) next = modelsList[0];
+
+      const changed = !currentModel || (next && next.id !== currentModel.id) || (next && next._displayName !== currentModel._displayName);
+      currentModel = next;
+
+      if (changed || opts.force) {
+        modelBtnName.textContent = currentModel ? getModelDisplayName(currentModel) : "Select model";
+        saveModel();
+        updateEmptyStateTitle();
+      }
+
+      saveModelsCache();
+    }
+
+    /* ============================================
+       Manual connect
        ============================================ */
     async function connect() {
       if (connectingBusy) return;
@@ -700,6 +820,7 @@
       clearLoginError();
       goBtn.disabled = true;
       tokInput.disabled = true;
+
       buildDotSquare(connectingDots);
       connectingEl.classList.add('show');
       connectingAnim.start();
@@ -715,19 +836,30 @@
       const failAuth = (errMsg) => {
         lastFailureWasAuth = true;
         cleanupUi();
-        try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(MODEL_KEY); localStorage.removeItem(HISTORY_KEY); } catch (e) {}
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+          localStorage.removeItem(MODEL_KEY);
+          localStorage.removeItem(HISTORY_KEY);
+        } catch (e) {}
+        clearModelsCache();
         token = ""; history = []; currentModel = null; modelsList = []; chat.innerHTML = "";
         showLoginScreen(errMsg || "Invalid token. Please check and try again.");
       };
-      const failNetwork = (errMsg) => { lastFailureWasAuth = false; cleanupUi(); showLoginError(errMsg); };
+      const failNetwork = (errMsg) => {
+        lastFailureWasAuth = false;
+        cleanupUi();
+        showLoginError(errMsg);
+      };
 
       try {
         const url = API_URL + "?action=models&token=" + encodeURIComponent(t);
         const data = await gasFetch(url, { method: "GET" });
+
         const elapsed = Date.now() - startTs;
         if (elapsed < MIN_LOADING) await sleep(MIN_LOADING - elapsed);
 
         if (!data || data._parseError) { failNetwork("Invalid response from server. Please try again."); return; }
+
         if (data.error) {
           const msg = (data.error && data.error.message) || "";
           if (/invalid|unauthor|forbidden|token|auth|denied|expired/i.test(msg)) failAuth("Invalid token. Please check and try again.");
@@ -735,15 +867,14 @@
           return;
         }
 
-        const list = decorateModels(data.data);
-        if (!list.length) { failAuth("No models available with this token."); return; }
+        const list = data.data;
+        if (!list || !list.length) { failAuth("No models available with this token."); return; }
 
         token = t;
-        modelsList = list;
-        const savedModel = loadSavedModel();
-        currentModel = (savedModel && list.find(m => m.id === savedModel.id)) || list[0];
-        saveModel();
         try { localStorage.setItem(STORAGE_KEY, token); } catch (e) {}
+
+        // Decorate + apply + cache
+        applyModelsList(list, { force: true });
 
         showChatScreen();
         restoreChat();
@@ -762,28 +893,75 @@
     }
 
     /* ============================================
-       Auto-login — direct to chat, no checks
+       Background refresh — keeps cache fresh silently
+       ============================================ */
+    async function refreshModelsInBackground() {
+      if (!token) return;
+      const myToken = ++backgroundRefreshToken;
+
+      try {
+        const url = API_URL + "?action=models&token=" + encodeURIComponent(token);
+        const data = await gasFetch(url, { method: "GET" });
+
+        // Another refresh started, or we disconnected while fetching — bail
+        if (myToken !== backgroundRefreshToken) return;
+        if (!token) return;
+
+        // Silent-fail on any network or auth issue — user already has cache
+        if (!data || data._parseError || data.error || !data.data || !data.data.length) return;
+
+        applyModelsList(data.data);
+      } catch (e) {
+        // Silently ignore — we already have cache
+      }
+    }
+
+    /* ============================================
+       Auto-login — instant from cache, refresh in bg
        ============================================ */
     function autoLogin() {
       if (autoLoggedIn) return;
       autoLoggedIn = true;
+
       let savedToken = null;
       try { savedToken = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+
       if (!savedToken) {
         document.documentElement.classList.remove('auto-session');
         tokInput.focus();
         return;
       }
+
       token = savedToken;
       tokInput.value = savedToken;
-      const saved = loadSavedModel();
-      currentModel = saved ? decorateModels([saved])[0] : null;
+
+      // 1) Load cached models instantly
+      const cached = loadModelsCache(savedToken);
+
+      if (cached && cached.length) {
+        modelsList = decorateModels(cached);
+        const savedModel = loadSavedModel();
+        currentModel = (savedModel && modelsList.find(m => m.id === savedModel.id)) || modelsList[0];
+      } else {
+        // No cache — use just the saved model (may have no meta)
+        const savedModel = loadSavedModel();
+        if (savedModel) {
+          modelsList = [];
+          currentModel = decorateModels([savedModel])[0];
+        } else {
+          currentModel = null;
+        }
+      }
+
       showChatScreen();
       restoreChat();
+
+      // 2) Refresh cache in background — no UI blocking
+      refreshModelsInBackground();
     }
 
     /* ============================================
-       Dialogs
+       Drag-to-dismiss dialogs
        ============================================ */
     function setupDragToDismiss(dialogEl, overlayEl, dragArea, onClose) {
       let startY = 0, currentY = 0, dragging = false;
@@ -817,6 +995,9 @@
       dragArea.addEventListener('pointerleave', () => { if (dragging) end(); });
     }
 
+    /* ============================================
+       Model list rendering
+       ============================================ */
     const UNIFIED_ICON = `
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z"/>
@@ -846,6 +1027,7 @@
       item.type = 'button';
       const isActive = currentModel && m.id === currentModel.id;
       item.className = 'model-item' + (isActive ? ' active' : '');
+
       const name = getModelDisplayName(m);
       const meta = m._meta || "";
       const isFree = m._isFree;
@@ -860,6 +1042,7 @@
       nameEl.className = 'model-item-name';
       nameEl.textContent = name;
       info.appendChild(nameEl);
+
       if (meta) {
         const metaEl = document.createElement('div');
         metaEl.className = 'model-item-meta';
@@ -886,7 +1069,6 @@
         currentModel = m;
         modelBtnName.textContent = name;
         saveModel();
-        // Update the empty state title to reflect the new model
         updateEmptyStateTitle();
         closeDialog();
       });
@@ -907,6 +1089,7 @@
       else dialogSub.textContent = total === 1 ? "1 model available" : (total + " models available");
 
       modelList.innerHTML = '';
+
       if (shown === 0) {
         const empty = document.createElement('div');
         empty.className = 'model-empty';
@@ -923,12 +1106,18 @@
 
       const frag = document.createDocumentFragment();
       const cap = shown > 20 ? 0.001 : 0.025;
+
       filtered.forEach((m, idx) => {
         const item = buildModelItem(m);
         if (renderFirstTime) item.style.animationDelay = Math.min(idx * cap, 0.3) + 's';
-        else { item.style.animation = 'none'; item.style.opacity = '1'; item.style.transform = 'none'; }
+        else {
+          item.style.animation = 'none';
+          item.style.opacity = '1';
+          item.style.transform = 'none';
+        }
         frag.appendChild(item);
       });
+
       modelList.appendChild(frag);
       renderFirstTime = false;
     }
@@ -936,9 +1125,11 @@
     async function ensureModelsLoaded() {
       if (modelsList.length) return true;
       if (!token) return false;
+
       try {
         const url = API_URL + "?action=models&token=" + encodeURIComponent(token);
         const data = await gasFetch(url, { method: "GET" });
+
         if (!data || data._parseError || data.error || !data.data || !data.data.length) {
           const msg = (data && data.error && data.error.message) || "";
           if (/invalid|unauthor|forbidden|token|auth|denied|expired/i.test(msg)) {
@@ -949,33 +1140,35 @@
           }
           return false;
         }
-        modelsList = decorateModels(data.data);
-        if (!currentModel || !modelsList.find(m => m.id === currentModel.id)) {
-          currentModel = modelsList[0];
-          saveModel();
-          modelBtnName.textContent = getModelDisplayName(currentModel);
-          updateEmptyStateTitle();
-        } else {
-          const fresh = modelsList.find(m => m.id === currentModel.id);
-          currentModel = fresh;
-          modelBtnName.textContent = getModelDisplayName(fresh);
-          updateEmptyStateTitle();
-        }
+
+        applyModelsList(data.data);
         return true;
-      } catch (e) { return false; }
+      } catch (e) {
+        return false;
+      }
     }
 
     async function openDialog() {
       modelSearch.value = '';
       modelSearchClear.classList.remove('show');
       renderFirstTime = true;
-      if (!modelsList.length) { dialogSub.textContent = "Loading models..."; dialogCount.textContent = "…"; }
+
+      if (!modelsList.length) {
+        dialogSub.textContent = "Loading models...";
+        dialogCount.textContent = "…";
+      }
+
       dialogOverlay.classList.add('show');
       requestAnimationFrame(() => dialog.classList.add('show'));
+
       const ok = await ensureModelsLoaded();
       if (!ok) { closeDialog(); return; }
+
       renderModelList();
-      if (window.matchMedia('(min-width: 641px)').matches) setTimeout(() => modelSearch.focus(), 300);
+
+      if (window.matchMedia('(min-width: 641px)').matches) {
+        setTimeout(() => modelSearch.focus(), 300);
+      }
     }
 
     function closeDialog() {
@@ -1008,6 +1201,9 @@
       modelSearch.focus();
     });
 
+    /* ============================================
+       Info dialog
+       ============================================ */
     function maskToken(t) {
       if (!t) return "";
       if (t.length <= 12) return t;
@@ -1024,6 +1220,7 @@
   "max_tokens": 800,
   "_tok": "sk-..."
 }`;
+
       infoList.innerHTML = `
         <div class="info-section">
           <div class="info-label">Server</div>
@@ -1050,6 +1247,7 @@ Content-Type: application/json
 ${exampleJSON}</div>
         </div>
       `;
+
       const revealBtn = infoList.querySelector('#revealBtn');
       if (revealBtn) revealBtn.addEventListener('click', () => { tokenRevealed = !tokenRevealed; buildInfoDialog(); });
     }
@@ -1156,9 +1354,10 @@ ${exampleJSON}</div>
     }
 
     /* ============================================
-       Typewriter + send
+       Typewriter + chat
        ============================================ */
     const typeState = { queue: [], running: false, node: null, stopped: false };
+
     async function pumpQueue() {
       if (typeState.running) return;
       typeState.running = true;
@@ -1184,6 +1383,7 @@ ${exampleJSON}</div>
     async function sendChat(payload, onDelta, onDone, onError) {
       currentController = new AbortController();
       abortRequested = false;
+
       try {
         const res = await fetch(API_URL + "?action=chat", {
           method: "POST",
@@ -1192,6 +1392,7 @@ ${exampleJSON}</div>
           redirect: "follow",
           signal: currentController.signal
         });
+
         if (!res.ok) { onError("Server error: HTTP " + res.status); return; }
 
         const contentType = (res.headers.get("content-type") || "").toLowerCase();
@@ -1231,6 +1432,7 @@ ${exampleJSON}</div>
 
         const text = await res.text();
         const trimmedAll = text.trim();
+
         if (trimmedAll.startsWith("data:")) {
           for (const line of trimmedAll.split("\n")) {
             const trimmed = line.trim();
@@ -1299,22 +1501,11 @@ ${exampleJSON}</div>
       const text = input.value.trim();
       if (!text || !token || isStreaming) return;
 
+      // Lazy-load models if we don't have any (fresh install with saved token)
       if (!currentModel) {
-        try {
-          const url = API_URL + "?action=models&token=" + encodeURIComponent(token);
-          const data = await gasFetch(url, { method: "GET" });
-          if (data && data.data && data.data.length) {
-            modelsList = decorateModels(data.data);
-            currentModel = modelsList[0];
-            saveModel();
-            modelBtnName.textContent = getModelDisplayName(currentModel);
-            updateEmptyStateTitle();
-          } else {
-            addErrorMessage("Could not determine a model. Please reconnect.");
-            return;
-          }
-        } catch (e) {
-          addErrorMessage("Network error — please try again.");
+        const ok = await ensureModelsLoaded();
+        if (!ok || !currentModel) {
+          addErrorMessage("Could not determine a model. Please reconnect.");
           return;
         }
       }
@@ -1329,6 +1520,7 @@ ${exampleJSON}</div>
       saveHistory();
 
       const block = createThinkingBlock();
+
       const final = document.createElement('div');
       final.className = 'final';
       const textNode = document.createElement('span');
@@ -1352,8 +1544,17 @@ ${exampleJSON}</div>
 
       await new Promise((resolve) => {
         sendChat(
-          { model: currentModel.id, messages: history.slice(-20), max_tokens: 800, _tok: token },
-          (delta) => { firstDeltaInsert(); fullContent += delta; enqueueChars(delta); },
+          {
+            model: currentModel.id,
+            messages: history.slice(-20),
+            max_tokens: 800,
+            _tok: token
+          },
+          (delta) => {
+            firstDeltaInsert();
+            fullContent += delta;
+            enqueueChars(delta);
+          },
           () => resolve(),
           (err) => { errorMsg = err; resolve(); }
         );
@@ -1392,8 +1593,12 @@ ${exampleJSON}</div>
       stopGeneration();
       token = ""; history = []; currentModel = null; modelsList = [];
       chat.innerHTML = "";
-      try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(MODEL_KEY); } catch (e) {}
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(MODEL_KEY);
+      } catch (e) {}
       clearHistory();
+      clearModelsCache();
       document.documentElement.classList.remove('auto-session');
       modelBtn.classList.remove('show');
       infoBtn.classList.remove('show');
@@ -1443,6 +1648,7 @@ ${exampleJSON}</div>
       if (!window.visualViewport) return;
       const vv = window.visualViewport;
       let raf = null;
+
       function resetStyles() {
         layout.style.position = '';
         layout.style.top = '';
@@ -1453,11 +1659,13 @@ ${exampleJSON}</div>
         layout.style.width = '';
         document.body.classList.remove('kb-open');
       }
+
       function apply() {
         if (raf) cancelAnimationFrame(raf);
         raf = requestAnimationFrame(() => {
           const shrink = window.innerHeight - vv.height;
           const isKb = shrink > 120 && document.activeElement === input;
+
           if (isKb) {
             const top = vv.offsetTop || 0;
             layout.style.position = 'fixed';
@@ -1472,6 +1680,7 @@ ${exampleJSON}</div>
           } else resetStyles();
         });
       }
+
       vv.addEventListener('resize', apply);
       vv.addEventListener('scroll', apply);
       input.addEventListener('focus', () => { apply(); setTimeout(apply, 80); setTimeout(apply, 250); setTimeout(apply, 480); });
