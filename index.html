@@ -5,1090 +5,191 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
 <title>X5Models Free</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='black'/%3E%3Cg fill='%234A7DFF'%3E%3Cpath d='M48 15 L30 15 L20 35 L30 35 L30 30 L42 30 L42 42 L30 42 L25 50 L18 50 L10 62 L25 62 L30 55 L42 55 L42 68 L30 68 L25 78 L42 78 L48 82 L48 15 Z'/%3E%3Cpath d='M52 15 L70 15 L80 35 L70 35 L70 30 L58 30 L58 42 L70 42 L75 50 L82 50 L90 62 L75 62 L70 55 L58 55 L58 68 L70 68 L75 78 L58 78 L52 82 L52 15 Z'/%3E%3C/g%3E%3C/svg%3E">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   :root {
-    --bg: #000;
-    --line: #1a1a1a;
-    --line-2: #1e1e1e;
-    --txt: #e8e8e8;
-    --mut: #6a6a6a;
-    --mut-2: #4a4a4a;
-    --err: #ff4d4d;
-    --err-bg: #1a0808;
-    --err-border: #3a1212;
-    --accent: #4A7DFF;
-    --header-h: 56px;
-    --composer-min-h: 56px;
+    --bg: #000; --line: #1a1a1a; --line-2: #1e1e1e;
+    --txt: #e8e8e8; --mut: #6a6a6a; --mut-2: #4a4a4a;
+    --err: #ff4d4d; --err-bg: #1a0808; --err-border: #3a1212;
+    --accent: #4A7DFF; --header-h: 56px; --composer-min-h: 56px;
   }
-
   html, body {
-    height: 100%;
-    background: var(--bg);
-    color: var(--txt);
+    height: 100%; background: var(--bg); color: var(--txt);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    overflow: hidden;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-text-size-adjust: 100%;
-    overscroll-behavior: none;
+    overflow: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%; overscroll-behavior: none;
   }
-
-  body {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  /* Hide login screen immediately when a saved session exists — no flash */
-  html.auto-session .login-screen {
-    display: none !important;
-  }
-
-  .layout {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    height: 100dvh;
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-  }
-
-  /* ============================================
-     Header
-  ============================================ */
-  .header {
-    height: var(--header-h);
-    padding: 0 clamp(14px, 3vw, 24px);
-    border-bottom: 1px solid var(--line);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    position: relative;
-    z-index: 10;
-  }
-
-  .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    color: inherit;
-    transition: opacity 0.2s ease;
-    min-width: 0;
-  }
-
+  body { position: fixed; inset: 0; width: 100%; height: 100%; }
+  html.auto-session .login-screen { display: none !important; }
+  .layout { display: flex; flex-direction: column; height: 100vh; height: 100dvh; width: 100%; overflow: hidden; position: relative; }
+  .header { height: var(--header-h); padding: 0 clamp(14px, 3vw, 24px); border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 10px; flex-shrink: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); position: relative; z-index: 10; }
+  .brand { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; transition: opacity 0.2s ease; min-width: 0; }
   .brand:hover { opacity: 0.85; }
-
-  .brand-icon {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-    display: block;
-  }
-
-  .brand-name {
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: #d0d0d0;
-    letter-spacing: -0.01em;
-    transition: color 0.2s ease;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
+  .brand-icon { width: 20px; height: 20px; flex-shrink: 0; display: block; }
+  .brand-name { font-size: 0.82rem; font-weight: 600; color: #d0d0d0; letter-spacing: -0.01em; transition: color 0.2s ease; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .brand:hover .brand-name { color: #fff; }
-
   .header-spacer { flex: 1; min-width: 0; }
-
-  .model-btn {
-    display: none;
-    align-items: center;
-    gap: 7px;
-    background: #0f0f0f;
-    border: 1px solid var(--line-2);
-    color: var(--txt);
-    padding: 6px 11px;
-    border-radius: 9px;
-    font-family: inherit;
-    font-size: 0.75rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s ease, border-color 0.2s ease;
-    white-space: nowrap;
-    max-width: min(220px, 32vw);
-    min-width: 0;
-  }
-
+  .model-btn { display: none; align-items: center; gap: 7px; background: #0f0f0f; border: 1px solid var(--line-2); color: var(--txt); padding: 6px 11px; border-radius: 9px; font-family: inherit; font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease; white-space: nowrap; max-width: min(220px, 32vw); min-width: 0; }
   .model-btn.show { display: inline-flex; }
   .model-btn:hover { background: #161616; border-color: #2a2a2a; }
-  .model-btn .name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    min-width: 0;
-  }
+  .model-btn .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
   .model-btn > svg:first-child { width: 10px; height: 10px; flex-shrink: 0; opacity: 0.6; }
-
-  .icon-btn {
-    display: none;
-    background: transparent;
-    border: 1px solid var(--line-2);
-    color: #888;
-    width: 30px;
-    height: 30px;
-    border-radius: 9px;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-    flex-shrink: 0;
-  }
-
+  .icon-btn { display: none; background: transparent; border: 1px solid var(--line-2); color: #888; width: 30px; height: 30px; border-radius: 9px; cursor: pointer; align-items: center; justify-content: center; transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease; flex-shrink: 0; }
   .icon-btn.show { display: flex; }
   .icon-btn:hover { background: #161616; border-color: #2a2a2a; color: #e8e8e8; }
   .icon-btn svg { width: 13px; height: 13px; }
-
-  /* ============================================
-     Login Screen
-  ============================================ */
-  .login-screen {
-    flex: 1;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: clamp(24px, 5vh, 56px) clamp(16px, 3vw, 24px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-    overflow-y: auto;
-    min-height: 0;
-  }
-
-  .login-screen.hide {
-    opacity: 0;
-    transform: scale(0.98);
-    pointer-events: none;
-    position: absolute;
-    inset: 0;
-  }
-
-  .login-box {
-    width: 100%;
-    max-width: 620px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    text-align: center;
-    margin: auto 0;
-  }
-
-  .login-icon {
-    width: 56px;
-    height: 56px;
-    margin: 0 auto 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
+  .login-screen { flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: clamp(24px, 5vh, 56px) clamp(16px, 3vw, 24px); transition: opacity 0.4s ease, transform 0.4s ease; overflow-y: auto; min-height: 0; }
+  .login-screen.hide { opacity: 0; transform: scale(0.98); pointer-events: none; position: absolute; inset: 0; }
+  .login-box { width: 100%; max-width: 620px; display: flex; flex-direction: column; gap: 16px; text-align: center; margin: auto 0; }
+  .login-icon { width: 56px; height: 56px; margin: 0 auto 4px; display: flex; align-items: center; justify-content: center; }
   .login-icon svg { width: 100%; height: 100%; }
-
-  .login-title {
-    font-size: clamp(1.3rem, 3.5vw, 1.55rem);
-    font-weight: 600;
-    color: #fff;
-    letter-spacing: -0.025em;
-  }
-
+  .login-title { font-size: clamp(1.3rem, 3.5vw, 1.55rem); font-weight: 600; color: #fff; letter-spacing: -0.025em; }
   .login-box.error .login-title { color: var(--err); }
-
-  .login-sub {
-    font-size: clamp(0.82rem, 2vw, 0.88rem);
-    color: var(--mut);
-    line-height: 1.55;
-    max-width: 440px;
-    margin: 0 auto 6px;
-  }
-
+  .login-sub { font-size: clamp(0.82rem, 2vw, 0.88rem); color: var(--mut); line-height: 1.55; max-width: 440px; margin: 0 auto 6px; }
   .login-box.error .login-sub { color: #a06060; }
-
-  .login-input-wrap {
-    display: flex;
-    gap: 8px;
-    align-items: stretch;
-    background: #0a0a0a;
-    border: 1px solid var(--line-2);
-    border-radius: 14px;
-    padding: 6px 6px 6px 18px;
-    transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-  }
-
+  .login-input-wrap { display: flex; gap: 8px; align-items: stretch; background: #0a0a0a; border: 1px solid var(--line-2); border-radius: 14px; padding: 6px 6px 6px 18px; transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease; }
   .login-input-wrap:focus-within { border-color: #333; }
-
-  .login-box.error .login-input-wrap {
-    border-color: var(--err);
-    background: var(--err-bg);
-    box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.08);
-  }
-
-  .login-input-wrap input {
-    flex: 1;
-    min-width: 0;
-    background: transparent;
-    border: 0;
-    color: var(--txt);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 16px;
-    outline: none;
-    padding: 12px 0;
-    letter-spacing: 0.01em;
-  }
-
-  .login-input-wrap input::placeholder {
-    color: var(--mut-2);
-    font-family: 'Inter', sans-serif;
-    letter-spacing: 0;
-  }
-
+  .login-box.error .login-input-wrap { border-color: var(--err); background: var(--err-bg); box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.08); }
+  .login-input-wrap input { flex: 1; min-width: 0; background: transparent; border: 0; color: var(--txt); font-family: 'JetBrains Mono', monospace; font-size: 16px; outline: none; padding: 12px 0; letter-spacing: 0.01em; }
+  .login-input-wrap input::placeholder { color: var(--mut-2); font-family: 'Inter', sans-serif; letter-spacing: 0; }
   .login-box.error .login-input-wrap input::placeholder { color: #6a3030; }
-
-  .login-input-wrap button {
-    background: #ffffff;
-    border: 0;
-    color: #000;
-    padding: 0 clamp(16px, 3vw, 22px);
-    border-radius: 10px;
-    font-family: inherit;
-    font-size: clamp(0.78rem, 2vw, 0.85rem);
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.1s ease;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
+  .login-input-wrap button { background: #ffffff; border: 0; color: #000; padding: 0 clamp(16px, 3vw, 22px); border-radius: 10px; font-family: inherit; font-size: clamp(0.78rem, 2vw, 0.85rem); font-weight: 600; cursor: pointer; transition: background 0.2s ease, transform 0.1s ease; white-space: nowrap; flex-shrink: 0; }
   .login-input-wrap button:hover:not(:disabled) { background: #e8e8e8; }
   .login-input-wrap button:active:not(:disabled) { transform: scale(0.98); }
   .login-input-wrap button:disabled { opacity: 0.5; cursor: not-allowed; }
-
-  .login-box.error .login-input-wrap button {
-    background: #2a0a0a;
-    border: 1px solid #3a1212;
-    color: var(--err);
-  }
-
-  .login-error {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    border-radius: 12px;
-    background: var(--err-bg);
-    border: 1px solid var(--err-border);
-    color: var(--err);
-    font-size: 0.82rem;
-    font-weight: 500;
-    text-align: left;
-    line-height: 1.4;
-    max-height: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.3s ease, padding 0.3s ease;
-  }
-
-  .login-error.show {
-    max-height: 120px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    opacity: 1;
-  }
-
+  .login-box.error .login-input-wrap button { background: #2a0a0a; border: 1px solid #3a1212; color: var(--err); }
+  .login-error { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 12px; background: var(--err-bg); border: 1px solid var(--err-border); color: var(--err); font-size: 0.82rem; font-weight: 500; text-align: left; line-height: 1.4; max-height: 0; padding-top: 0; padding-bottom: 0; opacity: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, padding 0.3s ease; }
+  .login-error.show { max-height: 120px; padding-top: 12px; padding-bottom: 12px; opacity: 1; }
   .login-error svg { width: 18px; height: 18px; flex-shrink: 0; }
-
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20% { transform: translateX(-8px); }
-    40% { transform: translateX(8px); }
-    60% { transform: translateX(-5px); }
-    80% { transform: translateX(5px); }
-  }
-
-  .login-box.shake .login-input-wrap {
-    animation: shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97);
-  }
-
-  .login-steps {
-    text-align: left;
-    background: #060606;
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: clamp(16px, 3vw, 22px) clamp(18px, 3vw, 26px);
-    margin-top: 4px;
-  }
-
-  .login-steps-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: clamp(0.7rem, 1.8vw, 0.78rem);
-    font-weight: 600;
-    color: #c0c0c0;
-    letter-spacing: 0.02em;
-    margin-bottom: 16px;
-    text-transform: uppercase;
-  }
-
-  .login-steps-head svg {
-    width: 14px;
-    height: 14px;
-    color: #7a7a7a;
-    flex-shrink: 0;
-  }
-
-  .steps-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    counter-reset: step;
-  }
-
-  .steps-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    font-size: clamp(0.75rem, 1.9vw, 0.82rem);
-    color: #9a9a9a;
-    line-height: 1.6;
-    counter-increment: step;
-  }
-
-  .steps-list li::before {
-    content: counter(step);
-    width: 22px;
-    height: 22px;
-    border-radius: 7px;
-    background: #101010;
-    border: 1px solid #1e1e1e;
-    color: #999;
-    font-size: 0.72rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-
-  .steps-list a {
-    color: #d0d0d0;
-    text-decoration: none;
-    border-bottom: 1px dashed #2a2a2a;
-    transition: color 0.2s ease, border-color 0.2s ease;
-    word-break: break-all;
-  }
-
-  .steps-list a:hover {
-    color: #fff;
-    border-color: #4a4a4a;
-  }
-
-  .steps-list code {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem;
-    background: #101010;
-    border: 1px solid #1e1e1e;
-    padding: 2px 6px;
-    border-radius: 5px;
-    color: #c0c0c0;
-    word-break: break-all;
-  }
-
-  /* ============================================
-     Chat Screen
-  ============================================ */
-  .chat-screen {
-    flex: 1;
-    display: none;
-    flex-direction: column;
-    min-height: 0;
-    overflow: hidden;
-  }
-
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); } }
+  .login-box.shake .login-input-wrap { animation: shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+  .login-steps { text-align: left; background: #060606; border: 1px solid var(--line); border-radius: 16px; padding: clamp(16px, 3vw, 22px) clamp(18px, 3vw, 26px); margin-top: 4px; }
+  .login-steps-head { display: flex; align-items: center; gap: 10px; font-size: clamp(0.7rem, 1.8vw, 0.78rem); font-weight: 600; color: #c0c0c0; letter-spacing: 0.02em; margin-bottom: 16px; text-transform: uppercase; }
+  .login-steps-head svg { width: 14px; height: 14px; color: #7a7a7a; flex-shrink: 0; }
+  .steps-list { list-style: none; display: flex; flex-direction: column; gap: 14px; counter-reset: step; }
+  .steps-list li { display: flex; align-items: flex-start; gap: 12px; font-size: clamp(0.75rem, 1.9vw, 0.82rem); color: #9a9a9a; line-height: 1.6; counter-increment: step; }
+  .steps-list li::before { content: counter(step); width: 22px; height: 22px; border-radius: 7px; background: #101010; border: 1px solid #1e1e1e; color: #999; font-size: 0.72rem; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .steps-list a { color: #d0d0d0; text-decoration: none; border-bottom: 1px dashed #2a2a2a; transition: color 0.2s ease, border-color 0.2s ease; word-break: break-all; }
+  .steps-list a:hover { color: #fff; border-color: #4a4a4a; }
+  .steps-list code { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; background: #101010; border: 1px solid #1e1e1e; padding: 2px 6px; border-radius: 5px; color: #c0c0c0; word-break: break-all; }
+  .chat-screen { flex: 1; display: none; flex-direction: column; min-height: 0; overflow: hidden; }
   .chat-screen.show { display: flex; }
-
-  .chat {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: clamp(16px, 3vw, 28px) clamp(14px, 3vw, 24px);
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    max-width: 820px;
-    width: 100%;
-    margin: 0 auto;
-    min-height: 0;
-    scroll-behavior: smooth;
-  }
-
+  .chat { flex: 1; overflow-y: auto; overflow-x: hidden; padding: clamp(16px, 3vw, 28px) clamp(14px, 3vw, 24px); display: flex; flex-direction: column; gap: 16px; max-width: 820px; width: 100%; margin: 0 auto; min-height: 0; scroll-behavior: smooth; }
   .chat::-webkit-scrollbar { width: 6px; }
   .chat::-webkit-scrollbar-track { background: transparent; }
-  .chat::-webkit-scrollbar-thumb {
-    background: #1e1e1e;
-    border-radius: 3px;
-  }
+  .chat::-webkit-scrollbar-thumb { background: #1e1e1e; border-radius: 3px; }
   .chat::-webkit-scrollbar-thumb:hover { background: #2a2a2a; }
-
-  .msg {
-    max-width: 82%;
-    padding: 10px 15px;
-    border-radius: 18px;
-    font-size: clamp(0.86rem, 2vw, 0.94rem);
-    line-height: 1.6;
-    white-space: pre-wrap;
-    word-break: break-word;
-    animation: msgIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  @keyframes msgIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .msg.user {
-    align-self: flex-end;
-    background: #1f1f1f;
-    color: #ececec;
-    border-bottom-right-radius: 6px;
-  }
-
-  .msg.error {
-    align-self: flex-start;
-    background: var(--err-bg);
-    border: 1px solid var(--err-border);
-    color: var(--err);
-    font-size: 0.82rem;
-    max-width: 100%;
-  }
-
-  .empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-    text-align: center;
-    padding: 40px 20px;
-    margin: auto 0;
-    animation: fadeIn 0.6s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  .empty-state-icon {
-    width: 48px;
-    height: 48px;
-    opacity: 0.7;
-  }
-
-  .empty-state-title {
-    font-size: clamp(1.1rem, 3vw, 1.3rem);
-    font-weight: 600;
-    color: #d0d0d0;
-    letter-spacing: -0.02em;
-  }
-
-  .empty-state-sub {
-    font-size: clamp(0.82rem, 2vw, 0.88rem);
-    color: var(--mut);
-    max-width: 400px;
-    line-height: 1.5;
-  }
-
-  .thinking-block {
-    align-self: flex-start;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 4px 0;
-  }
-
-  .dot-square {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 2.5px;
-    align-self: center;
-  }
-
-  .dot-square span {
-    width: 2.5px;
-    height: 2.5px;
-    border-radius: 50%;
-    background: #0f0f0f;
-    box-shadow: none;
-    transition: background 0.18s ease-out, box-shadow 0.18s ease-out;
-  }
-
-  .dot-square span.on {
-    background: #ffffff;
-    box-shadow:
-      0 0 3px rgba(255, 255, 255, 0.85),
-      0 0 6px rgba(255, 255, 255, 0.35);
-  }
-
-  .thinking-block.done .dot-square span {
-    transition: background 0.7s cubic-bezier(0.4, 0, 0.2, 1),
-                box-shadow 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .thinking-block.done .dot-square span.lit-white {
-    background: #ffffff;
-    box-shadow:
-      0 0 3px rgba(255, 255, 255, 0.85),
-      0 0 6px rgba(255, 255, 255, 0.35);
-  }
-
-  .thinking-block.done .dot-square span.lit-black {
-    background: #2a2a2a;
-    box-shadow: none;
-  }
-
-  .working-text {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.92rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    white-space: nowrap;
-    background-image: repeating-linear-gradient(
-      90deg,
-      #ffffff 0px,
-      #ffffff 55px,
-      #4a4a4a 100px,
-      #ffffff 145px,
-      #ffffff 200px
-    );
-    background-size: 200px 100%;
-    background-repeat: repeat;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-    animation: continuousWave 2.8s linear infinite;
-  }
-
-  @keyframes continuousWave {
-    0% { background-position: 0px 0; }
-    100% { background-position: 200px 0; }
-  }
-
-  .thinking-block.done .working-text {
-    animation: none;
-    background-image: none;
-    -webkit-text-fill-color: #ffffff;
-    color: #ffffff;
-  }
-
-  .final {
-    align-self: flex-start;
-    max-width: 100%;
-    font-size: clamp(0.86rem, 2vw, 0.94rem);
-    line-height: 1.72;
-    color: #e0e0e0;
-    padding: 2px 0;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-
-  .cursor {
-    display: inline-block;
-    width: 7px;
-    height: 1em;
-    background: #e0e0e0;
-    vertical-align: text-bottom;
-    margin-left: 3px;
-    border-radius: 1px;
-    animation: blink 0.9s steps(2, start) infinite;
-  }
-
-  @keyframes blink {
-    to { visibility: hidden; }
-  }
-
-  /* ============================================
-     Composer
-  ============================================ */
-  .composer-wrap {
-    padding: 8px clamp(14px, 3vw, 24px) clamp(14px, 3vh, 22px);
-    flex-shrink: 0;
-    background: linear-gradient(to top, #000 70%, transparent);
-    transition: padding 0.2s ease;
-  }
-
-  .composer {
-    display: flex;
-    align-items: flex-end;
-    gap: 6px;
-    max-width: 820px;
-    margin: 0 auto;
-    background: #101010;
-    border: 1px solid #1f1f1f;
-    border-radius: 28px;
-    padding: 6px 6px 6px clamp(16px, 3vw, 20px);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, border-radius 0.2s ease;
-    min-height: var(--composer-min-h);
-  }
-
-  .composer:focus-within {
-    border-color: #2e2e2e;
-    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.025);
-  }
-
-  /*
-    FIXED: textarea was using `height: 24px` with box-sizing: border-box,
-    so content area collapsed to 0 and the placeholder sat at the bottom.
-    Now: height:auto + min-height so the content area always fits one line.
-  */
-  .composer textarea {
-    flex: 1;
-    min-width: 0;
-    background: transparent;
-    border: 0;
-    color: var(--txt);
-    font-family: inherit;
-    font-size: 16px;
-    line-height: 1.5;
-    outline: none;
-    resize: none;
-    height: auto;
-    min-height: 48px;
-    max-height: 200px;
-    padding: 12px 0;
-    display: block;
-    overflow-y: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .composer textarea::-webkit-scrollbar {
-    display: none;
-    width: 0;
-    height: 0;
-  }
-
+  .msg { max-width: 82%; padding: 10px 15px; border-radius: 18px; font-size: clamp(0.86rem, 2vw, 0.94rem); line-height: 1.6; white-space: pre-wrap; word-break: break-word; animation: msgIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+  @keyframes msgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .msg.user { align-self: flex-end; background: #1f1f1f; color: #ececec; border-bottom-right-radius: 6px; }
+  .msg.error { align-self: flex-start; background: var(--err-bg); border: 1px solid var(--err-border); color: var(--err); font-size: 0.82rem; max-width: 100%; }
+  .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; padding: 40px 20px; margin: auto 0; animation: fadeIn 0.6s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .empty-state-icon { width: 48px; height: 48px; opacity: 0.7; }
+  .empty-state-title { font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 600; color: #d0d0d0; letter-spacing: -0.02em; overflow: hidden; text-overflow: ellipsis; max-width: 100%; padding: 0 12px; }
+  .empty-state-sub { font-size: clamp(0.82rem, 2vw, 0.88rem); color: var(--mut); max-width: 400px; line-height: 1.5; }
+  .thinking-block { align-self: flex-start; display: flex; align-items: center; gap: 10px; padding: 4px 0; }
+  .dot-square { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2.5px; align-self: center; }
+  .dot-square span { width: 2.5px; height: 2.5px; border-radius: 50%; background: #0f0f0f; box-shadow: none; transition: background 0.18s ease-out, box-shadow 0.18s ease-out; }
+  .dot-square span.on { background: #ffffff; box-shadow: 0 0 3px rgba(255, 255, 255, 0.85), 0 0 6px rgba(255, 255, 255, 0.35); }
+  .thinking-block.done .dot-square span { transition: background 0.7s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
+  .thinking-block.done .dot-square span.lit-white { background: #ffffff; box-shadow: 0 0 3px rgba(255, 255, 255, 0.85), 0 0 6px rgba(255, 255, 255, 0.35); }
+  .thinking-block.done .dot-square span.lit-black { background: #2a2a2a; box-shadow: none; }
+  .working-text { font-family: 'Inter', sans-serif; font-size: 0.92rem; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; background-image: repeating-linear-gradient(90deg, #ffffff 0px, #ffffff 55px, #4a4a4a 100px, #ffffff 145px, #ffffff 200px); background-size: 200px 100%; background-repeat: repeat; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; animation: continuousWave 2.8s linear infinite; }
+  @keyframes continuousWave { 0% { background-position: 0px 0; } 100% { background-position: 200px 0; } }
+  .thinking-block.done .working-text { animation: none; background-image: none; -webkit-text-fill-color: #ffffff; color: #ffffff; }
+  .final { align-self: flex-start; max-width: 100%; font-size: clamp(0.86rem, 2vw, 0.94rem); line-height: 1.72; color: #e0e0e0; padding: 2px 0; white-space: pre-wrap; word-break: break-word; }
+  .cursor { display: inline-block; width: 7px; height: 1em; background: #e0e0e0; vertical-align: text-bottom; margin-left: 3px; border-radius: 1px; animation: blink 0.9s steps(2, start) infinite; }
+  @keyframes blink { to { visibility: hidden; } }
+  .composer-wrap { padding: 8px clamp(14px, 3vw, 24px) clamp(14px, 3vh, 22px); flex-shrink: 0; background: linear-gradient(to top, #000 70%, transparent); transition: padding 0.2s ease; }
+  .composer { display: flex; align-items: flex-end; gap: 6px; max-width: 820px; margin: 0 auto; background: #101010; border: 1px solid #1f1f1f; border-radius: 28px; padding: 6px 6px 6px clamp(16px, 3vw, 20px); transition: border-color 0.2s ease, box-shadow 0.2s ease, border-radius 0.2s ease; min-height: var(--composer-min-h); }
+  .composer:focus-within { border-color: #2e2e2e; box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.025); }
+  .composer textarea { flex: 1; min-width: 0; background: transparent; border: 0; color: var(--txt); font-family: inherit; font-size: 16px; line-height: 1.5; outline: none; resize: none; height: auto; min-height: 48px; max-height: 200px; padding: 12px 0; display: block; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; }
+  .composer textarea::-webkit-scrollbar { display: none; width: 0; height: 0; }
   .composer textarea::placeholder { color: var(--mut-2); }
-
-  .send-btn {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-    min-height: 40px;
-    border-radius: 50%;
-    background: #2a2a2a;
-    color: #6a6a6a;
-    border: 0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    align-self: flex-end;
-    transition: background 0.2s ease,
-                color 0.2s ease,
-                border-radius 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
-                transform 0.15s ease;
-    position: relative;
-    padding: 0;
-    line-height: 1;
-    overflow: hidden;
-  }
-
-  .send-btn.ready {
-    background: #ffffff;
-    color: #000;
-  }
-
+  .send-btn { width: 40px; height: 40px; min-width: 40px; min-height: 40px; border-radius: 50%; background: #2a2a2a; color: #6a6a6a; border: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; align-self: flex-end; margin-bottom: 4px; transition: background 0.2s ease, color 0.2s ease, border-radius 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.15s ease; position: relative; padding: 0; line-height: 1; overflow: hidden; }
+  .send-btn.ready { background: #ffffff; color: #000; }
   .send-btn.ready:hover { transform: scale(1.05); }
   .send-btn.ready:active { transform: scale(0.95); }
-
-  .send-btn.sending {
-    background: #ffffff;
-    color: #000;
-    border-radius: 12px;
-  }
-
+  .send-btn.sending { background: #ffffff; color: #000; border-radius: 12px; }
   .send-btn.sending:hover { transform: scale(1.05); }
   .send-btn.sending:active { transform: scale(0.95); }
-
   .send-btn:disabled { cursor: not-allowed; }
-
-  .send-btn svg {
-    width: 16px;
-    height: 16px;
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    pointer-events: none;
-  }
-
-  .send-btn .icon-send {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-  }
-
-  .send-btn .icon-stop {
-    transform: translate(-50%, -50%) scale(0.5);
-    opacity: 0;
-  }
-
-  .send-btn.sending .icon-send {
-    transform: translate(-50%, -50%) scale(0.5);
-    opacity: 0;
-  }
-
-  .send-btn.sending .icon-stop {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-  }
-
-  /* ============================================
-     Dialogs
-  ============================================ */
-  .dialog-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-    z-index: 100;
-  }
-
-  .dialog-overlay.show {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .dialog {
-    position: fixed;
-    left: 50%;
-    bottom: 0;
-    transform: translate(-50%, 100%);
-    width: 100%;
-    max-width: 540px;
-    background: #0c0c0c;
-    border: 1px solid #1f1f1f;
-    border-bottom: 0;
-    border-radius: 22px 22px 0 0;
-    padding: 0 20px 22px;
-    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 101;
-    max-height: min(80vh, 640px);
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.75);
-    will-change: transform;
-  }
-
+  .send-btn svg { width: 16px; height: 16px; display: block; position: absolute; top: 50%; left: 50%; transition: opacity 0.2s ease, transform 0.2s ease; pointer-events: none; }
+  .send-btn .icon-send { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  .send-btn .icon-stop { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+  .send-btn.sending .icon-send { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+  .send-btn.sending .icon-stop { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  .dialog-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 100; }
+  .dialog-overlay.show { opacity: 1; pointer-events: auto; }
+  .dialog { position: fixed; left: 50%; bottom: 0; transform: translate(-50%, 100%); width: 100%; max-width: 540px; background: #0c0c0c; border: 1px solid #1f1f1f; border-bottom: 0; border-radius: 22px 22px 0 0; padding: 0 18px 18px; transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1); z-index: 101; max-height: min(85vh, 680px); display: flex; flex-direction: column; box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.75); will-change: transform; }
   .dialog.show { transform: translate(-50%, 0); }
-
-  .dialog-drag-area {
-    padding: 14px 0 4px;
-    cursor: grab;
-    user-select: none;
-    touch-action: none;
-    flex-shrink: 0;
-  }
-
+  .dialog-drag-area { padding: 14px 0 4px; cursor: grab; user-select: none; touch-action: none; flex-shrink: 0; }
   .dialog-drag-area:active { cursor: grabbing; }
-
-  .dialog-handle {
-    width: 40px;
-    height: 4px;
-    background: #2a2a2a;
-    border-radius: 2px;
-    margin: 0 auto 16px;
-  }
-
-  .dialog-title {
-    font-size: 1.02rem;
-    font-weight: 600;
-    color: #fff;
-    letter-spacing: -0.015em;
-    margin-bottom: 4px;
-  }
-
-  .dialog-sub {
-    font-size: 0.79rem;
-    color: var(--mut);
-    margin-bottom: 18px;
-  }
-
-  .model-list {
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    flex: 1;
-    min-height: 0;
-    margin: 0 -6px;
-    padding: 0 6px;
-  }
-
-  .model-list::-webkit-scrollbar { width: 4px; }
-  .model-list::-webkit-scrollbar-thumb {
-    background: #222;
-    border-radius: 2px;
-  }
-
-  .model-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
-    border-radius: 12px;
-    background: transparent;
-    border: 1px solid transparent;
-    cursor: pointer;
-    transition: background 0.2s ease, border-color 0.2s ease;
-    text-align: left;
-    width: 100%;
-    font-family: inherit;
-    color: var(--txt);
-    opacity: 0;
-    transform: translateY(8px);
-    animation: dialogItemIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-
-  @keyframes dialogItemIn {
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .model-item:hover {
-    background: #101010;
-    border-color: var(--line-2);
-  }
-
-  .model-item.active {
-    background: #101010;
-    border-color: #2a2a2a;
-  }
-
-  .model-item-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    background: linear-gradient(145deg, #161616, #0a0a0a);
-    border: 1px solid #1f1f1f;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    color: #888;
-  }
-
-  .model-item.active .model-item-icon {
-    background: #1a1a1a;
-    border-color: #2a2a2a;
-    color: #fff;
-  }
-
-  .model-item-icon svg { width: 15px; height: 15px; }
-
-  .model-item-info { flex: 1; min-width: 0; }
-
-  .model-item-name {
-    font-size: 0.88rem;
-    font-weight: 500;
-    color: #d0d0d0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
+  .dialog-handle { width: 40px; height: 4px; background: #2a2a2a; border-radius: 2px; margin: 0 auto 16px; }
+  .dialog-title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 4px; }
+  .dialog-title { font-size: 1.02rem; font-weight: 600; color: #fff; letter-spacing: -0.015em; }
+  .dialog-count { font-size: 0.72rem; font-weight: 600; color: #6a6a6a; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.02em; padding: 3px 8px; border-radius: 6px; background: #101010; border: 1px solid #1c1c1c; flex-shrink: 0; }
+  .dialog-sub { font-size: 0.78rem; color: var(--mut); margin-bottom: 14px; }
+  .dialog-search-wrap { position: relative; margin-bottom: 12px; flex-shrink: 0; }
+  .dialog-search { width: 100%; background: #080808; border: 1px solid #1c1c1c; border-radius: 12px; color: var(--txt); font-family: inherit; font-size: 16px; padding: 11px 40px 11px 40px; outline: none; transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease; -webkit-appearance: none; appearance: none; }
+  .dialog-search:focus { border-color: #2e2e2e; background: #0c0c0c; box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.02); }
+  .dialog-search::placeholder { color: var(--mut-2); }
+  .dialog-search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--mut); pointer-events: none; }
+  .dialog-search-clear { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; border: 0; background: #1a1a1a; border-radius: 7px; color: #888; cursor: pointer; display: none; align-items: center; justify-content: center; padding: 0; transition: background 0.15s ease, color 0.15s ease; }
+  .dialog-search-clear.show { display: flex; }
+  .dialog-search-clear:hover { background: #262626; color: #e8e8e8; }
+  .dialog-search-clear:active { transform: translateY(-50%) scale(0.92); }
+  .dialog-search-clear svg { width: 11px; height: 11px; }
+  .model-list { overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 6px; flex: 1; min-height: 0; margin: 0 -6px; padding: 0 6px 4px; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: #262626 transparent; }
+  .model-list::-webkit-scrollbar { width: 6px; }
+  .model-list::-webkit-scrollbar-track { background: transparent; }
+  .model-list::-webkit-scrollbar-thumb { background: #262626; border-radius: 3px; }
+  .model-list::-webkit-scrollbar-thumb:hover { background: #333; }
+  .model-item { display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 13px; background: transparent; border: 1px solid transparent; cursor: pointer; transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease; text-align: left; width: 100%; font-family: inherit; color: var(--txt); opacity: 0; transform: translateY(6px); animation: dialogItemIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  @keyframes dialogItemIn { to { opacity: 1; transform: translateY(0); } }
+  .model-item:hover { background: #0d0d0d; border-color: #1c1c1c; }
+  .model-item:active { transform: scale(0.995); }
+  .model-item.active { background: #101010; border-color: #2a2a2a; }
+  .model-item-icon { width: 36px; height: 36px; border-radius: 11px; background: linear-gradient(145deg, #151515, #0a0a0a); border: 1px solid #1c1c1c; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #6a6a6a; transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease; }
+  .model-item.active .model-item-icon { color: var(--accent); border-color: rgba(74, 125, 255, 0.28); background: linear-gradient(145deg, #0e1524, #090b10); }
+  .model-item-icon svg { width: 17px; height: 17px; }
+  .model-item-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .model-item-name { font-size: 0.875rem; font-weight: 500; color: #d8d8d8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: -0.005em; }
   .model-item.active .model-item-name { color: #fff; }
-
-  .model-item-id {
-    font-size: 0.72rem;
-    color: var(--mut);
-    margin-top: 2px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  .model-item-check {
-    color: #4ade80;
-    flex-shrink: 0;
-    display: none;
-  }
-
-  .model-item.active .model-item-check { display: block; }
+  .model-item-meta { font-size: 0.7rem; color: #5a5a5a; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .model-item.active .model-item-meta { color: #6a6a6a; }
+  .model-badge { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.07em; padding: 3px 7px; border-radius: 5px; text-transform: uppercase; flex-shrink: 0; line-height: 1.3; font-family: 'Inter', sans-serif; }
+  .model-badge.free { background: rgba(74, 222, 128, 0.1); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.22); }
+  .model-item-check { width: 18px; height: 18px; color: var(--accent); flex-shrink: 0; display: none; align-items: center; justify-content: center; }
+  .model-item.active .model-item-check { display: flex; }
   .model-item-check svg { width: 16px; height: 16px; }
-
-  .info-list {
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    padding: 0 2px 4px;
-  }
-
+  .model-empty { text-align: center; padding: 40px 20px; color: var(--mut); font-size: 0.85rem; display: flex; flex-direction: column; align-items: center; gap: 10px; animation: fadeIn 0.3s ease; }
+  .model-empty svg { width: 32px; height: 32px; opacity: 0.35; color: #6a6a6a; }
+  .info-list { overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding: 0 2px 4px; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
   .info-list::-webkit-scrollbar { width: 4px; }
-  .info-list::-webkit-scrollbar-thumb {
-    background: #222;
-    border-radius: 2px;
-  }
-
-  .info-section {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .info-label {
-    font-size: 0.68rem;
-    color: #555;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .info-value {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.74rem;
-    color: #d0d0d0;
-    background: #060606;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 10px 12px;
-    word-break: break-all;
-    line-height: 1.55;
-  }
-
+  .info-list::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
+  .info-section { display: flex; flex-direction: column; gap: 6px; }
+  .info-label { font-size: 0.68rem; color: #555; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+  .info-value { font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: #d0d0d0; background: #060606; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; word-break: break-all; line-height: 1.55; }
   .info-value.masked { color: #6a6a6a; }
-
-  .info-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .info-row .info-value {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .info-reveal {
-    background: #101010;
-    border: 1px solid var(--line-2);
-    color: #888;
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-    flex-shrink: 0;
-  }
-
-  .info-reveal:hover {
-    background: #161616;
-    border-color: #2a2a2a;
-    color: #e0e0e0;
-  }
-
+  .info-row { display: flex; align-items: center; gap: 8px; }
+  .info-row .info-value { flex: 1; min-width: 0; }
+  .info-reveal { background: #101010; border: 1px solid var(--line-2); color: #888; width: 34px; height: 34px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease; flex-shrink: 0; }
+  .info-reveal:hover { background: #161616; border-color: #2a2a2a; color: #e0e0e0; }
   .info-reveal svg { width: 14px; height: 14px; }
-
-  .info-pre {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem;
-    color: #b0b0b0;
-    background: #060606;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 14px;
-    white-space: pre;
-    overflow-x: auto;
-    line-height: 1.7;
-  }
-
+  .info-pre { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: #b0b0b0; background: #060606; border: 1px solid var(--line); border-radius: 10px; padding: 14px; white-space: pre; overflow-x: auto; line-height: 1.7; }
   .info-pre::-webkit-scrollbar { height: 4px; }
-  .info-pre::-webkit-scrollbar-thumb {
-    background: #222;
-    border-radius: 2px;
-  }
-
-  .connecting {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 200;
-    opacity: 0;
-    transition: opacity 0.25s ease;
-  }
-
-  .connecting.show {
-    display: flex;
-    opacity: 1;
-  }
-
-  .connecting-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .connecting .dot-square {
-    grid-template-columns: repeat(5, 1fr);
-    gap: 3.5px;
-  }
-
-  .connecting .dot-square span {
-    width: 3.5px;
-    height: 3.5px;
-  }
-
-  .connecting-text {
-    font-size: 0.85rem;
-    color: #888;
-    letter-spacing: 0.02em;
-  }
-
-  /* ============================================
-     Mobile
-  ============================================ */
+  .info-pre::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
+  .connecting { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 200; opacity: 0; transition: opacity 0.25s ease; }
+  .connecting.show { display: flex; opacity: 1; }
+  .connecting-box { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+  .connecting .dot-square { grid-template-columns: repeat(5, 1fr); gap: 3.5px; }
+  .connecting .dot-square span { width: 3.5px; height: 3.5px; }
+  .connecting-text { font-size: 0.85rem; color: #888; letter-spacing: 0.02em; }
   @media (max-width: 640px) {
     :root { --header-h: 52px; }
     .header { padding: 0 12px; gap: 6px; }
@@ -1102,27 +203,29 @@
     .steps-list { gap: 12px; }
     .steps-list li { gap: 10px; }
     .steps-list li::before { width: 20px; height: 20px; font-size: 0.68rem; }
-    .send-btn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; }
+    .send-btn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; margin-bottom: 4px; }
     .composer { min-height: 50px; padding: 5px 5px 5px 16px; }
     .composer textarea { padding: 10px 0; min-height: 44px; max-height: 160px; }
     .composer-wrap { padding: 6px 12px 10px; }
+    .dialog { padding: 0 14px 16px; border-radius: 20px 20px 0 0; }
+    .dialog-title { font-size: 0.98rem; }
+    .dialog-count { font-size: 0.68rem; padding: 2px 7px; }
+    .model-item { padding: 10px 11px; }
+    .model-item-icon { width: 34px; height: 34px; border-radius: 10px; }
+    .model-item-icon svg { width: 16px; height: 16px; }
+    .model-item-name { font-size: 0.84rem; }
+    .model-badge { font-size: 0.56rem; padding: 2px 6px; }
   }
-
   @media (max-width: 380px) {
     .brand-name { max-width: 36vw; }
     .model-btn { max-width: 34vw; padding: 5px 8px; }
+    .dialog-count { display: none; }
   }
-
-  @supports (height: 100svh) {
-    .layout {
-      height: 100svh;
-    }
-  }
+  @supports (height: 100svh) { .layout { height: 100svh; } }
 </style>
 </head>
 <body>
 
-  <!-- Runs before anything else: prevents login screen flash when a saved session exists -->
   <script>
     (function () {
       try {
@@ -1134,7 +237,6 @@
   </script>
 
   <div class="layout" id="layout">
-
     <div class="header">
       <a class="brand" href="https://github.com/X5Coder/X5Models-Free" target="_blank" rel="noopener noreferrer">
         <svg class="brand-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -1145,9 +247,7 @@
         </svg>
         <span class="brand-name">X5Models Free</span>
       </a>
-
       <div class="header-spacer"></div>
-
       <button class="model-btn" id="modelBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="3" width="7" height="7" rx="1.5"/>
@@ -1157,7 +257,6 @@
         </svg>
         <span class="name" id="modelBtnName">Select model</span>
       </button>
-
       <button class="icon-btn" id="infoBtn" title="Connection info">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"/>
@@ -1165,7 +264,6 @@
           <line x1="12" y1="8" x2="12.01" y2="8"/>
         </svg>
       </button>
-
       <button class="icon-btn" id="logoutBtn" title="Disconnect">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -1185,15 +283,12 @@
             </g>
           </svg>
         </div>
-
         <div class="login-title">Connect to X5Models</div>
         <div class="login-sub">Paste your access token to start chatting with any model from a single API</div>
-
         <div class="login-input-wrap" id="loginWrap">
           <input type="password" id="tok" placeholder="sk-..." autocomplete="off" spellcheck="false">
           <button id="go" type="button">Connect</button>
         </div>
-
         <div class="login-error" id="loginError">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"/>
@@ -1202,7 +297,6 @@
           </svg>
           <span id="loginErrorText">Invalid token. Please check and try again.</span>
         </div>
-
         <div class="login-steps">
           <div class="login-steps-head">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1212,28 +306,12 @@
             How to get your token
           </div>
           <ol class="steps-list">
-            <li>
-              Copy the Python script from
-              <a href="https://raw.githubusercontent.com/X5Coder/X5Models-Free/refs/heads/main/start.py" target="_blank" rel="noopener noreferrer">start.py</a>
-            </li>
-            <li>
-              Run it in any Python editor on your PC or phone
-            </li>
-            <li>
-              It will print a URL like
-              <code>https://authkit.cline.bot/device?user_code=XXXX-XXXX</code>
-            </li>
-            <li>
-              Open that URL in Chrome and sign in with your Google account
-            </li>
-            <li>
-              Confirm the code shown on the page, then go back to the script
-            </li>
-            <li>
-              Copy the token shown in the terminal
-              <code>sk-xxxxxxxxxxxx</code>
-              and paste it above
-            </li>
+            <li>Copy the Python script from <a href="https://raw.githubusercontent.com/X5Coder/X5Models-Free/refs/heads/main/start.py" target="_blank" rel="noopener noreferrer">start.py</a></li>
+            <li>Run it in any Python editor on your PC or phone</li>
+            <li>It will print a URL like <code>https://authkit.cline.bot/device?user_code=XXXX-XXXX</code></li>
+            <li>Open that URL in Chrome and sign in with your Google account</li>
+            <li>Confirm the code shown on the page, then go back to the script</li>
+            <li>Copy the token shown in the terminal <code>sk-xxxxxxxxxxxx</code> and paste it above</li>
           </ol>
         </div>
       </div>
@@ -1241,7 +319,6 @@
 
     <div class="chat-screen" id="chatScreen">
       <div class="chat" id="chat"></div>
-
       <div class="composer-wrap" id="composerWrap">
         <div class="composer" id="composer">
           <textarea id="input" placeholder="Ask anything..." rows="1" autocomplete="off" spellcheck="false"></textarea>
@@ -1257,15 +334,30 @@
         </div>
       </div>
     </div>
-
   </div>
 
   <div class="dialog-overlay" id="dialogOverlay"></div>
   <div class="dialog" id="dialog">
     <div class="dialog-drag-area" id="dialogDragArea">
       <div class="dialog-handle"></div>
-      <div class="dialog-title">Select a model</div>
-      <div class="dialog-sub">Choose which AI model to chat with</div>
+      <div class="dialog-title-row">
+        <div class="dialog-title">Select a model</div>
+        <div class="dialog-count" id="dialogCount">0</div>
+      </div>
+      <div class="dialog-sub" id="dialogSub">Loading models...</div>
+    </div>
+    <div class="dialog-search-wrap">
+      <svg class="dialog-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" class="dialog-search" id="modelSearch" placeholder="Search models..." autocomplete="off" spellcheck="false">
+      <button type="button" class="dialog-search-clear" id="modelSearchClear" aria-label="Clear search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
     </div>
     <div class="model-list" id="modelList"></div>
   </div>
@@ -1295,6 +387,7 @@
     const FETCH_TIMEOUT = 30000;
     const MIN_LOADING = 350;
     const MAX_INPUT_H = 200;
+    const EMPTY_SUBTITLE = "Test The Pure Models Context For FREE";
 
     let token = "";
     let history = [];
@@ -1325,6 +418,10 @@
     const dialogOverlay = document.getElementById('dialogOverlay');
     const dialogDragArea = document.getElementById('dialogDragArea');
     const modelList = document.getElementById('modelList');
+    const dialogCount = document.getElementById('dialogCount');
+    const dialogSub = document.getElementById('dialogSub');
+    const modelSearch = document.getElementById('modelSearch');
+    const modelSearchClear = document.getElementById('modelSearchClear');
     const infoDialog = document.getElementById('infoDialog');
     const infoOverlay = document.getElementById('infoOverlay');
     const infoDragArea = document.getElementById('infoDragArea');
@@ -1344,6 +441,68 @@
     }
 
     /* ============================================
+       Model display parsing
+       ============================================ */
+    function isFreeModel(m) {
+      if (!m) return false;
+      if (m.free === true || m.is_free === true || m.isFree === true) return true;
+      if (typeof m.tier === "string" && /free/i.test(m.tier)) return true;
+      if (typeof m.plan === "string" && /free/i.test(m.plan)) return true;
+      const hay = ((m.id || "") + " " + (m.label || "")).toLowerCase();
+      if (/(?:^|[\s:/_-])free(?:$|[\s:/_-])/.test(hay)) return true;
+      if (/:free$/.test(hay)) return true;
+      return false;
+    }
+
+    function parseModelInfo(m) {
+      const id = (m && m.id) || "";
+      const label = (m && m.label) || id;
+      let name = "";
+      let meta = "";
+      const sources = [label, id];
+      for (const source of sources) {
+        if (!source) continue;
+        let cleaned = String(source).trim();
+        const paren = cleaned.match(/[\s]*[\(（]([^\(\)（）]+)[\)）]\s*$/);
+        if (paren) {
+          if (!meta) meta = paren[1].trim();
+          cleaned = cleaned.slice(0, paren.index).trim();
+        }
+        const slashIdx = cleaned.indexOf("/");
+        if (slashIdx > 0) cleaned = cleaned.slice(slashIdx + 1).trim();
+        if (cleaned) {
+          name = cleaned;
+          if (meta) break;
+        }
+      }
+      if (!name) name = label || id || "Unnamed model";
+      if (!meta) {
+        const anywhere = label.match(/[\(（]([^\(\)（）]+)[\)）]/);
+        if (anywhere) meta = anywhere[1].trim();
+      }
+      return { name, meta };
+    }
+
+    function decorateModels(list) {
+      if (!Array.isArray(list)) return [];
+      for (const m of list) {
+        if (!m || m._parsed) continue;
+        const info = parseModelInfo(m);
+        m._displayName = info.name;
+        m._meta = info.meta;
+        m._isFree = isFreeModel(m);
+        m._searchIndex = ((m.id || "") + " " + (m.label || "") + " " + info.name + " " + info.meta).toLowerCase();
+        m._parsed = true;
+      }
+      return list;
+    }
+
+    function getModelDisplayName(m) {
+      if (!m) return "anything";
+      return m._displayName || m.label || m.id || "anything";
+    }
+
+    /* ============================================
        Persistence
        ============================================ */
     function loadHistory() {
@@ -1354,31 +513,34 @@
         return Array.isArray(parsed) ? parsed : [];
       } catch (e) { return []; }
     }
-
     function saveHistory() {
-      try {
-        localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(-200)));
-      } catch (e) {}
+      try { localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(-200))); } catch (e) {}
     }
-
-    function clearHistory() {
-      try { localStorage.removeItem(HISTORY_KEY); } catch (e) {}
+    function clearHistory() { try { localStorage.removeItem(HISTORY_KEY); } catch (e) {} }
+    function saveModel() {
+      if (!currentModel) return;
+      try { localStorage.setItem(MODEL_KEY, JSON.stringify({ id: currentModel.id, label: currentModel.label })); } catch (e) {}
+    }
+    function loadSavedModel() {
+      try {
+        const raw = localStorage.getItem(MODEL_KEY);
+        if (!raw) return null;
+        try {
+          const obj = JSON.parse(raw);
+          if (obj && obj.id) return obj;
+        } catch (e) { return { id: raw, label: raw }; }
+      } catch (e) {}
+      return null;
     }
 
     async function gasFetch(url, options = {}) {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
       try {
-        const res = await fetch(url, {
-          ...options,
-          signal: controller.signal,
-          redirect: "follow",
-          cache: "no-store"
-        });
+        const res = await fetch(url, { ...options, signal: controller.signal, redirect: "follow", cache: "no-store" });
         clearTimeout(timer);
         const text = await res.text();
-        try { return JSON.parse(text); }
-        catch (e) { return { _raw: text, _parseError: true }; }
+        try { return JSON.parse(text); } catch (e) { return { _raw: text, _parseError: true }; }
       } catch (e) {
         clearTimeout(timer);
         throw e;
@@ -1386,7 +548,6 @@
     }
 
     let errorTimer = null;
-
     function showLoginError(message) {
       loginErrorText.textContent = message;
       loginError.classList.add('show');
@@ -1397,7 +558,6 @@
       clearTimeout(errorTimer);
       errorTimer = setTimeout(() => loginBox.classList.remove('shake'), 500);
     }
-
     function clearLoginError() {
       loginError.classList.remove('show');
       loginBox.classList.remove('error');
@@ -1418,14 +578,12 @@
     }
 
     const connectingAnim = {
-      timers: [],
-      stopped: false,
+      timers: [], stopped: false,
       start() {
         this.stopped = false;
         const dots = [...connectingDots.querySelectorAll('span')];
         const rings = [[], [], []];
         dots.forEach(d => rings[+d.dataset.ring].push(d));
-
         const runCycle = () => {
           if (this.stopped) return;
           dots.forEach(d => d.classList.remove('on'));
@@ -1445,195 +603,12 @@
     };
 
     /* ============================================
-       Show login screen (helper)
+       Empty state — dynamic title + subtitle
        ============================================ */
-    function showLoginScreen(errorMsg, keepToken) {
-      document.documentElement.classList.remove('auto-session');
-      loginScreen.classList.remove('hide');
-      chatScreen.classList.remove('show');
-      modelBtn.classList.remove('show');
-      infoBtn.classList.remove('show');
-      logoutBtn.classList.remove('show');
-      tokInput.disabled = false;
-      goBtn.disabled = false;
-      if (!keepToken) {
-        tokInput.value = "";
-      }
-      if (errorMsg) showLoginError(errorMsg);
+    function getEmptyTitle() {
+      return "Ask " + getModelDisplayName(currentModel);
     }
 
-    function showChatScreen() {
-      loginScreen.classList.add('hide');
-      chatScreen.classList.add('show');
-      modelBtn.classList.add('show');
-      infoBtn.classList.add('show');
-      logoutBtn.classList.add('show');
-    }
-
-    /* ============================================
-       Connect
-       ============================================ */
-    async function connect(savedToken) {
-      if (connectingBusy) return;
-      const t = (savedToken || tokInput.value).trim();
-      const isAuto = !!savedToken;
-
-      if (!t) {
-        if (!isAuto) {
-          showLoginError("Please enter a token to continue.");
-          tokInput.focus();
-        }
-        return;
-      }
-
-      connectingBusy = true;
-      lastFailureWasAuth = false;
-
-      if (!isAuto) {
-        clearLoginError();
-        goBtn.disabled = true;
-        tokInput.disabled = true;
-        buildDotSquare(connectingDots);
-        connectingEl.classList.add('show');
-        connectingAnim.start();
-      }
-
-      const startTs = Date.now();
-
-      const cleanupUi = () => {
-        connectingBusy = false;
-        connectingAnim.stop();
-        connectingEl.classList.remove('show');
-      };
-
-      const failAuth = (errMsg) => {
-        // Token is genuinely bad — clear it and go to login
-        lastFailureWasAuth = true;
-        cleanupUi();
-        try {
-          localStorage.removeItem(STORAGE_KEY);
-          localStorage.removeItem(MODEL_KEY);
-          localStorage.removeItem(HISTORY_KEY);
-        } catch (e) {}
-        token = "";
-        history = [];
-        currentModel = null;
-        modelsList = [];
-        chat.innerHTML = "";
-        showLoginScreen(errMsg || "Invalid token. Please check and try again.", false);
-      };
-
-      const failNetwork = (errMsg) => {
-        // Keep the token saved — just show the login screen so user can retry
-        lastFailureWasAuth = false;
-        cleanupUi();
-        showLoginScreen(errMsg, true); // keep token in the input
-      };
-
-      try {
-        const url = API_URL + "?action=models&token=" + encodeURIComponent(t);
-        const data = await gasFetch(url, { method: "GET" });
-
-        if (!isAuto) {
-          const elapsed = Date.now() - startTs;
-          if (elapsed < MIN_LOADING) await sleep(MIN_LOADING - elapsed);
-        }
-
-        if (!data || data._parseError) {
-          failNetwork("Invalid response from server. Please try again.");
-          return;
-        }
-
-        if (data.error) {
-          const msg = (data.error && data.error.message) || "";
-          if (/invalid|unauthor|forbidden|token|auth|denied|expired/i.test(msg)) {
-            failAuth("Invalid token. Please check and try again.");
-          } else {
-            failNetwork(msg || "Server returned an error.");
-          }
-          return;
-        }
-
-        const list = data.data;
-        if (!list || !list.length) {
-          failAuth("No models available with this token.");
-          return;
-        }
-
-        // SUCCESS
-        token = t;
-        modelsList = list;
-        try { localStorage.setItem(STORAGE_KEY, token); } catch (e) {}
-
-        let savedModelId = null;
-        try { savedModelId = localStorage.getItem(MODEL_KEY); } catch (e) {}
-
-        currentModel = modelsList.find(m => m.id === savedModelId) || modelsList[0];
-        modelBtnName.textContent = currentModel.label || currentModel.id;
-
-        showChatScreen();
-        restoreChat();
-
-        cleanupUi();
-
-        if (!isAuto) input.focus();
-      } catch (e) {
-        const msg = (e && e.message) || "";
-        const isTimeout = /abort|timeout/i.test(msg);
-        const isNetwork = /network|failed to fetch|load failed/i.test(msg);
-        if (!isAuto) {
-          const elapsed = Date.now() - startTs;
-          if (elapsed < MIN_LOADING) await sleep(MIN_LOADING - elapsed);
-        }
-        if (isTimeout) failNetwork("Connection timed out. Please check your internet and try again.");
-        else if (isNetwork) failNetwork("Unable to reach server. Please check your internet.");
-        else failNetwork("Connection failed. Please try again.");
-      }
-    }
-
-    /* ============================================
-       Auto-login
-       ============================================ */
-    async function autoLogin() {
-      if (autoLoggedIn) return;
-      autoLoggedIn = true;
-
-      let saved = null;
-      try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
-
-      if (!saved) {
-        // No saved session — show login screen normally
-        document.documentElement.classList.remove('auto-session');
-        tokInput.focus();
-        return;
-      }
-
-      tokInput.value = saved;
-
-      // Show the loading overlay immediately — login screen is already hidden by CSS
-      buildDotSquare(connectingDots);
-      connectingEl.classList.add('show');
-      connectingAnim.start();
-
-      await connect(saved);
-
-      // Auto-retry ONCE on network failure (not auth failure)
-      if (!token && !lastFailureWasAuth) {
-        await sleep(1500);
-        let retrySaved = null;
-        try { retrySaved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
-        if (retrySaved) {
-          buildDotSquare(connectingDots);
-          connectingEl.classList.add('show');
-          connectingAnim.start();
-          await connect(retrySaved);
-        }
-      }
-    }
-
-    /* ============================================
-       Chat rendering
-       ============================================ */
     function renderEmptyStateIfNeeded() {
       if (chat.children.length > 0) return;
       chat.innerHTML = `
@@ -1644,10 +619,17 @@
               <path d="M52 15 L70 15 L80 35 L70 35 L70 30 L58 30 L58 42 L70 42 L75 50 L82 50 L90 62 L75 62 L70 55 L58 55 L58 68 L70 68 L75 78 L58 78 L52 82 L52 15 Z"/>
             </g>
           </svg>
-          <div class="empty-state-title">Ready when you are</div>
-          <div class="empty-state-sub">Ask anything — the model will answer in real time.</div>
+          <div class="empty-state-title" id="emptyTitle">${escapeHtml(getEmptyTitle())}</div>
+          <div class="empty-state-sub">${EMPTY_SUBTITLE}</div>
         </div>
       `;
+    }
+
+    // Called whenever the current model changes so the empty state stays in sync
+    function updateEmptyStateTitle() {
+      const titleEl = chat.querySelector('.empty-state-title');
+      if (!titleEl) return;
+      titleEl.textContent = getEmptyTitle();
     }
 
     function removeEmptyState() {
@@ -1658,32 +640,153 @@
     function restoreChat() {
       chat.innerHTML = '';
       history = loadHistory();
-
       if (history.length === 0) {
         renderEmptyStateIfNeeded();
         return;
       }
-
+      const frag = document.createDocumentFragment();
       for (const msg of history) {
         if (msg.role === "user") {
           const el = document.createElement('div');
           el.className = 'msg user';
           el.textContent = msg.content;
-          chat.appendChild(el);
+          frag.appendChild(el);
         } else if (msg.role === "assistant" && msg.content) {
           const el = document.createElement('div');
           el.className = 'final';
           el.textContent = msg.content;
-          chat.appendChild(el);
+          frag.appendChild(el);
         }
       }
-
+      chat.appendChild(frag);
       requestAnimationFrame(() => scrollBottom());
     }
 
+    /* ============================================
+       Screens
+       ============================================ */
+    function showLoginScreen(errorMsg) {
+      document.documentElement.classList.remove('auto-session');
+      loginScreen.classList.remove('hide');
+      chatScreen.classList.remove('show');
+      modelBtn.classList.remove('show');
+      infoBtn.classList.remove('show');
+      logoutBtn.classList.remove('show');
+      tokInput.disabled = false;
+      goBtn.disabled = false;
+      if (errorMsg) showLoginError(errorMsg);
+    }
+
+    function showChatScreen() {
+      document.documentElement.classList.add('auto-session');
+      loginScreen.classList.add('hide');
+      chatScreen.classList.add('show');
+      modelBtn.classList.add('show');
+      infoBtn.classList.add('show');
+      logoutBtn.classList.add('show');
+      modelBtnName.textContent = currentModel ? getModelDisplayName(currentModel) : "Select model";
+    }
+
+    /* ============================================
+       Connect (manual only)
+       ============================================ */
+    async function connect() {
+      if (connectingBusy) return;
+      const t = tokInput.value.trim();
+      if (!t) { showLoginError("Please enter a token to continue."); tokInput.focus(); return; }
+
+      connectingBusy = true;
+      lastFailureWasAuth = false;
+      clearLoginError();
+      goBtn.disabled = true;
+      tokInput.disabled = true;
+      buildDotSquare(connectingDots);
+      connectingEl.classList.add('show');
+      connectingAnim.start();
+
+      const startTs = Date.now();
+      const cleanupUi = () => {
+        connectingBusy = false;
+        connectingAnim.stop();
+        connectingEl.classList.remove('show');
+        goBtn.disabled = false;
+        tokInput.disabled = false;
+      };
+      const failAuth = (errMsg) => {
+        lastFailureWasAuth = true;
+        cleanupUi();
+        try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(MODEL_KEY); localStorage.removeItem(HISTORY_KEY); } catch (e) {}
+        token = ""; history = []; currentModel = null; modelsList = []; chat.innerHTML = "";
+        showLoginScreen(errMsg || "Invalid token. Please check and try again.");
+      };
+      const failNetwork = (errMsg) => { lastFailureWasAuth = false; cleanupUi(); showLoginError(errMsg); };
+
+      try {
+        const url = API_URL + "?action=models&token=" + encodeURIComponent(t);
+        const data = await gasFetch(url, { method: "GET" });
+        const elapsed = Date.now() - startTs;
+        if (elapsed < MIN_LOADING) await sleep(MIN_LOADING - elapsed);
+
+        if (!data || data._parseError) { failNetwork("Invalid response from server. Please try again."); return; }
+        if (data.error) {
+          const msg = (data.error && data.error.message) || "";
+          if (/invalid|unauthor|forbidden|token|auth|denied|expired/i.test(msg)) failAuth("Invalid token. Please check and try again.");
+          else failNetwork(msg || "Server returned an error.");
+          return;
+        }
+
+        const list = decorateModels(data.data);
+        if (!list.length) { failAuth("No models available with this token."); return; }
+
+        token = t;
+        modelsList = list;
+        const savedModel = loadSavedModel();
+        currentModel = (savedModel && list.find(m => m.id === savedModel.id)) || list[0];
+        saveModel();
+        try { localStorage.setItem(STORAGE_KEY, token); } catch (e) {}
+
+        showChatScreen();
+        restoreChat();
+        cleanupUi();
+        input.focus();
+      } catch (e) {
+        const msg = (e && e.message) || "";
+        const isTimeout = /abort|timeout/i.test(msg);
+        const isNetwork = /network|failed to fetch|load failed/i.test(msg);
+        const elapsed = Date.now() - startTs;
+        if (elapsed < MIN_LOADING) await sleep(MIN_LOADING - elapsed);
+        if (isTimeout) failNetwork("Connection timed out. Please check your internet and try again.");
+        else if (isNetwork) failNetwork("Unable to reach server. Please check your internet.");
+        else failNetwork("Connection failed. Please try again.");
+      }
+    }
+
+    /* ============================================
+       Auto-login — direct to chat, no checks
+       ============================================ */
+    function autoLogin() {
+      if (autoLoggedIn) return;
+      autoLoggedIn = true;
+      let savedToken = null;
+      try { savedToken = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+      if (!savedToken) {
+        document.documentElement.classList.remove('auto-session');
+        tokInput.focus();
+        return;
+      }
+      token = savedToken;
+      tokInput.value = savedToken;
+      const saved = loadSavedModel();
+      currentModel = saved ? decorateModels([saved])[0] : null;
+      showChatScreen();
+      restoreChat();
+    }
+
+    /* ============================================
+       Dialogs
+       ============================================ */
     function setupDragToDismiss(dialogEl, overlayEl, dragArea, onClose) {
       let startY = 0, currentY = 0, dragging = false;
-
       const start = (y) => { startY = y; currentY = y; dragging = true; dialogEl.style.transition = 'none'; };
       const move = (y) => {
         if (!dragging) return;
@@ -1701,7 +804,6 @@
         if (diff > 100) onClose();
         else dialogEl.style.transform = '';
       };
-
       dragArea.addEventListener('pointerdown', (e) => {
         if (e.button !== undefined && e.button !== 0) return;
         start(e.clientY);
@@ -1715,52 +817,196 @@
       dragArea.addEventListener('pointerleave', () => { if (dragging) end(); });
     }
 
-    function openDialog() {
-      modelList.innerHTML = '';
-      modelsList.forEach((m, idx) => {
-        const item = document.createElement('button');
-        item.type = 'button';
-        item.className = 'model-item' + (m.id === currentModel?.id ? ' active' : '');
-        item.style.animationDelay = (idx * 0.03) + 's';
+    const UNIFIED_ICON = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z"/>
+        <path d="M12 22 V12"/>
+        <path d="M3 7 L12 12 L21 7"/>
+      </svg>
+    `;
 
-        item.innerHTML = `
-          <div class="model-item-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2 L2 7 L12 12 L22 7 Z"/>
-              <path d="M2 17 L12 22 L22 17"/>
-              <path d="M2 12 L12 17 L22 12"/>
-            </svg>
-          </div>
-          <div class="model-item-info">
-            <div class="model-item-name">${escapeHtml(m.label || m.id)}</div>
-            <div class="model-item-id">${escapeHtml(m.id)}</div>
-          </div>
-          <div class="model-item-check">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"/>
-            </svg>
-          </div>
-        `;
+    function getSearchQuery() { return (modelSearch.value || "").trim().toLowerCase(); }
 
-        item.addEventListener('click', () => {
-          currentModel = m;
-          modelBtnName.textContent = m.label || m.id;
-          try { localStorage.setItem(MODEL_KEY, m.id); } catch (e) {}
-          closeDialog();
-        });
+    function filterModels(query) {
+      if (!query) return modelsList;
+      const tokens = query.split(/\s+/).filter(Boolean);
+      if (!tokens.length) return modelsList;
+      const out = [];
+      for (const m of modelsList) {
+        const idx = m._searchIndex || "";
+        let ok = true;
+        for (const tok of tokens) { if (idx.indexOf(tok) === -1) { ok = false; break; } }
+        if (ok) out.push(m);
+      }
+      return out;
+    }
 
-        modelList.appendChild(item);
+    function buildModelItem(m) {
+      const item = document.createElement('button');
+      item.type = 'button';
+      const isActive = currentModel && m.id === currentModel.id;
+      item.className = 'model-item' + (isActive ? ' active' : '');
+      const name = getModelDisplayName(m);
+      const meta = m._meta || "";
+      const isFree = m._isFree;
+
+      const icon = document.createElement('div');
+      icon.className = 'model-item-icon';
+      icon.innerHTML = UNIFIED_ICON;
+
+      const info = document.createElement('div');
+      info.className = 'model-item-info';
+      const nameEl = document.createElement('div');
+      nameEl.className = 'model-item-name';
+      nameEl.textContent = name;
+      info.appendChild(nameEl);
+      if (meta) {
+        const metaEl = document.createElement('div');
+        metaEl.className = 'model-item-meta';
+        metaEl.textContent = meta;
+        info.appendChild(metaEl);
+      }
+
+      item.appendChild(icon);
+      item.appendChild(info);
+
+      if (isFree) {
+        const badge = document.createElement('span');
+        badge.className = 'model-badge free';
+        badge.textContent = 'FREE';
+        item.appendChild(badge);
+      }
+
+      const check = document.createElement('div');
+      check.className = 'model-item-check';
+      check.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+      item.appendChild(check);
+
+      item.addEventListener('click', () => {
+        currentModel = m;
+        modelBtnName.textContent = name;
+        saveModel();
+        // Update the empty state title to reflect the new model
+        updateEmptyStateTitle();
+        closeDialog();
       });
 
+      return item;
+    }
+
+    let renderFirstTime = true;
+
+    function renderModelList() {
+      const query = getSearchQuery();
+      const filtered = filterModels(query);
+      const total = modelsList.length;
+      const shown = filtered.length;
+
+      dialogCount.textContent = query ? (shown + "/" + total) : String(total);
+      if (query) dialogSub.textContent = shown === 1 ? "1 match" : (shown + " matches");
+      else dialogSub.textContent = total === 1 ? "1 model available" : (total + " models available");
+
+      modelList.innerHTML = '';
+      if (shown === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'model-empty';
+        empty.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <div>No models match "${escapeHtml(query)}"</div>
+        `;
+        modelList.appendChild(empty);
+        return;
+      }
+
+      const frag = document.createDocumentFragment();
+      const cap = shown > 20 ? 0.001 : 0.025;
+      filtered.forEach((m, idx) => {
+        const item = buildModelItem(m);
+        if (renderFirstTime) item.style.animationDelay = Math.min(idx * cap, 0.3) + 's';
+        else { item.style.animation = 'none'; item.style.opacity = '1'; item.style.transform = 'none'; }
+        frag.appendChild(item);
+      });
+      modelList.appendChild(frag);
+      renderFirstTime = false;
+    }
+
+    async function ensureModelsLoaded() {
+      if (modelsList.length) return true;
+      if (!token) return false;
+      try {
+        const url = API_URL + "?action=models&token=" + encodeURIComponent(token);
+        const data = await gasFetch(url, { method: "GET" });
+        if (!data || data._parseError || data.error || !data.data || !data.data.length) {
+          const msg = (data && data.error && data.error.message) || "";
+          if (/invalid|unauthor|forbidden|token|auth|denied|expired/i.test(msg)) {
+            disconnect();
+            showLoginScreen("Your token has expired or is invalid. Please sign in again.");
+          } else {
+            showLoginScreen("Unable to load models. Please sign in again.");
+          }
+          return false;
+        }
+        modelsList = decorateModels(data.data);
+        if (!currentModel || !modelsList.find(m => m.id === currentModel.id)) {
+          currentModel = modelsList[0];
+          saveModel();
+          modelBtnName.textContent = getModelDisplayName(currentModel);
+          updateEmptyStateTitle();
+        } else {
+          const fresh = modelsList.find(m => m.id === currentModel.id);
+          currentModel = fresh;
+          modelBtnName.textContent = getModelDisplayName(fresh);
+          updateEmptyStateTitle();
+        }
+        return true;
+      } catch (e) { return false; }
+    }
+
+    async function openDialog() {
+      modelSearch.value = '';
+      modelSearchClear.classList.remove('show');
+      renderFirstTime = true;
+      if (!modelsList.length) { dialogSub.textContent = "Loading models..."; dialogCount.textContent = "…"; }
       dialogOverlay.classList.add('show');
       requestAnimationFrame(() => dialog.classList.add('show'));
+      const ok = await ensureModelsLoaded();
+      if (!ok) { closeDialog(); return; }
+      renderModelList();
+      if (window.matchMedia('(min-width: 641px)').matches) setTimeout(() => modelSearch.focus(), 300);
     }
 
     function closeDialog() {
       dialog.classList.remove('show');
       dialogOverlay.classList.remove('show');
       dialog.style.transform = '';
+      if (document.activeElement === modelSearch) modelSearch.blur();
     }
+
+    let searchTimer = null;
+    modelSearch.addEventListener('input', () => {
+      modelSearchClear.classList.toggle('show', modelSearch.value.length > 0);
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => { renderFirstTime = false; renderModelList(); }, 60);
+    });
+    modelSearch.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modelSearch.value) {
+        e.stopPropagation();
+        modelSearch.value = '';
+        modelSearchClear.classList.remove('show');
+        renderFirstTime = false;
+        renderModelList();
+      }
+    });
+    modelSearchClear.addEventListener('click', () => {
+      modelSearch.value = '';
+      modelSearchClear.classList.remove('show');
+      renderFirstTime = false;
+      renderModelList();
+      modelSearch.focus();
+    });
 
     function maskToken(t) {
       if (!t) return "";
@@ -1778,38 +1024,24 @@
   "max_tokens": 800,
   "_tok": "sk-..."
 }`;
-
       infoList.innerHTML = `
         <div class="info-section">
           <div class="info-label">Server</div>
           <div class="info-value">${escapeHtml(API_URL)}</div>
         </div>
-
         <div class="info-section">
           <div class="info-label">Token</div>
           <div class="info-row">
             <div class="info-value ${tokenRevealed ? '' : 'masked'}">${escapeHtml(displayToken)}</div>
             <button class="info-reveal" id="revealBtn" type="button" title="Toggle token visibility">
-              ${tokenRevealed ? `
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-                  <line x1="1" y1="1" x2="23" y2="23"/>
-                </svg>
-              ` : `
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                  <circle cx="12" cy="12" r="3"/>
-                </svg>
-              `}
+              ${tokenRevealed ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>` : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`}
             </button>
           </div>
         </div>
-
         <div class="info-section">
           <div class="info-label">Current Model</div>
           <div class="info-value">${escapeHtml(currentModel?.id || "—")}</div>
         </div>
-
         <div class="info-section">
           <div class="info-label">API Format (OpenAI compatible)</div>
           <div class="info-pre">POST {server}?action=chat
@@ -1818,14 +1050,8 @@ Content-Type: application/json
 ${exampleJSON}</div>
         </div>
       `;
-
       const revealBtn = infoList.querySelector('#revealBtn');
-      if (revealBtn) {
-        revealBtn.addEventListener('click', () => {
-          tokenRevealed = !tokenRevealed;
-          buildInfoDialog();
-        });
-      }
+      if (revealBtn) revealBtn.addEventListener('click', () => { tokenRevealed = !tokenRevealed; buildInfoDialog(); });
     }
 
     function openInfo() {
@@ -1834,7 +1060,6 @@ ${exampleJSON}</div>
       infoOverlay.classList.add('show');
       requestAnimationFrame(() => infoDialog.classList.add('show'));
     }
-
     function closeInfo() {
       infoDialog.classList.remove('show');
       infoOverlay.classList.remove('show');
@@ -1842,17 +1067,17 @@ ${exampleJSON}</div>
       tokenRevealed = false;
     }
 
+    /* ============================================
+       Thinking animation
+       ============================================ */
     const squareAnimations = new Map();
-
     function startSquareAnimation(square) {
       stopSquareAnimation(square);
       const dots = [...square.querySelectorAll('span')];
       const rings = [[], [], []];
       dots.forEach(dot => rings[+dot.dataset.ring].push(dot));
-
       let timers = [];
       let stopped = false;
-
       function runCycle() {
         if (stopped) return;
         dots.forEach(d => d.classList.remove('on'));
@@ -1862,17 +1087,9 @@ ${exampleJSON}</div>
         timers.push(setTimeout(() => { if (!stopped) dots.forEach(d => d.classList.remove('on')); }, 1300));
         timers.push(setTimeout(runCycle, 1600));
       }
-
-      squareAnimations.set(square, {
-        stop: () => {
-          stopped = true;
-          timers.forEach(t => clearTimeout(t));
-          timers = [];
-        }
-      });
+      squareAnimations.set(square, { stop: () => { stopped = true; timers.forEach(t => clearTimeout(t)); timers = []; } });
       runCycle();
     }
-
     function stopSquareAnimation(square) {
       const anim = squareAnimations.get(square);
       if (anim) { anim.stop(); squareAnimations.delete(square); }
@@ -1887,7 +1104,6 @@ ${exampleJSON}</div>
       scrollBottom();
       return el;
     }
-
     function addErrorMessage(text) {
       removeEmptyState();
       const el = document.createElement('div');
@@ -1908,8 +1124,7 @@ ${exampleJSON}</div>
           const ring = Math.max(Math.abs(row - center), Math.abs(col - center));
           dot.dataset.ring = ring;
           const isWhite = row >= 1 && row <= 3 && col >= 1 && col <= 3;
-          if (isWhite) dot.classList.add('lit-white');
-          else dot.classList.add('lit-black');
+          if (isWhite) dot.classList.add('lit-white'); else dot.classList.add('lit-black');
           square.appendChild(dot);
         }
       }
@@ -1920,23 +1135,18 @@ ${exampleJSON}</div>
       removeEmptyState();
       const block = document.createElement('div');
       block.className = 'thinking-block';
-
       const dotSquare = createDotSquare();
       const workingText = document.createElement('span');
       workingText.className = 'working-text';
       workingText.textContent = 'Working';
-
       block.appendChild(dotSquare);
       block.appendChild(workingText);
-
       chat.appendChild(block);
       scrollBottom();
-
       startSquareAnimation(dotSquare);
       block._dotSquare = dotSquare;
       return block;
     }
-
     function finishThinkingBlock(block) {
       if (block._dotSquare) {
         stopSquareAnimation(block._dotSquare);
@@ -1945,34 +1155,26 @@ ${exampleJSON}</div>
       block.classList.add('done');
     }
 
-    const typeState = {
-      queue: [],
-      running: false,
-      node: null,
-      stopped: false
-    };
-
+    /* ============================================
+       Typewriter + send
+       ============================================ */
+    const typeState = { queue: [], running: false, node: null, stopped: false };
     async function pumpQueue() {
       if (typeState.running) return;
       typeState.running = true;
-
       while (typeState.queue.length && !typeState.stopped) {
         const ch = typeState.queue.shift();
         typeState.node.textContent += ch;
         scrollBottom();
-
         let d = 6 + Math.random() * 8;
         if (ch === '.' || ch === '!' || ch === '?') d = 90;
         else if (ch === ',') d = 45;
         else if (ch === '\n') d = 55;
         else if (ch === ' ') d = 12;
-
         await sleep(d);
       }
-
       typeState.running = false;
     }
-
     function enqueueChars(str) {
       if (typeState.stopped) return;
       for (const ch of str) typeState.queue.push(ch);
@@ -1982,7 +1184,6 @@ ${exampleJSON}</div>
     async function sendChat(payload, onDelta, onDone, onError) {
       currentController = new AbortController();
       abortRequested = false;
-
       try {
         const res = await fetch(API_URL + "?action=chat", {
           method: "POST",
@@ -1991,37 +1192,27 @@ ${exampleJSON}</div>
           redirect: "follow",
           signal: currentController.signal
         });
-
-        if (!res.ok) {
-          onError("Server error: HTTP " + res.status);
-          return;
-        }
+        if (!res.ok) { onError("Server error: HTTP " + res.status); return; }
 
         const contentType = (res.headers.get("content-type") || "").toLowerCase();
-
         if (contentType.includes("event-stream") && res.body && res.body.getReader) {
           const reader = res.body.getReader();
           const decoder = new TextDecoder();
           let buffer = "";
           let finished = false;
-
           while (!finished) {
             const { value, done: rdone } = await reader.read();
             if (rdone) break;
-
             buffer += decoder.decode(value, { stream: true });
-
             let idx;
             while ((idx = buffer.indexOf("\n\n")) !== -1) {
               const event = buffer.slice(0, idx);
               buffer = buffer.slice(idx + 2);
-
               for (const line of event.split("\n")) {
                 const trimmed = line.trim();
                 if (!trimmed.startsWith("data:")) continue;
                 const data = trimmed.slice(5).trim();
                 if (data === "[DONE]") { finished = true; break; }
-
                 try {
                   const parsed = JSON.parse(data);
                   if (parsed.error) { onError(parsed.error.message || "Server error"); return; }
@@ -2040,7 +1231,6 @@ ${exampleJSON}</div>
 
         const text = await res.text();
         const trimmedAll = text.trim();
-
         if (trimmedAll.startsWith("data:")) {
           for (const line of trimmedAll.split("\n")) {
             const trimmed = line.trim();
@@ -2066,9 +1256,7 @@ ${exampleJSON}</div>
           const content = parsed.choices?.[0]?.message?.content || "";
           if (content) onDelta(content);
           onDone();
-        } catch (e) {
-          onError("Invalid response from server");
-        }
+        } catch (e) { onError("Invalid response from server"); }
       } catch (e) {
         if (e.name === "AbortError") onDone();
         else onError((e && e.message) || "Network error");
@@ -2077,9 +1265,7 @@ ${exampleJSON}</div>
 
     function stopGeneration() {
       abortRequested = true;
-      if (currentController) {
-        try { currentController.abort(); } catch (e) {}
-      }
+      if (currentController) { try { currentController.abort(); } catch (e) {} }
       typeState.stopped = true;
       typeState.queue = [];
     }
@@ -2111,7 +1297,27 @@ ${exampleJSON}</div>
 
     async function handleSend() {
       const text = input.value.trim();
-      if (!text || !token || !currentModel || isStreaming) return;
+      if (!text || !token || isStreaming) return;
+
+      if (!currentModel) {
+        try {
+          const url = API_URL + "?action=models&token=" + encodeURIComponent(token);
+          const data = await gasFetch(url, { method: "GET" });
+          if (data && data.data && data.data.length) {
+            modelsList = decorateModels(data.data);
+            currentModel = modelsList[0];
+            saveModel();
+            modelBtnName.textContent = getModelDisplayName(currentModel);
+            updateEmptyStateTitle();
+          } else {
+            addErrorMessage("Could not determine a model. Please reconnect.");
+            return;
+          }
+        } catch (e) {
+          addErrorMessage("Network error — please try again.");
+          return;
+        }
+      }
 
       isStreaming = true;
       input.value = '';
@@ -2123,7 +1329,6 @@ ${exampleJSON}</div>
       saveHistory();
 
       const block = createThinkingBlock();
-
       const final = document.createElement('div');
       final.className = 'final';
       const textNode = document.createElement('span');
@@ -2142,34 +1347,19 @@ ${exampleJSON}</div>
       typeState.node = textNode;
 
       const firstDeltaInsert = () => {
-        if (!hasContent) {
-          chat.appendChild(final);
-          hasContent = true;
-        }
+        if (!hasContent) { chat.appendChild(final); hasContent = true; }
       };
 
       await new Promise((resolve) => {
         sendChat(
-          {
-            model: currentModel.id,
-            messages: history.slice(-20),
-            max_tokens: 800,
-            _tok: token
-          },
-          (delta) => {
-            firstDeltaInsert();
-            fullContent += delta;
-            enqueueChars(delta);
-          },
+          { model: currentModel.id, messages: history.slice(-20), max_tokens: 800, _tok: token },
+          (delta) => { firstDeltaInsert(); fullContent += delta; enqueueChars(delta); },
           () => resolve(),
           (err) => { errorMsg = err; resolve(); }
         );
       });
 
-      while (typeState.running || typeState.queue.length) {
-        await sleep(40);
-      }
-
+      while (typeState.running || typeState.queue.length) await sleep(40);
       cursor.remove();
 
       if (errorMsg) {
@@ -2191,7 +1381,6 @@ ${exampleJSON}</div>
 
       await sleep(250);
       finishThinkingBlock(block);
-
       isStreaming = false;
       abortRequested = false;
       currentController = null;
@@ -2201,18 +1390,10 @@ ${exampleJSON}</div>
 
     function disconnect() {
       stopGeneration();
-      token = "";
-      history = [];
-      currentModel = null;
-      modelsList = [];
+      token = ""; history = []; currentModel = null; modelsList = [];
       chat.innerHTML = "";
-
-      try {
-        localStorage.removeItem(STORAGE_KEY);
-        localStorage.removeItem(MODEL_KEY);
-      } catch (e) {}
+      try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(MODEL_KEY); } catch (e) {}
       clearHistory();
-
       document.documentElement.classList.remove('auto-session');
       modelBtn.classList.remove('show');
       infoBtn.classList.remove('show');
@@ -2228,33 +1409,24 @@ ${exampleJSON}</div>
       tokInput.focus();
     }
 
+    /* ============================================
+       Wire events
+       ============================================ */
     setupDragToDismiss(dialog, dialogOverlay, dialogDragArea, closeDialog);
     setupDragToDismiss(infoDialog, infoOverlay, infoDragArea, closeInfo);
 
     goBtn.addEventListener('click', () => connect());
-    tokInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') { e.preventDefault(); connect(); }
-    });
-    tokInput.addEventListener('input', () => {
-      if (loginBox.classList.contains('error')) clearLoginError();
-    });
+    tokInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); connect(); } });
+    tokInput.addEventListener('input', () => { if (loginBox.classList.contains('error')) clearLoginError(); });
 
-    input.addEventListener('input', () => {
-      autoResize();
-      if (!isStreaming) updateSendBtn();
-    });
-
+    input.addEventListener('input', () => { autoResize(); if (!isStreaming) updateSendBtn(); });
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
         e.preventDefault();
         if (!isStreaming) handleSend();
       }
     });
-
-    sendBtn.addEventListener('click', () => {
-      if (isStreaming) stopGeneration();
-      else handleSend();
-    });
+    sendBtn.addEventListener('click', () => { if (isStreaming) stopGeneration(); else handleSend(); });
 
     modelBtn.addEventListener('click', openDialog);
     dialogOverlay.addEventListener('click', closeDialog);
@@ -2262,18 +1434,15 @@ ${exampleJSON}</div>
     infoOverlay.addEventListener('click', closeInfo);
     logoutBtn.addEventListener('click', disconnect);
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') { closeDialog(); closeInfo(); }
-    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeDialog(); closeInfo(); } });
 
     /* ============================================
-       Keyboard Handling — Only lift the composer
+       Keyboard handling
        ============================================ */
     (function setupKeyboard() {
       if (!window.visualViewport) return;
       const vv = window.visualViewport;
       let raf = null;
-
       function resetStyles() {
         layout.style.position = '';
         layout.style.top = '';
@@ -2284,13 +1453,11 @@ ${exampleJSON}</div>
         layout.style.width = '';
         document.body.classList.remove('kb-open');
       }
-
       function apply() {
         if (raf) cancelAnimationFrame(raf);
         raf = requestAnimationFrame(() => {
           const shrink = window.innerHeight - vv.height;
           const isKb = shrink > 120 && document.activeElement === input;
-
           if (isKb) {
             const top = vv.offsetTop || 0;
             layout.style.position = 'fixed';
@@ -2301,35 +1468,15 @@ ${exampleJSON}</div>
             layout.style.height = vv.height + 'px';
             layout.style.width = 'auto';
             document.body.classList.add('kb-open');
-            requestAnimationFrame(() => {
-              chat.scrollTop = chat.scrollHeight;
-            });
-          } else {
-            resetStyles();
-          }
+            requestAnimationFrame(() => { chat.scrollTop = chat.scrollHeight; });
+          } else resetStyles();
         });
       }
-
       vv.addEventListener('resize', apply);
       vv.addEventListener('scroll', apply);
-
-      input.addEventListener('focus', () => {
-        apply();
-        setTimeout(apply, 80);
-        setTimeout(apply, 250);
-        setTimeout(apply, 480);
-      });
-
-      input.addEventListener('blur', () => {
-        setTimeout(apply, 50);
-        setTimeout(apply, 300);
-      });
-
-      window.addEventListener('orientationchange', () => {
-        resetStyles();
-        setTimeout(apply, 350);
-      });
-
+      input.addEventListener('focus', () => { apply(); setTimeout(apply, 80); setTimeout(apply, 250); setTimeout(apply, 480); });
+      input.addEventListener('blur', () => { setTimeout(apply, 50); setTimeout(apply, 300); });
+      window.addEventListener('orientationchange', () => { resetStyles(); setTimeout(apply, 350); });
       apply();
     })();
 
