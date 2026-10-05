@@ -40,6 +40,9 @@ _H = {
 }
 
 
+UA_BROWSER = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
+
+
 def _d(s):
     return base64.b64decode(s.encode()).decode()
 
@@ -86,7 +89,7 @@ def _open_browser(u):
 def _send_account(server, secret, payload):
     url = server.rstrip("/") + "/admin/add_account?admin=" + urllib.parse.quote(secret)
     req = urllib.request.Request(url, data=json.dumps(payload).encode(), method="POST",
-                                 headers={"Content-Type": "application/json"})
+                                 headers={"Content-Type": "application/json", "User-Agent": UA_BROWSER})
     try:
         with urllib.request.urlopen(req, timeout=60) as r:
             return r.status, json.loads(r.read().decode())
