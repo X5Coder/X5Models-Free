@@ -1,3 +1,4 @@
+##By X5Coder
 import datetime
 import json
 import os
@@ -9,7 +10,6 @@ import urllib.error
 import webbrowser
 import base64
 
-# ANSI Color Codes for formatted terminal output
 CYAN = "\033[96m"
 GREEN = "\033[92m"
 YELLOW = "\033[93m"
