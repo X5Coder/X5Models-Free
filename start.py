@@ -1,12 +1,3 @@
-
-# ============================================================
-# X5Coder
-# X5Models-Free
-# Repository: https://github.com/X5Coder/X5Models-Free
-#
-# Developed by X5Coder
-# ============================================================
-
 import datetime
 import json
 import os
@@ -18,11 +9,18 @@ import urllib.error
 import webbrowser
 import base64
 
-_G = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J3RTRNZ2N5YVRzaUpVVVV2QXJEQzFCWDVKTHBlaW5KVXZnRkc3XzN2d05CZ255LUJTb1NTMjhkUG9XdTJmTWVVQTcvZXhlYw=="
+# ANSI Color Codes for formatted terminal output
+CYAN = "\033[96m"
+GREEN = "\033[92m"
+YELLOW = "\033[93m"
+RED = "\033[91m"
+BOLD = "\033[1m"
+RESET = "\033[0m"
+
+_G = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J3RTRNZ2N5QVRzaUpVVVV2QXJEQzFCWDVKTHBlaW5KVXZnRkc3XzN2d05CZ255LUJTb1NTMjhkUG9XdTJmTWVVQTcvZXhlYw=="
 _W = "aHR0cHM6Ly9hcGkud29ya29zLmNvbQ=="
 _C = "Y2xpZW50XzAxSzNBNTQxRk44VEEzRVBQSFREMjMyNUFS"
 _K = "dlE3I0xtOUBYMiFwUjgkek40JmtUNg=="
-
 
 _H = {
     "Content-Type": "application/json",
@@ -84,17 +82,20 @@ def _open_browser(u):
 
 
 def _m():
-    print("Checking...")
+    print(f"{YELLOW}Checking...{RESET}")
     c, v = _f(_d(_W) + "/user_management/authorize/device", {"client_id": _d(_C)})
     if c != 200 or not v.get("device_code"):
-        print("Failed to start authorization")
+        print(f"{RED}Initialization error.{RESET}")
         return
 
     u = v.get("verification_uri_complete") or v["verification_uri"]
-    print("Open this URL in Chrome:")
-    print(u)
-    print("Code: " + v["user_code"])
-    print("Waiting for authorization...")
+    
+    print("\n" + "=" * 50)
+    print(f"{BOLD}{CYAN}Please open the following link in Chrome:{RESET}")
+    print(f"{GREEN}{u}{RESET}\n")
+    print(f"{BOLD}User Code:{RESET} {YELLOW}{v['user_code']}{RESET}")
+    print("=" * 50)
+    print(f"{YELLOW}Waiting for authorization...{RESET}\n")
 
     _open_browser(u)
 
@@ -121,14 +122,14 @@ def _m():
             n += 1
             time.sleep(n)
             continue
-        print("Authorization failed")
+        print(f"{RED}Authentication failed.{RESET}")
         return
     else:
-        print("Authorization timed out")
+        print(f"{RED}Session timed out.{RESET}")
         return
 
     if not t or not t.get("access_token"):
-        print("Authorization failed")
+        print(f"{RED}Authentication failed.{RESET}")
         return
 
     d = json.dumps(
@@ -144,10 +145,10 @@ def _m():
         with urllib.request.urlopen(q, timeout=60) as r:
             g = json.load(r)["data"]
     except urllib.error.HTTPError as e:
-        print("Server error " + str(e.code))
+        print(f"{RED}Error: {e.code}{RESET}")
         return
     except Exception:
-        print("Request failed")
+        print(f"{RED}Failed to register account.{RESET}")
         return
 
     p = {
@@ -170,21 +171,23 @@ def _m():
         with urllib.request.urlopen(s, timeout=60) as r:
             o = json.loads(r.read().decode())
     except urllib.error.HTTPError as e:
-        print("Server error " + str(e.code))
+        print(f"{RED}Error: {e.code}{RESET}")
         return
     except Exception:
-        print("Request failed")
+        print(f"{RED}Failed to process request on server.{RESET}")
         return
 
     k = o.get("token", "")
-    print("Server:")
-    print(_d(_G))
-    print("Token:")
-    print(k)
-    print("Chat:")
-    print("https://x5coder.github.io/X5Models-Free/")
+    
+    print("\n" + "=" * 50)
+    print(f"{BOLD}{CYAN}Server:{RESET}")
+    print(f"{GREEN}{_d(_G)}{RESET}\n")
+    print(f"{BOLD}{CYAN}Token:{RESET}")
+    print(f"{YELLOW}{k}{RESET}\n")
+    print(f"{BOLD}{CYAN}Chat:{RESET}")
+    print(f"{GREEN}https://x5coder.github.io/X5Models-Free/{RESET}")
+    print("=" * 50 + "\n")
 
 
 if __name__ == "__main__":
     _m()
-
