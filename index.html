@@ -261,6 +261,12 @@
           <line x1="12" y1="8" x2="12.01" y2="8"/>
         </svg>
       </button>
+      <button class="icon-btn" id="clearBtn" title="Clear chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+        </svg>
+      </button>
       <button class="icon-btn" id="logoutBtn" title="Disconnect">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -377,7 +383,7 @@
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbwE4MgcyATsiJUUUvArDC1BX5JLpeinJUvgFG7_3vwNBgny-BSoSS28dPoWu2fMeUA7/exec";
+    const API_URL = "https://x5models-free.x5coder.workers.dev/v1";
     const STORAGE_KEY = "x5models_token";
     const MODEL_KEY = "x5models_model";
     const HISTORY_KEY = "x5models_history";
@@ -414,6 +420,7 @@
     const modelBtnName = document.getElementById('modelBtnName');
     const infoBtn = document.getElementById('infoBtn');
     const logoutBtn = document.getElementById('logoutBtn');
+    const clearBtn = document.getElementById('clearBtn');
     const dialog = document.getElementById('dialog');
     const dialogOverlay = document.getElementById('dialogOverlay');
     const dialogDragArea = document.getElementById('dialogDragArea');
@@ -578,6 +585,11 @@
       try { localStorage.removeItem(CACHE_KEY); } catch (e) {}
     }
 
+    function authHeaders(extra) {
+      const h = Object.assign({ "Authorization": "Bearer " + token }, extra || {});
+      return h;
+    }
+
     async function gasFetch(url, options = {}) {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
@@ -654,6 +666,7 @@
       chatScreen.classList.remove('show');
       modelBtn.classList.remove('show');
       infoBtn.classList.remove('show');
+      clearBtn.classList.remove('show');
       logoutBtn.classList.remove('show');
       tokInput.disabled = false;
       goBtn.disabled = false;
@@ -666,6 +679,7 @@
       chatScreen.classList.add('show');
       modelBtn.classList.add('show');
       infoBtn.classList.add('show');
+      clearBtn.classList.add('show');
       logoutBtn.classList.add('show');
       modelBtnName.textContent = currentModel ? getModelDisplayName(currentModel) : "Select model";
     }
@@ -751,6 +765,7 @@
 
       connectingBusy = true;
       lastFailureWasAuth = false;
+      token = t; // set before authHeaders() so the models call carries it
       clearLoginError();
       goBtn.disabled = true;
       tokInput.disabled = true;
@@ -785,24 +800,24 @@
       };
 
       try {
-        const url = API_URL + "?action=models&token=" + encodeURIComponent(t);
-        const data = await gasFetch(url, { method: "GET" });
+        const url = API_URL + "/models";
+        const data = await gasFetch(url, { method: "GET", headers: authHeaders() });
         const elapsed = Date.now() - startTs;
         if (elapsed < MIN_LOADING) await sleep(MIN_LOADING - elapsed);
 
-        if (!data || data._parseError) { failNetwork("Invalid response from server. Please try again."); return; }
+        if (!data || data._parseError) { token = ""; failNetwork("Invalid response from server. Please try again."); return; }
         if (data.error) {
           const msg = (data.error && data.error.message) || "";
+          token = "";
           if (/invalid|unauthor|forbidden|token|auth|denied|expired/i.test(msg)) failAuth("Invalid token. Please check and try again.");
           else failNetwork(msg || "Server returned an error.");
           return;
         }
 
         const list = data.data;
-        if (!list || !list.length) { failAuth("No models available with this token."); return; }
+        if (!list || !list.length) { token = ""; failAuth("No models available with this token."); return; }
 
-        token = t;
-        try { localStorage.setItem(STORAGE_KEY, token); } catch (e) {}
+        try { localStorage.setItem(STORAGE_KEY, t); } catch (e) {}
         applyModelsList(list, { force: true });
         showChatScreen();
         restoreChat();
@@ -824,8 +839,8 @@
       if (!token) return;
       const myToken = ++backgroundRefreshToken;
       try {
-        const url = API_URL + "?action=models&token=" + encodeURIComponent(token);
-        const data = await gasFetch(url, { method: "GET" });
+        const url = API_URL + "/models";
+        const data = await gasFetch(url, { method: "GET", headers: authHeaders() });
         if (myToken !== backgroundRefreshToken) return;
         if (!token) return;
         if (!data || data._parseError || data.error || !data.data || !data.data.length) return;
@@ -1014,8 +1029,8 @@
       if (modelsList.length) return true;
       if (!token) return false;
       try {
-        const url = API_URL + "?action=models&token=" + encodeURIComponent(token);
-        const data = await gasFetch(url, { method: "GET" });
+        const url = API_URL + "/models";
+        const data = await gasFetch(url, { method: "GET", headers: authHeaders() });
         if (!data || data._parseError || data.error || !data.data || !data.data.length) {
           const msg = (data && data.error && data.error.message) || "";
           if (/invalid|unauthor|forbidden|token|auth|denied|expired/i.test(msg)) {
@@ -1087,8 +1102,7 @@
   "messages": [
     { "role": "user", "content": "Hello" }
   ],
-  "max_tokens": 800,
-  "_tok": "sk-..."
+  "max_tokens": 800
 }`;
       infoList.innerHTML = `
         <div class="info-section">
@@ -1110,7 +1124,8 @@
         </div>
         <div class="info-section">
           <div class="info-label">API Format (OpenAI compatible)</div>
-          <div class="info-pre">POST {server}?action=chat
+          <div class="info-pre">POST /v1/chat/completions
+Authorization: Bearer sk-...
 Content-Type: application/json
 
 ${exampleJSON}</div>
@@ -1247,10 +1262,10 @@ ${exampleJSON}</div>
       abortRequested = false;
 
       try {
-        const res = await fetch(API_URL + "?action=chat", {
+        const res = await fetch(API_URL + "/chat/completions", {
           method: "POST",
-          body: JSON.stringify(payload),
-          headers: { "Accept": "text/event-stream, application/json" },
+          body: JSON.stringify(Object.assign({ stream: true }, payload)),
+          headers: authHeaders({ "Content-Type": "application/json", "Accept": "text/event-stream, application/json" }),
           redirect: "follow",
           signal: currentController.signal
         });
@@ -1404,7 +1419,7 @@ ${exampleJSON}</div>
 
       await new Promise((resolve) => {
         sendChat(
-          { model: currentModel.id, messages: history.slice(-20), max_tokens: 800, _tok: token },
+          { model: currentModel.id, messages: history.slice(-20), max_tokens: 800 },
           (delta) => { firstDeltaInsert(); fullContent += delta; enqueueChars(delta); },
           () => resolve(),
           (err) => { errorMsg = err; resolve(); }
@@ -1440,6 +1455,23 @@ ${exampleJSON}</div>
       input.focus();
     }
 
+    function clearChat() {
+      if (isStreaming) stopGeneration();
+      stopSquareAnimationAll();
+      history = [];
+      clearHistory();
+      chat.innerHTML = "";
+      renderEmptyStateIfNeeded();
+      scrollBottom();
+    }
+    function stopSquareAnimationAll() {
+      try {
+        chat.querySelectorAll('.thinking-block').forEach((b) => {
+          if (b._dotSquare) stopSquareAnimation(b._dotSquare);
+          b.remove();
+        });
+      } catch (e) {}
+    }
     function disconnect() {
       stopGeneration();
       token = ""; history = []; currentModel = null; modelsList = [];
@@ -1453,6 +1485,7 @@ ${exampleJSON}</div>
       document.documentElement.classList.remove('auto-session');
       modelBtn.classList.remove('show');
       infoBtn.classList.remove('show');
+      clearBtn.classList.remove('show');
       logoutBtn.classList.remove('show');
       chatScreen.classList.remove('show');
       loginScreen.classList.remove('hide');
@@ -1486,6 +1519,7 @@ ${exampleJSON}</div>
     infoBtn.addEventListener('click', openInfo);
     infoOverlay.addEventListener('click', closeInfo);
     logoutBtn.addEventListener('click', disconnect);
+    clearBtn.addEventListener('click', clearChat);
 
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeDialog(); closeInfo(); } });
 

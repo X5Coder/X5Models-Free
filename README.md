@@ -21,3 +21,29 @@ Follow these steps to generate your X5Models token:
 7. Paste the token into the token field above and connect.
 
 You're ready to use X5Models Free.
+
+---
+
+## Use as an OpenAI-compatible API
+
+Base URL: `https://x5models-free.x5coder.workers.dev/v1`
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://x5models-free.x5coder.workers.dev/v1",
+    api_key="sk-...",
+)
+resp = client.chat.completions.create(
+    model="mimo-v2.6-flash",
+    messages=[{"role": "user", "content": "Hello"}],
+    stream=True,
+)
+for chunk in resp:
+    print(chunk.choices[0].delta.content or "", end="")
+```
+
+- `GET /v1/models` — full models list (no key needed for discovery).
+- `POST /v1/chat/completions` — OpenAI format, `stream: true` returns real-time SSE.
+- Header: `Authorization: Bearer sk-...`.

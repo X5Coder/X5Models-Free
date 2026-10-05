@@ -1,4 +1,11 @@
-##By X5Coder
+"""X5Coder register client — device flow + register + send to skrept-py server.
+Usage:
+  python register.py                              # local server 127.0.0.1:8000
+  python register.py --server http://host:8000 --secret NEWSECRET
+The admin secret defaults to the GAS default; override with --secret or SKREPT_SECRET env.
+"""
+import argparse
+import base64
 import datetime
 import json
 import os
@@ -8,7 +15,6 @@ import urllib.parse
 import urllib.request
 import urllib.error
 import webbrowser
-import base64
 
 CYAN = "\033[96m"
 GREEN = "\033[92m"
@@ -17,10 +23,10 @@ RED = "\033[91m"
 BOLD = "\033[1m"
 RESET = "\033[0m"
 
-_G = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J3RTRNZ2N5QVRzaUpVVVV2QXJEQzFCWDVKTHBlaW5KVXZnRkc3XzN2d05CZ255LUJTb1NTMjhkUG9XdTJmTWVVQTcvZXhlYw=="
 _W = "aHR0cHM6Ly9hcGkud29ya29zLmNvbQ=="
 _C = "Y2xpZW50XzAxSzNBNTQxRk44VEEzRVBQSFREMjMyNUFS"
-_K = "dlE3I0xtOUBYMiFwUjgkek40JmtUNg=="
+_DEFAULT_SECRET = "dlE3I0xtOUBYMiFwUjgkek40JmtUNg=="  # == GAS DEF_SECRET
+_CHAT = "https://x5coder.github.io/X5Models-Free/"
 
 _H = {
     "Content-Type": "application/json",
@@ -40,13 +46,8 @@ def _d(s):
 
 def _f(u, d, t=30):
     q = urllib.request.Request(
-        u,
-        data=urllib.parse.urlencode(d).encode(),
-        method="POST",
-        headers={
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Accept": "application/json",
-        },
+        u, data=urllib.parse.urlencode(d).encode(), method="POST",
+        headers={"Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json"},
     )
     try:
         with urllib.request.urlopen(q, timeout=t) as r:
@@ -69,6 +70,7 @@ def _f(u, d, t=30):
             return e.code, {"e": w[:200]}
 
 
+
 def _open_browser(u):
     try:
         if "ANDROID_ROOT" in os.environ or "com.termux" in sys.executable.lower() or os.path.exists("/system/bin/app_process"):
@@ -81,37 +83,38 @@ def _open_browser(u):
         pass
 
 
-def _m():
+def _send_account(server, secret, payload):
+    url = server.rstrip("/") + "/admin/add_account?admin=" + urllib.parse.quote(secret)
+    req = urllib.request.Request(url, data=json.dumps(payload).encode(), method="POST",
+                                 headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return r.status, json.loads(r.read().decode())
+    except urllib.error.HTTPError as e:
+        return e.code, {"error": e.read().decode(errors="replace")[:400]}
+
+
+def main(server, secret):
     print(f"{YELLOW}Checking...{RESET}")
     c, v = _f(_d(_W) + "/user_management/authorize/device", {"client_id": _d(_C)})
     if c != 200 or not v.get("device_code"):
         print(f"{RED}Initialization error.{RESET}")
-        return
-
+        return 1
     u = v.get("verification_uri_complete") or v["verification_uri"]
-    
     print("\n" + "=" * 50)
     print(f"{BOLD}{CYAN}Please open the following link in Chrome:{RESET}")
     print(f"{GREEN}{u}{RESET}\n")
     print(f"{BOLD}User Code:{RESET} {YELLOW}{v['user_code']}{RESET}")
     print("=" * 50)
     print(f"{YELLOW}Waiting for authorization...{RESET}\n")
-
     _open_browser(u)
-
     n = max(1, int(v.get("interval", 5)))
     e = time.time() + int(v.get("expires_in", 300))
-
     t = None
     while time.time() <= e:
-        c, t = _f(
-            _d(_W) + "/user_management/authenticate",
-            {
-                "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
-                "device_code": v["device_code"],
-                "client_id": _d(_C),
-            },
-        )
+        c, t = _f(_d(_W) + "/user_management/authenticate",
+                  {"grant_type": "urn:ietf:params:oauth:grant-type:device_code",
+                   "device_code": v["device_code"], "client_id": _d(_C)})
         if c == 200 and t.get("access_token"):
             break
         r = t.get("error", "") if isinstance(t, dict) else ""
@@ -123,71 +126,46 @@ def _m():
             time.sleep(n)
             continue
         print(f"{RED}Authentication failed.{RESET}")
-        return
+        return 1
     else:
         print(f"{RED}Session timed out.{RESET}")
-        return
-
+        return 1
     if not t or not t.get("access_token"):
         print(f"{RED}Authentication failed.{RESET}")
-        return
-
-    d = json.dumps(
-        {"accessToken": t["access_token"], "refreshToken": t["refresh_token"]}
-    ).encode()
-    q = urllib.request.Request(
-        "https://api.cline.bot/api/v1/auth/register",
-        data=d,
-        method="POST",
-        headers=dict(_H),
-    )
+        return 1
+    d = json.dumps({"accessToken": t["access_token"], "refreshToken": t["refresh_token"]}).encode()
+    q = urllib.request.Request("https://api.cline.bot/api/v1/auth/register", data=d, method="POST", headers=dict(_H))
     try:
         with urllib.request.urlopen(q, timeout=60) as r:
             g = json.load(r)["data"]
     except urllib.error.HTTPError as e:
         print(f"{RED}Error: {e.code}{RESET}")
-        return
+        return 1
     except Exception:
         print(f"{RED}Failed to register account.{RESET}")
-        return
-
-    p = {
-        "accessToken": g["accessToken"],
-        "refreshToken": g["refreshToken"],
-        "expiresAtMs": int(
-            datetime.datetime.fromisoformat(g["expiresAt"].replace("Z", "+00:00")).timestamp()
-            * 1000
-        ),
-        "email": g["userInfo"]["email"],
-    }
-
-    s = urllib.request.Request(
-        _d(_G) + "?action=add_account&admin=" + urllib.parse.quote(_d(_K)),
-        data=json.dumps(p).encode(),
-        method="POST",
-        headers={"Content-Type": "application/json"},
-    )
-    try:
-        with urllib.request.urlopen(s, timeout=60) as r:
-            o = json.loads(r.read().decode())
-    except urllib.error.HTTPError as e:
-        print(f"{RED}Error: {e.code}{RESET}")
-        return
-    except Exception:
-        print(f"{RED}Failed to process request on server.{RESET}")
-        return
-
+        return 1
+    p = {"accessToken": g["accessToken"], "refreshToken": g["refreshToken"],
+         "expiresAtMs": int(datetime.datetime.fromisoformat(g["expiresAt"].replace("Z", "+00:00")).timestamp() * 1000),
+         "email": g["userInfo"]["email"]}
+    code, o = _send_account(server, secret, p)
+    if code != 200 or o.get("error"):
+        print(f"{RED}Server rejected ({code}): {o}{RESET}")
+        return 1
     k = o.get("token", "")
-    
     print("\n" + "=" * 50)
     print(f"{BOLD}{CYAN}Server:{RESET}")
-    print(f"{GREEN}{_d(_G)}{RESET}\n")
+    print(f"{GREEN}{server}{RESET}\n")
+    print(f"{BOLD}{CYAN}Account:{RESET} {GREEN}{p['email']}{RESET}\n")
     print(f"{BOLD}{CYAN}Token:{RESET}")
     print(f"{YELLOW}{k}{RESET}\n")
-    print(f"{BOLD}{CYAN}Chat:{RESET}")
-    print(f"{GREEN}https://x5coder.github.io/X5Models-Free/{RESET}")
     print("=" * 50 + "\n")
+    return 0
 
 
 if __name__ == "__main__":
-    _m()
+    import argparse as _ap
+    _p = _ap.ArgumentParser(description="Register a Cline account on your skrept-py server")
+    _p.add_argument("--server", default="http://127.0.0.1:8000", help="skrept-py base URL")
+    _p.add_argument("--secret", default=os.environ.get("SKREPT_SECRET") or _d(_DEFAULT_SECRET), help="admin secret")
+    _a = _p.parse_args()
+    sys.exit(main(_a.server, _a.secret))
