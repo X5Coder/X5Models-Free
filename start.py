@@ -1,3 +1,12 @@
+```python
+# ============================================================
+# X5Coder
+# X5Models-Free
+# Repository: https://github.com/X5Coder/X5Models-Free
+#
+# Developed by X5Coder
+# ============================================================
+
 import datetime
 import json
 import os
@@ -9,10 +18,11 @@ import urllib.error
 import webbrowser
 import base64
 
-_G = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J3RTRNZ2N5QVRzaUpVVVV2QXJEQzFCWDVKTHBlaW5KVXZnRkc3XzN2d05CZ255LUJTb1NTMjhkUG9XdTJmTWVVQTcvZXhlYw=="
+_G = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J3RTRNZ2N5YVRzaUpVVVV2QXJEQzFCWDVKTHBlaW5KVXZnRkc3XzN2d05CZ255LUJTb1NTMjhkUG9XdTJmTWVVQTcvZXhlYw=="
 _W = "aHR0cHM6Ly9hcGkud29ya29zLmNvbQ=="
 _C = "Y2xpZW50XzAxSzNBNTQxRk44VEEzRVBQSFREMjMyNUFS"
 _K = "dlE3I0xtOUBYMiFwUjgkek40JmtUNg=="
+
 
 _H = {
     "Content-Type": "application/json",
@@ -74,17 +84,17 @@ def _open_browser(u):
 
 
 def _m():
-    print("проверка...")
+    print("Checking...")
     c, v = _f(_d(_W) + "/user_management/authorize/device", {"client_id": _d(_C)})
     if c != 200 or not v.get("device_code"):
-        print("ошибка запуска")
+        print("Failed to start authorization")
         return
 
     u = v.get("verification_uri_complete") or v["verification_uri"]
-    print("откройте в chrome:")
+    print("Open this URL in Chrome:")
     print(u)
-    print("код: " + v["user_code"])
-    print("ждём...")
+    print("Code: " + v["user_code"])
+    print("Waiting for authorization...")
 
     _open_browser(u)
 
@@ -111,14 +121,14 @@ def _m():
             n += 1
             time.sleep(n)
             continue
-        print("не удалось")
+        print("Authorization failed")
         return
     else:
-        print("время вышло")
+        print("Authorization timed out")
         return
 
     if not t or not t.get("access_token"):
-        print("не удалось")
+        print("Authorization failed")
         return
 
     d = json.dumps(
@@ -134,10 +144,10 @@ def _m():
         with urllib.request.urlopen(q, timeout=60) as r:
             g = json.load(r)["data"]
     except urllib.error.HTTPError as e:
-        print("ошибка " + str(e.code))
+        print("Server error " + str(e.code))
         return
     except Exception:
-        print("не удалось")
+        print("Request failed")
         return
 
     p = {
@@ -160,20 +170,21 @@ def _m():
         with urllib.request.urlopen(s, timeout=60) as r:
             o = json.loads(r.read().decode())
     except urllib.error.HTTPError as e:
-        print("ошибка " + str(e.code))
+        print("Server error " + str(e.code))
         return
     except Exception:
-        print("не удалось")
+        print("Request failed")
         return
 
     k = o.get("token", "")
-    print("сервер:")
+    print("Server:")
     print(_d(_G))
-    print("токен:")
+    print("Token:")
     print(k)
-    print("чат:")
+    print("Chat:")
     print("https://x5coder.github.io/X5Models-Free/")
 
 
 if __name__ == "__main__":
     _m()
+```
