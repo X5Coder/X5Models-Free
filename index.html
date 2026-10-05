@@ -26,7 +26,6 @@
     --accent: #4A7DFF;
     --header-h: 56px;
     --composer-min-h: 56px;
-    --kb-height: 0px;
   }
 
   html, body {
@@ -41,6 +40,14 @@
     overscroll-behavior: none;
   }
 
+  /* Prevent iOS auto-scroll when keyboard opens */
+  body {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
   .layout {
     display: flex;
     flex-direction: column;
@@ -49,17 +56,12 @@
     width: 100%;
     overflow: hidden;
     position: relative;
-    transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1);
   }
 
-  /* When keyboard is open on mobile — lift the composer only */
-  body.kb-open .layout {
-    transform: translateY(calc(-1 * var(--kb-height)));
-  }
+  /* When keyboard is open, layout becomes fixed to visual viewport — set via JS inline styles */
 
-  body.kb-open .chat {
-    /* Keep chat scrollable but prevent body scroll */
-    padding-bottom: 0;
+  body.kb-open .composer-wrap {
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
   }
 
   /* ============================================
@@ -250,7 +252,7 @@
     border: 0;
     color: var(--txt);
     font-family: 'JetBrains Mono', monospace;
-    font-size: clamp(0.8rem, 2vw, 0.86rem);
+    font-size: 16px;
     outline: none;
     padding: 12px 0;
     letter-spacing: 0.01em;
@@ -642,11 +644,7 @@
     padding: 8px clamp(14px, 3vw, 24px) clamp(14px, 3vh, 22px);
     flex-shrink: 0;
     background: linear-gradient(to top, #000 70%, transparent);
-    transition: padding 0.25s ease;
-  }
-
-  body.kb-open .composer-wrap {
-    padding-bottom: max(clamp(8px, 2vh, 14px), env(safe-area-inset-bottom));
+    transition: padding 0.2s ease;
   }
 
   .composer {
@@ -659,7 +657,7 @@
     border: 1px solid #1f1f1f;
     border-radius: 28px;
     padding: 6px 6px 6px clamp(16px, 3vw, 20px);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, border-radius 0.2s ease;
     min-height: var(--composer-min-h);
   }
 
@@ -675,31 +673,24 @@
     border: 0;
     color: var(--txt);
     font-family: inherit;
-    font-size: clamp(0.88rem, 2vw, 0.94rem);
+    font-size: 16px;
     line-height: 1.5;
     outline: none;
     resize: none;
-    max-height: 160px;
+    max-height: 200px;
     padding: 12px 0;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #2a2a2a transparent;
     display: block;
     height: 24px;
-    /* Prevent iOS zoom on focus */
-    font-size: 16px;
+    overflow-y: auto;
+    /* Hide scrollbar completely, no scroll inside the composer */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
-  @media (min-width: 640px) {
-    .composer textarea {
-      font-size: clamp(0.88rem, 2vw, 0.94rem);
-    }
-  }
-
-  .composer textarea::-webkit-scrollbar { width: 4px; }
-  .composer textarea::-webkit-scrollbar-thumb {
-    background: #2a2a2a;
-    border-radius: 2px;
+  .composer textarea::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   .composer textarea::placeholder { color: var(--mut-2); }
@@ -1112,7 +1103,8 @@
     .steps-list li::before { width: 20px; height: 20px; font-size: 0.68rem; }
     .send-btn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; }
     .composer { min-height: 50px; padding: 5px 5px 5px 16px; }
-    .composer textarea { padding: 10px 0; }
+    .composer textarea { padding: 10px 0; max-height: 160px; }
+    .composer-wrap { padding: 6px 12px 10px; }
   }
 
   @media (max-width: 380px) {
@@ -1125,15 +1117,12 @@
     .layout {
       height: 100svh;
     }
-    body.kb-open .layout {
-      height: 100dvh;
-    }
   }
 </style>
 </head>
 <body>
 
-  <div class="layout">
+  <div class="layout" id="layout">
 
     <div class="header">
       <a class="brand" href="https://github.com/X5Coder/X5Models-Free" target="_blank" rel="noopener noreferrer">
@@ -1291,8 +1280,10 @@
     const API_URL = "https://script.google.com/macros/s/AKfycbwE4MgcyATsiJUUUvArDC1BX5JLpeinJUvgFG7_3vwNBgny-BSoSS28dPoWu2fMeUA7/exec";
     const STORAGE_KEY = "x5models_token";
     const MODEL_KEY = "x5models_model";
+    const HISTORY_KEY = "x5models_history";
     const FETCH_TIMEOUT = 20000;
     const MIN_LOADING = 350;
+    const MAX_INPUT_H = 200;
 
     let token = "";
     let history = [];
@@ -1305,6 +1296,7 @@
     let abortRequested = false;
     let autoLoggedIn = false;
 
+    const layout = document.getElementById('layout');
     const chat = document.getElementById('chat');
     const composer = document.getElementById('composer');
     const input = document.getElementById('input');
@@ -1330,7 +1322,6 @@
     const connectingDots = document.getElementById('connectingDots');
     const loginError = document.getElementById('loginError');
     const loginErrorText = document.getElementById('loginErrorText');
-    const composerWrap = document.getElementById('composerWrap');
 
     const scrollBottom = () => { chat.scrollTop = chat.scrollHeight; };
     const sleep = (ms) => new Promise(r => setTimeout(r, ms));
@@ -1339,6 +1330,28 @@
       const div = document.createElement('div');
       div.textContent = str == null ? "" : str;
       return div.innerHTML;
+    }
+
+    /* ============================================
+       Persistence
+       ============================================ */
+    function loadHistory() {
+      try {
+        const raw = localStorage.getItem(HISTORY_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) { return []; }
+    }
+
+    function saveHistory() {
+      try {
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(-200)));
+      } catch (e) {}
+    }
+
+    function clearHistory() {
+      try { localStorage.removeItem(HISTORY_KEY); } catch (e) {}
     }
 
     async function gasFetch(url, options = {}) {
@@ -1453,7 +1466,6 @@
         tokInput.disabled = false;
         if (!ok && !silent) showLoginError(errMsg || "Something went wrong.");
         else if (!ok && silent) {
-          // Silent failure — clean up saved token and let user retry
           try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
           tokInput.value = "";
           tokInput.focus();
@@ -1501,14 +1513,15 @@
         logoutBtn.classList.add('show');
         modelBtnName.textContent = currentModel.label || currentModel.id;
 
-        // Show empty state if no messages yet
-        renderEmptyStateIfNeeded();
+        // Restore chat history from localStorage
+        restoreChat();
 
         connectingBusy = false;
         connectingAnim.stop();
         connectingEl.classList.remove('show');
 
-        input.focus();
+        // Focus input but avoid auto-opening keyboard on mobile if user hasn't interacted
+        if (!silent) input.focus();
       } catch (e) {
         const msg = (e && e.message) || "";
         const isTimeout = /abort|timeout/i.test(msg);
@@ -1536,6 +1549,9 @@
       await connect(saved);
     }
 
+    /* ============================================
+       Chat rendering
+       ============================================ */
     function renderEmptyStateIfNeeded() {
       if (chat.children.length > 0) return;
       chat.innerHTML = `
@@ -1555,6 +1571,32 @@
     function removeEmptyState() {
       const es = chat.querySelector('.empty-state');
       if (es) es.remove();
+    }
+
+    function restoreChat() {
+      chat.innerHTML = '';
+      history = loadHistory();
+
+      if (history.length === 0) {
+        renderEmptyStateIfNeeded();
+        return;
+      }
+
+      for (const msg of history) {
+        if (msg.role === "user") {
+          const el = document.createElement('div');
+          el.className = 'msg user';
+          el.textContent = msg.content;
+          chat.appendChild(el);
+        } else if (msg.role === "assistant" && msg.content) {
+          const el = document.createElement('div');
+          el.className = 'final';
+          el.textContent = msg.content;
+          chat.appendChild(el);
+        }
+      }
+
+      requestAnimationFrame(() => scrollBottom());
     }
 
     function setupDragToDismiss(dialogEl, overlayEl, dragArea, onClose) {
@@ -1962,7 +2004,7 @@ ${exampleJSON}</div>
 
     function autoResize() {
       input.style.height = 'auto';
-      const newHeight = Math.min(input.scrollHeight, 160);
+      const newHeight = Math.min(input.scrollHeight, MAX_INPUT_H);
       input.style.height = newHeight + 'px';
     }
 
@@ -1996,6 +2038,7 @@ ${exampleJSON}</div>
 
       addUserMessage(text);
       history.push({ role: "user", content: text });
+      saveHistory();
 
       const block = createThinkingBlock();
 
@@ -2058,6 +2101,7 @@ ${exampleJSON}</div>
         }
       } else if (fullContent) {
         history.push({ role: "assistant", content: fullContent });
+        saveHistory();
       } else if (!abortRequested) {
         if (!hasContent) final.remove();
         addErrorMessage("Empty response from model.");
@@ -2085,6 +2129,7 @@ ${exampleJSON}</div>
         localStorage.removeItem(STORAGE_KEY);
         localStorage.removeItem(MODEL_KEY);
       } catch (e) {}
+      clearHistory();
 
       modelBtn.classList.remove('show');
       infoBtn.classList.remove('show');
@@ -2139,52 +2184,72 @@ ${exampleJSON}</div>
     });
 
     /* ============================================
-       Keyboard Handling — Lift layout only
+       Keyboard Handling — Only lift the composer
+       via fixed-position layout sized to visual viewport
        ============================================ */
-    (function setupKeyboardLift() {
+    (function setupKeyboard() {
       if (!window.visualViewport) return;
-
       const vv = window.visualViewport;
-      let initialHeight = window.innerHeight;
       let raf = null;
 
-      function update() {
+      function resetStyles() {
+        layout.style.position = '';
+        layout.style.top = '';
+        layout.style.left = '';
+        layout.style.right = '';
+        layout.style.bottom = '';
+        layout.style.height = '';
+        layout.style.width = '';
+        document.body.classList.remove('kb-open');
+      }
+
+      function apply() {
         if (raf) cancelAnimationFrame(raf);
         raf = requestAnimationFrame(() => {
-          // Compute how much the viewport shrank (keyboard height)
-          const kb = Math.max(0, initialHeight - vv.height - vv.offsetTop);
+          const shrink = window.innerHeight - vv.height;
+          // Consider keyboard open only if viewport shrank notably AND input is focused
+          const isKb = shrink > 120 && document.activeElement === input;
 
-          // Threshold: consider keyboard open if shrink > 100px
-          if (kb > 100 && document.activeElement === input) {
-            document.documentElement.style.setProperty('--kb-height', kb + 'px');
+          if (isKb) {
+            const top = vv.offsetTop || 0;
+            layout.style.position = 'fixed';
+            layout.style.top = top + 'px';
+            layout.style.left = '0';
+            layout.style.right = '0';
+            layout.style.bottom = 'auto';
+            layout.style.height = vv.height + 'px';
+            layout.style.width = 'auto';
             document.body.classList.add('kb-open');
-            // Keep chat pinned to bottom
-            scrollBottom();
+            requestAnimationFrame(() => {
+              chat.scrollTop = chat.scrollHeight;
+            });
           } else {
-            document.documentElement.style.setProperty('--kb-height', '0px');
-            document.body.classList.remove('kb-open');
+            resetStyles();
           }
         });
       }
 
-      vv.addEventListener('resize', update);
-      vv.addEventListener('scroll', update);
+      vv.addEventListener('resize', apply);
+      vv.addEventListener('scroll', apply);
 
-      // Also track focus/blur to reset
-      input.addEventListener('focus', () => { setTimeout(update, 100); });
+      input.addEventListener('focus', () => {
+        apply();
+        setTimeout(apply, 80);
+        setTimeout(apply, 250);
+        setTimeout(apply, 480);
+      });
+
       input.addEventListener('blur', () => {
-        document.documentElement.style.setProperty('--kb-height', '0px');
-        document.body.classList.remove('kb-open');
+        setTimeout(apply, 50);
+        setTimeout(apply, 300);
       });
 
-      // Reset baseline on orientation change
       window.addEventListener('orientationchange', () => {
-        document.body.classList.remove('kb-open');
-        document.documentElement.style.setProperty('--kb-height', '0px');
-        setTimeout(() => { initialHeight = window.innerHeight; update(); }, 300);
+        resetStyles();
+        setTimeout(apply, 350);
       });
 
-      update();
+      apply();
     })();
 
     autoLogin();
