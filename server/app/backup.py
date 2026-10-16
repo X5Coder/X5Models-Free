@@ -50,9 +50,9 @@ def dump_obj():
                         'gone': bool(st.get('gone', False)),
                         'free_blocked_until': st.get('free_blocked_until', 0),
                         'paid_spent': st.get('paid_spent', 0.0)},
-            'usage': {'free_used': t.get('free_used', 0), 'free_limit': c.get('freeLimit') or 1000000,
-                      'paid_used': t.get('paid_used', 0), 'paid_limit': c.get('paidLimit') or 200000,
-                      'total_used': (t.get('free_used', 0)) + (t.get('paid_used', 0)),
+            'usage': {'free_used': t.get('freeUsed', t.get('free_used', 0)), 'free_limit': c.get('freeLimit') or 1000000,
+                      'paid_used': t.get('paidUsed', t.get('paid_used', 0)), 'paid_limit': c.get('paidLimit') or 200000,
+                      'total_used': t.get('freeUsed', t.get('free_used', 0)) + t.get('paidUsed', t.get('paid_used', 0)),
                       'reset_at': datetime.fromtimestamp((t.get('dayStart', now) + 86400000) / 1000, tz=timezone.utc).isoformat()},
             'stats': {'calls': u['calls'], 'routed_tokens': u['tokens'], 'fails': u['fails']},
             'blocked': blk})
