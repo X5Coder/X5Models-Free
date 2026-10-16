@@ -1,0 +1,106 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>skrept admin</title><style>
+*{box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#0a0e14;color:#e6edf3;padding:10px;margin:0;font-size:15px}
+.wrap{max-width:1240px;margin:0 auto}
+h2{font-size:20px;margin:8px 0}
+.card{background:#121822;border:1px solid #232b3a;border-radius:12px;padding:12px;margin-bottom:10px}
+.card h3{margin:0 0 8px;font-size:14px;color:#9aa7b4}
+input{background:#0a0e14;color:#e6edf3;border:1px solid #232b3a;border-radius:8px;padding:10px 12px;margin:4px 0;width:100%;font-size:15px}
+button{background:#238636;color:#fff;border:0;border-radius:8px;padding:10px 14px;cursor:pointer;font-weight:600;margin:2px;font-size:14px}
+button.gray{background:#171e2a;border:1px solid #232b3a}
+button.blue{background:#2f81f7}button.red{background:#f85149}
+.btnrow{display:flex;flex-wrap:wrap;gap:4px}
+.btnrow button{flex:1 1 auto;min-width:80px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:8px 6px;text-align:left;border-bottom:1px solid #232b3a;vertical-align:top}
+.twrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tok{font-family:monospace;font-size:11px;color:#3fb950;word-break:break-all}
+.log{background:#05080d;border:1px solid #232b3a;padding:10px;border-radius:10px;max-height:220px;overflow:auto;font-family:monospace;font-size:11px;white-space:pre-wrap;word-break:break-word}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
+.stat{background:#171e2a;border:1px solid #232b3a;border-radius:10px;padding:10px;font-size:12px;color:#9aa7b4}
+.stat .v{font-size:20px;font-weight:700;color:#e6edf3}
+details.mods{border:1px solid #232b3a;border-radius:8px;padding:8px;background:#0d131c}
+details.mods summary{cursor:pointer;font-weight:700;font-size:14px;padding:6px}
+.mrow{display:flex;justify-content:space-between;gap:8px;padding:6px 4px;border-bottom:1px solid #1b2330;font-size:13px}
+.mrow .t{font-size:11px;font-weight:700;border-radius:6px;padding:2px 8px}
+.tf{background:rgba(63,185,80,.15);color:#3fb950}
+.tp{background:rgba(210,153,34,.15);color:#d29922}
+@media(min-width:700px){.stats{grid-template-columns:repeat(5,1fr)}body{padding:16px}input{width:auto}}
+</style></head><body><div class="wrap">
+<h2>skrept <span style="color:#2ea043">admin</span></h2>
+<div class="stats">
+<div class="stat">Accounts<div class="v" id="sAcc">-</div></div>
+<div class="stat">Free<div class="v" id="sFree">-</div></div>
+<div class="stat">Paid<div class="v" id="sPaid">-</div></div>
+<div class="stat">Models<div class="v" id="sMod">-</div></div>
+<div class="stat">Errors<div class="v" id="sErr">-</div></div></div>
+<div class="card"><h3>Add account</h3>
+<input id="nE" placeholder="email">
+<input id="nA" placeholder="accessToken">
+<input id="nR" placeholder="refreshToken">
+<script>
+/* injected by server: window.__SEC */
+var SEC = window.__SEC || localStorage.getItem('sk_sec') || '';
+try{localStorage.setItem('sk_sec', SEC);}catch(e){}
+function qs(o){return Object.keys(o).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(o[k]);}).join('&');}
+function adm(q){q=q||{};q.admin=SEC;return q;}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});}
+var _logs=[];
+function lg(x){try{_logs.unshift(new Date().toLocaleTimeString()+' '+JSON.stringify(x).slice(0,500));if(_logs.length>20)_logs.length=20;document.getElementById('log').textContent=_logs.join('\n');}catch(e){}}
+function get(a){return fetch('/admin/'+a+'?'+qs(adm())).then(function(r){return r.json();}).catch(function(e){return {error:String(e)};});}
+function post(a,b){return fetch('/admin/'+a+'?'+qs(adm()),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b||{})}).then(function(r){return r.json();}).catch(function(e){return {error:String(e)};});}
+function showErr(where,d){if(d&&(d.error||d.detail)){var m=(d.error&&(d.error.message||d.error))||d.detail||JSON.stringify(d).slice(0,200);document.getElementById(where).innerHTML='<div style="color:#f85149;padding:10px">Error: '+esc(m)+'</div>';lg(d);return true;}return false;}
+function load(){
+document.getElementById('dl').href='/admin/backup.db?admin='+encodeURIComponent(SEC);
+get('export').then(function(d){if(!d||!d.accounts){if(!showErr('accs',d))document.getElementById('accs').innerHTML='...';return;}
+var s='<table><tr><th>Account</th><th>Token</th><th>Tot</th><th></th></tr>';var f=0,p=0;
+for(var i=0;i<d.accounts.length;i++){var a=d.accounts[i];f+=a.usage.free_used;p+=a.usage.paid_used;
+s+='<tr><td><b>'+esc(a.account.email)+'</b><br><small style="color:#9aa7b4">'+esc(a.account.state)+'</small></td><td class="tok">'+esc(a.credentials.gateway_token)+'</td><td>'+a.usage.total_used+'</td><td><button data-op="del" data-em="'+esc(a.account.email)+'" class="red">x</button></td></tr>';}
+s+='</table>';document.getElementById('accs').innerHTML=s;document.getElementById('accCount').textContent=d.accounts.length;
+document.getElementById('sAcc').textContent=d.accounts.length;document.getElementById('sFree').textContent=f;document.getElementById('sPaid').textContent=p;});
+get('config').then(function(d){if(d&&d.error){lg(d);return;}var cc=(d&&d.config)||{};document.getElementById('fF').value=cc.freeLimit;document.getElementById('fP').value=cc.paidLimit;document.getElementById('fI').value=cc.ipLimit;});
+get('live').then(function(d){if(!d||!d.live_models){if(!showErr('live',d))document.getElementById('live').innerHTML='...';return;}
+var ms=d.live_models||[];var free=0,paid=0,i,first=[];
+for(i=0;i<ms.length;i++){if(ms[i].tier==='free')free++;else paid++;if(i<15)first.push(ms[i]);}
+var s='<details class="mods"><summary>Free: '+free+' | Paid: '+paid+' — tap to expand</summary>';
+for(i=0;i<first.length;i++){s+='<div class="mrow"><b>'+esc(first[i].id)+'</b><span class="t '+(first[i].tier==='free'?'tf':'tp')+'">'+esc(first[i].tier)+'</span></div>';}
+if(ms.length>15)s+='<div style="padding:8px;color:#9aa7b4;font-size:12px">... +'+(ms.length-15)+' more (full list in /v1/models)</div>';
+s+='</details>';
+document.getElementById('live').innerHTML=s;document.getElementById('modCount').textContent=ms.length;document.getElementById('sMod').textContent=ms.length;
+var l=d.call_log||[];var c2='<table><tr><th>Model</th><th>Acc</th><th>St</th><th>Tk</th></tr>';
+for(var j=0;j<l.length;j++){c2+='<tr><td>'+esc(l[j].model)+'</td><td>'+esc(l[j].email)+'</td><td>'+(l[j].ok?'ok':'FAIL')+'</td><td>'+l[j].tokens+'</td></tr>';}c2+='</table>';document.getElementById('calls').innerHTML=c2||'-';
+var e=d.error_log||[];var e2='<table>';for(var n=0;n<e.length;n++){e2+='<tr><td>'+esc(e[n].code)+'</td><td class="tok">'+esc(e[n].detail)+'</td></tr>';}e2+='</table>';document.getElementById('errs').innerHTML=e2||'-';
+document.getElementById('errCount').textContent=e.length;document.getElementById('sErr').textContent=e.length;});
+}
+document.getElementById('accs').addEventListener('click',function(ev){var t=ev.target;var op=t.getAttribute&&t.getAttribute('data-op');if(!op)return;
+if(op==='del'&&confirm('Delete?'))post('set',{remove_email:t.getAttribute('data-em')}).then(function(dd){lg(dd);load();});});
+function addAcc(){post('add_account',{email:document.getElementById('nE').value,accessToken:document.getElementById('nA').value,refreshToken:document.getElementById('nR').value,expiresAtMs:+document.getElementById('nX').value}).then(function(d){lg(d);load();});}
+function saveCfg(){var b={};var f=document.getElementById('fF').value,p=document.getElementById('fP').value,i=document.getElementById('fI').value,s=document.getElementById('fS').value;
+if(f)b.freeLimit=+f;if(p)b.paidLimit=+p;if(i)b.ipLimit=+i;if(s)b.secret=s;post('set',b).then(function(d){lg(d);load();});}
+function bk(){post('backup',{}).then(lg);}
+function clean(){post('cleanup',{}).then(function(d){lg(d);load();});}
+function cacheClear(){post('cache_clear',{}).then(function(d){lg(d);load();});}
+lg('ready, loading...');
+load();setInterval(load,20000);
+</script></body></html>
+
+<input id="nX" placeholder="expiresAtMs" inputmode="numeric">
+<div class="btnrow"><button onclick="addAcc()">Add</button></div></div>
+<div class="card"><h3>Limits</h3>
+<div class="row"><input id="fF" type="number" placeholder="Free" style="flex:1;min-width:90px"><input id="fP" type="number" placeholder="Paid" style="flex:1;min-width:90px"><input id="fI" type="number" placeholder="IP/min" style="flex:1;min-width:90px"></div>
+<input id="fS" placeholder="new secret (optional)">
+<div class="btnrow"><button onclick="saveCfg()">Save</button>
+<button class="blue" onclick="bk()">Backup</button>
+<button class="gray" onclick="load()">Refresh</button>
+<button class="gray" onclick="clean()">Cleanup</button>
+<button class="gray" onclick="cacheClear()">Clear cache</button>
+<a id="dl" href="#"><button class="gray" type="button">.db</button></a></div></div>
+<div class="card"><h3>Accounts (<span id="accCount">0</span>)</h3><div class="twrap" id="accs">...</div></div>
+<div class="card"><h3>Models (<span id="modCount">0</span>)</h3><div id="live">...</div></div>
+<div class="card"><h3>Calls</h3><div class="twrap" id="calls">...</div></div>
+<div class="card"><h3>Errors (<span id="errCount">0</span>)</h3><div class="twrap" id="errs">-</div></div>
+<div class="card"><h3>Debug</h3><div id="log" class="log">ready</div></div>
+</div>
